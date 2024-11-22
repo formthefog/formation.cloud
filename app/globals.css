@@ -19,3 +19,21 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Disable text selection globally */
+* {
+  user-select: none; /* Prevent text selection */
+  -webkit-user-select: none; /* For Safari */
+  -ms-user-select: none; /* For older versions of Internet Explorer */
+}
+
+/* Optional: Prevent highlighting when tapping or clicking */
+:focus {
+  outline: none; /* Removes focus outlines */
+  box-shadow: none; /* Removes focus shadows if applicable */
+}
+
+/* If you only want to disable text selection on specific elements */
+.no-highlight {
+  user-select: none;
+}
