@@ -15,7 +15,7 @@ const geistMono = localFont({
 // Dynamic Metadata Export
 export const metadata = {
   title: "Formation",
-  description: "The fog is coming. Join now.",
+  description: "The fog is coming.",
 };
 
 export default function RootLayout({
