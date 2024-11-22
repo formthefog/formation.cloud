@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^9.117.3",
+    "@react-three/fiber": "^9.0.0-alpha.8",
     "@types/three": "^0.170.0",
     "next": "15.0.3",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
-    "three": "^0.170.0"
+    "react": "^18",
+    "react-dom": "^18",
+    "three": "^0.170.0",
+    "vanta": "^0.5.24"
   },
   "devDependencies": {
     "@types/node": "^20",
