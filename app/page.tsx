@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-// @ts-ignore
+//@typescript-eslint/ban-ts-comment
 import FOG from 'vanta/dist/vanta.fog.min';
 
 export default function Home() {
@@ -12,13 +12,13 @@ export default function Home() {
     // Add fade-in effect
     const container = myRef.current;
     if (container) {
-      // @ts-ignore
+      //@typescript-eslint/ban-ts-comment
       container.style.opacity = "0";
-      // @ts-ignore
+      //@typescript-eslint/ban-ts-comment
       container.style.transition = "opacity 2s ease-in-out"; // Fade-in duration
 
       setTimeout(() => {
-        // @ts-ignore
+        //@typescript-eslint/ban-ts-comment
         container.style.opacity = "1";
       }, 0); // Trigger fade-in immediately
     }
@@ -43,7 +43,7 @@ export default function Home() {
 
     // Cleanup VANTA effect on unmount
     return () => {
-      // @ts-ignore
+      //@typescript-eslint/ban-ts-comment
       if (vantaEffect) vantaEffect.destroy();
     };
   }, [vantaEffect]);
