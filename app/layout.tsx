@@ -1,7 +1,5 @@
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Script from "next/script";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -14,9 +12,10 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadata: Metadata = {
-  title: "Formation.cloud",
-  description: "The distributed compute platform",
+// Dynamic Metadata Export
+export const metadata = {
+  title: "Formation",
+  description: "The fog is coming. Join now.",
 };
 
 export default function RootLayout({
@@ -29,7 +28,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></Script>
         {children}
       </body>
     </html>
