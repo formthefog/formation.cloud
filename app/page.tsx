@@ -1,24 +1,24 @@
-'use client'
+'use client';
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-//@typescript-eslint/ban-ts-comment
-import FOG from 'vanta/dist/vanta.fog.min';
+// Import FOG with the newly created type declaration
+import FOG, { VantaEffect } from 'vanta/dist/vanta.fog.min'; // Import VantaEffect
 
 export default function Home() {
-  const [vantaEffect, setVantaEffect] = useState(null);
-  const myRef = useRef(null);
+  // Explicitly type vantaEffect as VantaEffect or null
+  const [vantaEffect, setVantaEffect] = useState<VantaEffect | null>(null);
+  // Type the ref to point to an HTMLDivElement or null
+  const myRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Add fade-in effect
     const container = myRef.current;
     if (container) {
-      //@typescript-eslint/ban-ts-comment
       container.style.opacity = "0";
-      //@typescript-eslint/ban-ts-comment
       container.style.transition = "opacity 2s ease-in-out"; // Fade-in duration
 
       setTimeout(() => {
-        //@typescript-eslint/ban-ts-comment
         container.style.opacity = "1";
       }, 0); // Trigger fade-in immediately
     }
@@ -43,7 +43,6 @@ export default function Home() {
 
     // Cleanup VANTA effect on unmount
     return () => {
-      //@typescript-eslint/ban-ts-comment
       if (vantaEffect) vantaEffect.destroy();
     };
   }, [vantaEffect]);
@@ -61,7 +60,9 @@ export default function Home() {
           height={95}
           priority
         />
-        <span className=" text-xl italic text-center m-auto animate-pulse font-black">The Fog is Coming</span>
+        <span className="text-xl italic text-center m-auto animate-pulse font-black">
+          The Fog is Coming
+        </span>
       </main>
     </div>
   );
