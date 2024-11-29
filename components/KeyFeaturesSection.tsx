@@ -3,7 +3,7 @@ import RightBottomCorner from "./icons/RightBottomCorner";
 
 const KeyFeaturesSection = () => {
   return (
-    <section className="relative bg-white mb-64">
+    <section className="relative bg-white">
       <div className="max-w-screen-xl mx-auto">
         {/* Section Title */}
         <div className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r border-b h-full border-black border-opacity-[0.05] flex flex-col items-start px-[40px] pt-[120px] pb-[64px]">
@@ -84,11 +84,11 @@ const KeyFeaturesSection = () => {
               height={96}
               className="h-[96px] w-[96px]"
             />
-            <div>
+            <div className="flex flex-col items-start gap-[12px]">
               <h3 className="text-lg font-[700] font-hauora text-gray-900">
                 Scalability
               </h3>
-              <p className="mt-1 text-[16px] leading-[24px] font-inter font-[400] text-gray-500">
+              <p className="text-[16px] leading-[24px] font-inter font-[400] text-gray-500">
                 Powerful, self-serve product and growth analytics to help you convert,
                 engage, and retain more users.
               </p>
@@ -102,11 +102,11 @@ const KeyFeaturesSection = () => {
               height={96}
               className="h-[96px] w-[96px]"
             />
-            <div>
+            <div className="flex flex-col gap-[12px]">
               <h3 className="text-lg font-[700] font-hauora text-gray-900">
                 Data Sovereignty
               </h3>
-              <p className="mt-1 text-[16px] leading-[24px] font-inter font-[400] text-gray-500">
+              <p className="text-[16px] leading-[24px] font-inter font-[400] text-gray-500">
                 Powerful, self-serve product and growth analytics to help you convert,
                 engage, and retain more users.
               </p>
