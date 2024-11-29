@@ -10,11 +10,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        ['formation-blue']: '#0A84FF',
+        ["formation-blue"]: '#0A84FF',
         gray: {
-          500: '#667085',
-          600: '#475467',
-          700: '#344054'
+          '200': "#EAECF0",
+          '400': '#98A2B3',
+          '500': '#667085',
+          '600': '#475467',
+          '700': '#344054'
+        },
+        blue: {
+          '600': "#155EEF",
         },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -60,12 +65,34 @@ export default {
       fontFamily: {
         hauora: ["var(--font-hauora-sans)"],
         inter: ["var(--font-inter-display)"],
-        geistMono: ["var(--font-geist-mono)"], // Add Geist Mono
+        geistMono: ["var(--font-geist-mono)"]
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
+      },
+      keyframes: {
+        'accordion-down': {
+          from: {
+            height: '0'
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)'
+          }
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)'
+          },
+          to: {
+            height: '0'
+          }
+        }
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out'
       }
     }
   },

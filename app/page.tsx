@@ -1,6 +1,7 @@
 import HeroSection from "@/components/HeroSection";
 import KeyFeaturesSection from "@/components/KeyFeaturesSection";
 import Navigation from "@/components/Navigation";
+import UseCasesSection from "@/components/UseCasesSection";
 import WhyFormationSection from "@/components/WhyFormationSection";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <HeroSection />
       <KeyFeaturesSection />
       <WhyFormationSection />
+      <UseCasesSection />
     </div>
   );
 }
