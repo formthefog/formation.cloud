@@ -9,12 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^9.0.0-alpha.8",
     "@types/three": "^0.170.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.462.0",
     "next": "15.0.3",
     "react": "^18",
     "react-dom": "^18",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-inner-border": "^0.2.0",
     "three": "^0.134.0",
     "vanta": "^0.5.24"
   },
