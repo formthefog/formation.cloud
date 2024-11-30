@@ -5,25 +5,25 @@ import Dots from "./icons/Dots";
 const UseCasesSection = () => {
   const useCases = [
     {
-      icon: "/smart-cities-icon.jpg",
+      icon: "/smart-city.jpg",
       title: "Smart Cities",
       description:
         "Empower urban innovation with real-time data processing for smarter infrastructure management. Optimize traffic flow, enhance public safety, and improve energy efficiency with ultra-low latency and reliable connectivity.",
     },
     {
-      icon: "/autonomous-vehicles-icon.jpg",
+      icon: "/autonomous-vehicle.jpg",
       title: "Autonomous Vehicles",
       description:
         "Drive the future of transportation with ultra-low latency edge processing. Enable split-second decisions for autonomous vehicles, enhancing safety and efficiency in transportation systems.",
     },
     {
-      icon: "/ar-gaming-icon.jpg",
+      icon: "/ar-game.jpg",
       title: "AR/Gaming",
       description:
         "Create immersive experiences with powerful edge computing. Build applications that respond instantly to user interactions, ideal for gaming, education, and training simulations.",
     },
     {
-      icon: "/financial-services-icon.jpg",
+      icon: "/financial.jpg",
       title: "Financial Services",
       description:
         "Secure transactions with speed through edge processing. Maximize latency and enhance security for real-time trading and fraud detection, improving customer satisfaction and trust in digital financial services.",
