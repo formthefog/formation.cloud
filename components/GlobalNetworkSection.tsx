@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import Image from "next/image";
-import LeftCorner from "./icons/LeftCorner";
 import RightBottomCorner from "./icons/RightBottomCorner";
 import LeftTopCorner from "./icons/LeftTopCorner";
 import Link from "next/link";
