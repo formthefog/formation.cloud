@@ -1,7 +1,7 @@
 const FormationLogo = (props) => (
   <svg
-    width={134}
-    height={28}
+    width={167}
+    height={35}
     viewBox="0 0 134 28"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
