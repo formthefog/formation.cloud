@@ -20,7 +20,7 @@ const GlobalNetworkSection = () => {
   const [selectedPartner, setSelectedPartner] = useState(partners[0]);
 
   return (
-    <section className="relative bg-gray-50 border-b">
+    <section id="ecosystem" className="relative bg-gray-50 border-b">
       {/* CTA Banner */}
       <div className="max-w-screen-xl mx-auto">
         <div

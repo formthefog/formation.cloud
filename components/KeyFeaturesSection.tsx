@@ -3,7 +3,7 @@ import RightBottomCorner from "./icons/RightBottomCorner";
 
 const KeyFeaturesSection = ({ tagline, features }) => {
   return (
-    <section className="relative bg-white">
+    <section id="features" className="relative bg-white">
       <div className="max-w-screen-xl mx-auto">
         {/* Section Title */}
         <div className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r border-b h-full border-black border-opacity-[0.05] flex flex-col items-start px-[40px] pt-[120px] pb-[64px]">

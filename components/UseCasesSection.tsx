@@ -4,6 +4,7 @@ import Dots from "./icons/Dots";
 const UseCasesSection = ({ title, subtitle, useCases }) => {
   return (
     <section
+      id="use-cases"
       className="relative w-full min-h-[100vh] border md:h-[85vh] bg-cover bg-top md:bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/fog2.jpg')" }}
     >
