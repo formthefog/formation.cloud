@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer";
+import GlobalNetworkSection from "@/components/GlobalNetworkSection";
 import HeroSection from "@/components/HeroSection";
 import KeyFeaturesSection from "@/components/KeyFeaturesSection";
 import Navigation from "@/components/Navigation";
@@ -12,6 +14,8 @@ export default function Home() {
       <KeyFeaturesSection />
       <WhyFormationSection />
       <UseCasesSection />
+      <GlobalNetworkSection />
+      <Footer />
     </div>
   );
 }
