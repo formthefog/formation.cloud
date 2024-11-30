@@ -20,7 +20,7 @@ const GlobalNetworkSection = () => {
   const [selectedPartner, setSelectedPartner] = useState(partners[0]);
 
   return (
-    <section className="relative bg-gray-50">
+    <section className="relative bg-gray-50 border-b">
       {/* CTA Banner */}
       <div className="max-w-screen-xl mx-auto">
         <div
@@ -30,7 +30,7 @@ const GlobalNetworkSection = () => {
             backgroundPosition: "top",
             backgroundSize: "contain",
           }}
-          className="relative w-full z-10 container mx-auto max-w-[1280px] border h-full border-black border-opacity-[0.05] flex flex-col items-center justify-center text-center"
+          className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r h-full border-black border-opacity-[0.05] flex flex-col items-center justify-center text-center"
         >
           <div className="text-center mt-[160px] px-[160px] flex flex-row bg-white w-full">
             <div className="flex flew-row w-full border-l border-r h-full p-[32px]">

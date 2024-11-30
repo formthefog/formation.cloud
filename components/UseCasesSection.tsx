@@ -32,11 +32,11 @@ const UseCasesSection = () => {
 
   return (
     <section
-      className="relative w-full min-h-[100vh]  md:h-[85vh] bg-cover bg-top md:bg-center bg-no-repeat"
+      className="relative w-full min-h-[100vh] border  md:h-[85vh] bg-cover bg-top md:bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/fog2.jpg')" }}
     >
 
-      <div className="relative w-full z-10 container mx-auto max-w-[1280px] border border border h-full border-black border-opacity-[0.05] flex flex-col items-start pt-[120px] pb-[64px]">
+      <div className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r h-full border-black border-opacity-[0.05] flex flex-col items-start pt-[120px] pb-[64px]">
         <div className="pb-[64px] p-[40px] flex flex-col md:flex-row">
           <div className="flex flex-col grow w-full">
             <div>
