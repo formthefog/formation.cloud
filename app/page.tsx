@@ -16,7 +16,6 @@ export default function Home() {
       <WhyFormationSection />
       <UseCasesSection />
       <GlobalNetworkSection />
-      <FAQSection />
       <Footer />
     </div>
   );
