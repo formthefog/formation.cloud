@@ -32,7 +32,7 @@ const GlobalNetworkSection = () => {
           }}
           className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r h-full border-black border-opacity-[0.05] flex flex-col items-center justify-center text-center"
         >
-          <div className="text-center mt-[160px] px-[160px] flex flex-row bg-white w-full">
+          <div className="text-center mt-[160px] px-[160px] flex flex-col bg-white w-full">
             <div className="flex flew-row w-full border-l border-r h-full p-[32px]">
               <h2 className="text-4xl font-hauora tracking-[-0.05em] font-[500] text-gray-900 leading-tight">
                 Join our global network of<br />builders like{" "}

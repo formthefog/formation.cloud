@@ -3,10 +3,10 @@ import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import Link from "next/link";
 
-const Footer = () => {
+const Footer = ({ headline, buttonText, buttonLink }) => {
   return (
     <footer
-      className="relative flex flex-col w-full bg-cover bg-top md:bg-center bg-no-repeat "
+      className="relative flex flex-col w-full bg-cover bg-top md:bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/city-2.jpg')" }}
     >
       <div className="container pt-16 md:pt-24 pb-24 mx-auto border-l border-r h-full max-w-[1280px] px-6 text-center">
@@ -17,18 +17,16 @@ const Footer = () => {
               width={156}
               height={156}
               src="/orb.png"
-              className={""}
+              className=""
             />
-            <h2 className="text-4xl md:text-[72px] font-[500] leading-[88px] font-hauora tracking-[-0.05em] ">
-              Build and shape the <br className="" /> future of computing.
+            <h2 className="text-4xl md:text-[72px] font-[500] leading-[88px] font-hauora tracking-[-0.05em]">
+              {headline}
             </h2>
           </span>
-
           <div className="mt-8 mb-12">
-
-            <Link target="_blank" href="https://forms.gle/GKWfrVbdD4M3VrMr5">
+            <Link target="_blank" href={buttonLink}>
               <Button size="lg" className="button-with-gradient">
-                Get Started <RightCaret />
+                {buttonText} <RightCaret />
               </Button>
             </Link>
           </div>
