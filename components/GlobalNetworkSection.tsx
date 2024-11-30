@@ -6,6 +6,7 @@ import Image from "next/image";
 import LeftCorner from "./icons/LeftCorner";
 import RightBottomCorner from "./icons/RightBottomCorner";
 import LeftTopCorner from "./icons/LeftTopCorner";
+import Link from "next/link";
 
 const GlobalNetworkSection = () => {
   const partners = [
@@ -41,10 +42,12 @@ const GlobalNetworkSection = () => {
               <div className="grow" />
               <div className="flex flex-col">
                 <div className="grow" />
-                <Button variant="outline" size="sm" className="">
-                  APPLY AS A PARTNER
-                  <RightCaret />
-                </Button>
+                <Link target="_blank" href="https://forms.gle/FucLj7e8wksHx6Hx7">
+                  <Button variant="outline" size="sm" className="">
+                    APPLY AS A PARTNER
+                    <RightCaret />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

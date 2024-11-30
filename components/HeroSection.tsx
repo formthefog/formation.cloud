@@ -1,3 +1,4 @@
+import Link from "next/link";
 import BackedBy from "./BackedByComponent";
 import LeftCorner from "./icons/LeftCorner";
 import RightCaret from "./icons/RightCaret";
@@ -20,9 +21,12 @@ const HeroSection = () => {
           Formation is the foundation for the next generation of computing. A world where computing power is distributed, secure, and always available.
         </p>
         <div className="mt-8 mb-12">
-          <Button size="lg" className="button-with-gradient">
-            View Docs <RightCaret />
-          </Button>
+
+          <Link target="_blank" href="https://forms.gle/GKWfrVbdD4M3VrMr5">
+            <Button size="lg" className="button-with-gradient">
+              Get Started <RightCaret />
+            </Button>
+          </Link>
         </div>
       </div>
 

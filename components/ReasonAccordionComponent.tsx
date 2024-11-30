@@ -110,7 +110,7 @@ const ReasonAccordionComponent = () => {
 
   return (
     <div
-      className="flex border-l flex-col md:flex-row"
+      className="flex border-l border flex-col md:flex-row"
       style={{ backgroundImage: "url('/grid.png')" }}
     >
       {/* Accordion */}
@@ -133,7 +133,6 @@ const ReasonAccordionComponent = () => {
         ))}
       </Accordion>
 
-      {/* Dynamic Image (Desktop Only) */}
       <div className="hidden md:flex w-1/2 py-[80px] justify-center items-center border-r">
         {activeItem && (
           <Image

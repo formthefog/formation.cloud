@@ -2,6 +2,7 @@ import FormationLogo from "./icons/FormationLogo";
 import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import Hamburger from "./icons/Hamburger";
+import Link from "next/link";
 
 const Navigation = () => {
   return (
@@ -38,15 +39,17 @@ const Navigation = () => {
           </a>
         </nav>
 
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" size="sm" className="">
-            VIEW DOCS
-            <RightCaret />
-          </Button>
+        <div className="flex itecms-center space-x-4">
+          <Link target="_blank" href="https://forms.gle/GKWfrVbdD4M3VrMr5">
+            <Button variant="outline" size="sm" className="">
+              GET STARTED
+              <RightCaret />
+            </Button>
+          </Link>
           <Hamburger className="md:hidden" />
         </div>
       </div>
-    </header>
+    </header >
   );
 };
 
