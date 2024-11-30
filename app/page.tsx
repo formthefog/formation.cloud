@@ -1,3 +1,4 @@
+import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import GlobalNetworkSection from "@/components/GlobalNetworkSection";
 import HeroSection from "@/components/HeroSection";
@@ -15,6 +16,7 @@ export default function Home() {
       <WhyFormationSection />
       <UseCasesSection />
       <GlobalNetworkSection />
+      <FAQSection />
       <Footer />
     </div>
   );

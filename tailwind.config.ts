@@ -12,6 +12,7 @@ export default {
       colors: {
         ["formation-blue"]: '#0A84FF',
         gray: {
+          '50': '#F9FAFB',
           '200': "#EAECF0",
           '400': '#98A2B3',
           '500': '#667085',
