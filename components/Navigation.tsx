@@ -175,7 +175,7 @@ const Navigation = () => {
             </a>
             <Link
               target="_blank"
-              href="https://forms.gle/GKWfrVbdD4M3VrMr5"
+              href="https://forms.gle/BmZ2Hu2Px9R4u2jE8"
               className="text-blue-500 font-bold"
             >
               GET STARTED

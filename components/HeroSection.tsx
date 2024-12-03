@@ -21,7 +21,7 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
         </p>
         <div className="mt-8 mb-12">
 
-          <Link target="_blank" href="https://forms.gle/GKWfrVbdD4M3VrMr5">
+          <Link target="_blank" href="https://forms.gle/BmZ2Hu2Px9R4u2jE8">
             <Button size="lg" className="button-with-gradient">
               {buttonText} <RightCaret />
             </Button>
