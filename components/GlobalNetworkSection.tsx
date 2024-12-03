@@ -19,29 +19,54 @@ const GlobalNetworkSection = () => {
 
   const [selectedPartner, setSelectedPartner] = useState(partners[0]);
 
+
+  const renderGrid = () => {
+    const rows = 10; // Adjust for desired height
+    const cols = 10; // Adjust for desired width
+    const grid = [];
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        grid.push(
+          <div
+            key={`${row}-${col}`}
+            className="w-[158px] h-[158px] border border-gray-200"
+            style={{
+              position: "absolute",
+              top: `${row * 160}px`,
+              left: `${col * 160}px`,
+              backgroundImage: "url('/bg.png')",
+              backgroundRepeat: "repeat", // Repeat the pattern
+              backgroundPosition: "top", // Align with the top of the container
+              backgroundSize: "160px 160px", // Match the grid size exactly
+            }}
+          />
+        );
+      }
+    }
+    return grid;
+  };
+
   return (
-    <section id="ecosystem" className="relative bg-gray-50 border-b">
-      {/* CTA Banner */}
+    <section id="ecosystem" className="relative bg-gray-50 border-b overflow-hidden">
       <div className="max-w-screen-xl mx-auto">
         <div
-          style={{
-            backgroundImage: "url('/dots-row-2.jpg')",
-            backgroundRepeat: "repeat",
-            backgroundPosition: "top",
-            backgroundSize: "contain",
-          }}
-          className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r h-full border-black border-opacity-[0.05] flex flex-col items-center justify-center text-center"
+          className="relative w-full z-10 overflow-hidden container mx-auto max-w-[1280px] border-l border-r h-full border-black border-opacity-[0.05] flex flex-col items-center justify-center text-center"
         >
-          <div className="text-center mt-[160px] px-[160px] flex flex-col bg-white w-full">
-            <div className="flex flew-row w-full border-l border-r h-full p-[32px]">
-              <h2 className="text-4xl font-hauora tracking-[-0.05em] font-[500] text-gray-900 leading-tight">
-                Join our global network of<br />builders like{" "}
+
+          <div className="absolute inset-0 z-1">
+            {renderGrid()}
+          </div>
+          <div className="text-center mt-[160px] md:px-[160px] w-full flex flex-col z-10 w-full">
+            <div className="flex flex-col md:flex-row md:text-left w-full grow border-l bg-white border-r h-full p-[32px]">
+              <h2 className="text-4xl text-center md:text-left font-hauora w-full tracking-[-0.05em] font-[500] text-gray-900 leading-tight">
+                <span className="">Join our global network<br /> of builders like </span>
                 <span className={`${selectedPartner.textColor}`}>{selectedPartner.name}</span>.
               </h2>
               <div className="grow" />
               <div className="flex flex-col">
                 <div className="grow" />
-                <Link target="_blank" href="https://forms.gle/FucLj7e8wksHx6Hx7">
+                <Link target="_blank" className="my-6 md:my-0" href="https://forms.gle/FucLj7e8wksHx6Hx7">
                   <Button variant="outline" size="sm" className="">
                     APPLY AS A PARTNER
                     <RightCaret />
@@ -51,14 +76,14 @@ const GlobalNetworkSection = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 mt-[5px] sm:grid-cols-6 gap-0 max-w-screen-lg pb-[160px]">
+          <div className="grid grid-cols-3  lg:grid-cols-6 gap-0 max-w-screen-lg pb-[160px]">
             {partners.map((partner) => {
               const isSelected = selectedPartner.id === partner.id;
               return (
                 <div
                   key={partner.id}
                   onClick={() => setSelectedPartner(partner)}
-                  className={`w-[160px] h-[160px] relative flex items-center justify-center border border-gray-200 shadow-sm transition-all cursor-pointer ${isSelected
+                  className={`md:w-[160px] md:h-[160px] p-8 w-full relative flex items-center justify-center border border-gray-200 shadow-sm transition-all cursor-pointer ${isSelected
                     ? `${partner.hoverBg} font-black`
                     : "bg-white hover:bg-gray-300 hover:font-black"
                     }`}

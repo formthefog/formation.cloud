@@ -9,14 +9,14 @@ const UseCasesSection = ({ title, subtitle, useCases }) => {
       style={{ backgroundImage: "url('/fog2.jpg')" }}
     >
       <div className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r h-full border-black border-opacity-[0.05] flex flex-col items-start pt-[120px] pb-[64px]">
-        <div className="pb-[64px] p-[40px] flex flex-col md:flex-row">
+        <div className=" p-[40px] flex flex-col md:flex-row">
           <div className="flex flex-col grow w-full">
             <div>
               <span className="inline-block relative border border-formation-blue px-4 py-1 text-sm font-medium uppercase tracking-wider text-formation-blue font-geistMono">
                 Use Cases
               </span>
             </div>
-            <h2 className="mt-4 text-[48px] font-hauora tracking-[-0.05em] font-[500] text-gray-900 leading-tight">
+            <h2 className="mt-4 text-4xl md:text-[48px] font-hauora tracking-[-0.05em] font-[500] text-gray-900 leading-tight">
               {title}
             </h2>
           </div>
@@ -28,7 +28,7 @@ const UseCasesSection = ({ title, subtitle, useCases }) => {
           {useCases.map((useCase, index) => (
             <div
               key={index}
-              className="flex flex-col gap-[72px] relative gap-4 items-start border border-gray-200 bg-white p-[32px] shadow-sm"
+              className="flex flex-col gap-[72px] overflow-hidden relative gap-4 items-start border border-gray-200 bg-white p-[32px] shadow-sm"
             >
               <div className="flex-shrink-0">
                 <Image

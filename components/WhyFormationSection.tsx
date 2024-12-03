@@ -5,7 +5,7 @@ const WhyFormationSection = ({ title, subtitle, description }) => {
   return (
     <section id="why-formation" className="relative bg-white border-t">
       <div className="max-w-screen-xl mx-auto">
-        <div className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r h-full border-black border-opacity-[0.05] flex flex-col items-center justify-center text-center px-[32px] py-[48px] md:py-[120px] gap-[24px]">
+        <div className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r h-full border-black border-opacity-[0.05] flex flex-col items-center justify-center text-center px-[32px] pt-[120px] pb-[64px] gap-[24px]">
           <span className="inline-block border border-formation-blue px-4 py-1 text-sm font-medium uppercase tracking-wider text-formation-blue font-geistMono">
             {subtitle}
           </span>

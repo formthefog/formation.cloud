@@ -1,4 +1,3 @@
-'use client'
 import Footer from "@/components/Footer";
 import GlobalNetworkSection from "@/components/GlobalNetworkSection";
 import HeroSection from "@/components/HeroSection";
@@ -7,19 +6,13 @@ import Navigation from "@/components/Navigation";
 import UseCasesSection from "@/components/UseCasesSection";
 import WhyFormationSection from "@/components/WhyFormationSection";
 import { content } from "@/lib/contentArray";
-import { useState } from "react";
 
 export default function Home() {
-  const [selectedIndex, setSelectedIndex] = useState(0); // Start with the first content block
-  const currentContent = content[selectedIndex];
-
-  const handleLogoClick = () => {
-    setSelectedIndex((prevIndex) => (prevIndex + 1) % content.length);
-  };
+  const currentContent = content[0]
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navigation onLogoClick={handleLogoClick} />
+      <Navigation />
       <HeroSection
         title={currentContent.hero.title}
         subtitle={currentContent.hero.subtitle}

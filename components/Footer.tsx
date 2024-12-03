@@ -19,7 +19,7 @@ const Footer = ({ headline, buttonText, buttonLink }) => {
               src="/orb.png"
               className=""
             />
-            <h2 className="text-4xl md:text-[72px] font-[500] leading-[88px] font-hauora tracking-[-0.05em]">
+            <h2 className="text-6xl md:text-[72px] font-[500] md:leading-[88px] font-hauora tracking-[-0.05em]">
               {headline}
             </h2>
           </span>

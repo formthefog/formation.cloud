@@ -5,12 +5,12 @@ export const content = [
       title: ["Bring the Internet", "Closer to You."],
       subtitle:
         "With fog networks, data processing happens right where it’s needed—delivering speed, efficiency, and reliability.",
-      buttonText: "Discover Fog Computing",
+      buttonText: "Discover Fog compute",
     },
     keyFeatures: {
       tagline: (
         <>
-          Unmatched speed, security, and<br /> scalability for modern computing
+          Unmatched speed, security, and<br /> scalability for modern compute.
         </>
       ),
       features: [
@@ -61,7 +61,7 @@ export const content = [
           icon: "/ar-game.jpg",
           title: "AR/Gaming",
           description:
-            "Deliver immersive gaming and AR experiences with ultra-low latency and responsive edge computing.",
+            "Deliver immersive gaming and AR experiences with ultra-low latency and responsive edge compute.",
         },
         {
           icon: "/autonomous-vehicle.jpg",
@@ -79,14 +79,14 @@ export const content = [
     },
     whyFormation: {
       subtitle: "Why Formation",
-      title: "Resilient, distributed, and the future of computing",
+      title: "Resilient, distributed, and the future of compute.",
       description:
-        "Learn why Formation is the foundation for next-gen computing, enabling speed, scalability, and security.",
+        "Learn why Formation is the foundation for next-gen compute, enabling speed, scalability, and security.",
     },
     footer: {
       headline: (
         <>
-          Build and shape the <br /> future of computing.
+          Build and shape the <br /> future of compute.
         </>
       ),
       buttonText: "Get Started",
@@ -155,7 +155,7 @@ export const content = [
           icon: "/ar-game.jpg",
           title: "AR/Gaming Startups",
           description:
-            "Bring immersive games and interactive applications to life with responsive edge computing.",
+            "Bring immersive games and interactive applications to life with responsive edge compute.",
         },
         {
           icon: "/smart-city.jpg",
@@ -261,7 +261,7 @@ export const content = [
           icon: "/ar-game.jpg",
           title: "Enterprise Training and AR",
           description:
-            "Develop cutting-edge training tools and augmented reality applications with ultra-low latency and responsive edge computing.",
+            "Develop cutting-edge training tools and augmented reality applications with ultra-low latency and responsive edge compute.",
         },
       ],
     },
@@ -436,7 +436,7 @@ export const content = [
           icon: "/ar-game.jpg",
           title: "Customer Engagement Apps",
           description:
-            "Develop real-time marketing tools like loyalty apps or promotions powered by responsive edge-first computing.",
+            "Develop real-time marketing tools like loyalty apps or promotions powered by responsive edge-first compute.",
         },
         {
           icon: "/uptime.jpg",
@@ -723,7 +723,7 @@ export const content = [
           icon: "/latency.jpg",
           title: "Blockchain Gaming",
           description:
-            "Create immersive blockchain-based games with responsive, real-time interactions powered by edge computing.",
+            "Create immersive blockchain-based games with responsive, real-time interactions powered by edge compute.",
         },
         {
           icon: "/scalability.jpg",
@@ -817,7 +817,7 @@ export const content = [
           icon: "/latency.jpg",
           title: "Decentralized Social Media",
           description:
-            "Create responsive, community-driven social networks with real-time interactions powered by edge-first computing.",
+            "Create responsive, community-driven social networks with real-time interactions powered by edge-first compute.",
         },
         {
           icon: "/scalability.jpg",
