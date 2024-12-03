@@ -42,7 +42,7 @@ const interDisplay = localFont({
 // Dynamic Metadata Export
 export const metadata = {
   title: "Formation",
-  description: "The fog is coming.",
+  description: "A Fog is Forming.",
 };
 
 export default function RootLayout({
