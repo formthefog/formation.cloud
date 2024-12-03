@@ -66,7 +66,7 @@ const GlobalNetworkSection = () => {
               <div className="grow" />
               <div className="flex flex-col">
                 <div className="grow" />
-                <Link target="_blank" className="my-6 md:my-0" href="https://forms.gle/FucLj7e8wksHx6Hx7">
+                <Link target="_blank" className="my-6 md:my-0" href="https://forms.gle/P9ArBkZTLcLiQt3GA">
                   <Button variant="outline" size="sm" className="">
                     APPLY AS A PARTNER
                     <RightCaret />

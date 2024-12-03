@@ -90,7 +90,7 @@ export const content = [
         </>
       ),
       buttonText: "Get Started",
-      buttonLink: "https://forms.gle/GKWfrVbdD4M3VrMr5",
+      buttonLink: "https://forms.gle/c3BXHmLT6Cm7CoKg7",
     },
   },
   // 2. Startup Innovators
