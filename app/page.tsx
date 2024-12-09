@@ -1,3 +1,4 @@
+import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import GlobalNetworkSection from "@/components/GlobalNetworkSection";
 import HeroSection from "@/components/HeroSection";
@@ -33,6 +34,7 @@ export default function Home() {
         useCases={currentContent.useCases.useCases}
       />
       <GlobalNetworkSection />
+      <FAQSection />
       <Footer
         headline={currentContent.footer.headline}
         buttonText={currentContent.footer.buttonText}

@@ -4,7 +4,7 @@ export const content = [
     hero: {
       title: ["Bring the Internet", "Closer to You."],
       subtitle:
-        "With fog networks, data processing happens right where it’s needed—delivering speed, efficiency, and reliability.",
+        "Formation is the next-gen Fog compute platform that combines cloud-scale power with edge-level speed to deliver seamless, localized data processing.",
       buttonText: "Discover Fog compute",
     },
     keyFeatures: {
@@ -49,7 +49,7 @@ export const content = [
     useCases: {
       title: "Transforming industries with Formation",
       subtitle:
-        "Explore how Formation is revolutionizing the way businesses and technologies operate in a distributed world.",
+        "Explore how Formation is revolutionizing the way businesses and technologies operate.",
       useCases: [
         {
           icon: "/smart-city.jpg",
@@ -79,9 +79,9 @@ export const content = [
     },
     whyFormation: {
       subtitle: "Why Formation",
-      title: "Resilient, distributed, and the future of compute.",
+      title: "Unlock your full potential with Formation",
       description:
-        "Learn why Formation is the foundation for next-gen compute, enabling speed, scalability, and security.",
+        "Formation’s unique approach solves the limitations of siloed cloud and edge paradigms, inventing a world where compute is distributed, secure, and always available.",
     },
     footer: {
       headline: (
