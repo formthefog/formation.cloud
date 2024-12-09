@@ -7,7 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Props } from "next/script";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
