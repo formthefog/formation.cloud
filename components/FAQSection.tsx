@@ -1,4 +1,3 @@
-import RightBottomCorner from "./icons/RightBottomCorner";
 import TabbedFAQComponent from "./TabbedFAQComponent";
 
 const FAQSection = () => {

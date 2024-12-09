@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { ReactPropTypes, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Accordion,
@@ -51,7 +51,7 @@ const TabbedFAQComponent = () => {
       </TabsTrigger>)
   }
 
-  const CLosedCaretIcon = (props: any) => {
+  const CLosedCaretIcon = ({ className }: { className?: string }) => {
     return (
       <svg
         width={24}
@@ -59,7 +59,7 @@ const TabbedFAQComponent = () => {
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        {...props}
+        className={className}
       >
         <rect x={8} y={5} width={2} height={2} fill="#2970FF" />
         <rect x={11} y={8} width={2} height={2} fill="#2970FF" />
