@@ -41,11 +41,27 @@ const interDisplay = localFont({
   variable: "--font-inter-display",
 });
 
-// Dynamic Metadata Export
 export const metadata = {
-  title: "Formation",
-  description: "A Fog is Forming...",
-};
+  title: 'Formation',
+  description: 'A Fog is Forming...',
+  openGraph: {
+    title: 'Formation',
+    description: 'A Fog is Forming...',
+    url: 'https://formation.cloud',
+    type: 'website',
+    images: [
+      {
+        url: 'https://opengraph.b-cdn.net/production/images/52ad98f5-7554-466b-b96a-6fa0cc77376d.png?token=m6B_oJysXF-CAFf_wUXXSH7XK2M3881DA8i0LwAym-4&height=569&width=569&expires=33278307078',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Formation',
+    description: 'A Fog is Forming...',
+    images: ['https://opengraph.b-cdn.net/production/images/52ad98f5-7554-466b-b96a-6fa0cc77376d.png?token=m6B_oJysXF-CAFf_wUXXSH7XK2M3881DA8i0LwAym-4&height=569&width=569&expires=33278307078'],
+  },
+}
 
 export default function RootLayout({
   children,
@@ -54,26 +70,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        {/* HTML Meta Tags */}
-        <title>Formation</title>
-        <meta name="description" content="A Fog is Forming..." />
-
-        {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://formation.cloud" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Formation" />
-        <meta property="og:description" content="A Fog is Forming..." />
-        <meta property="og:image" content="https://opengraph.b-cdn.net/production/images/52ad98f5-7554-466b-b96a-6fa0cc77376d.png?token=m6B_oJysXF-CAFf_wUXXSH7XK2M3881DA8i0LwAym-4&height=569&width=569&expires=33278307078" />
-
-        {/* Twitter Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content="formation.cloud" />
-        <meta property="twitter:url" content="https://formation.cloud" />
-        <meta name="twitter:title" content="Formation" />
-        <meta name="twitter:description" content="A Fog is Forming..." />
-        <meta name="twitter:image" content="https://opengraph.b-cdn.net/production/images/52ad98f5-7554-466b-b96a-6fa0cc77376d.png?token=m6B_oJysXF-CAFf_wUXXSH7XK2M3881DA8i0LwAym-4&height=569&width=569&expires=33278307078" />
-      </Head>
       <body
         className={`${geistSans.variable} ${hauoraSans.variable} ${interDisplay.variable} ${geistMono.variable} antialiased`}
       >
