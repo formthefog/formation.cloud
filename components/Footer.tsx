@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import { useModal } from "@/context/ModalContext";
 
-const Footer = ({ headline, buttonText, buttonLink }) => {
+const Footer = ({ headline, buttonText }) => {
   const { openWaitlistModal } = useModal();
 
   return (
