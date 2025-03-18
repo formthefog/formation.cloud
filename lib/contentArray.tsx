@@ -10,7 +10,7 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Unmatched speed, security, and<br /> scalability for modern compute.
+          For Users and For Developers
         </>
       ),
       features: [
@@ -80,7 +80,7 @@ export const content = [
       subtitle: "Why Formation",
       title: "Unlock your full potential with Formation",
       description:
-        "Formation’s unique approach solves the limitations of siloed cloud and edge paradigms, inventing a world where compute is distributed, secure, and always available.",
+        "Formation provides the tools to succeed in the Age of Autonomy by providing a unified marketplace for agents, models and inference. Take control of your future with Formation.",
     },
     footer: {
       headline: (

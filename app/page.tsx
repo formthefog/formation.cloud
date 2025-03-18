@@ -21,6 +21,16 @@ export default function Home() {
       <KeyFeaturesSection
         tagline={currentContent.keyFeatures.tagline}
         features={currentContent.keyFeatures.features}
+        audienceColumns={[
+          {
+            title: "Users",
+            description: "Unlock the power of the Autonomous Age with Formation..."
+          },
+          {
+            title: "Developers",
+            description: "Share your innovations with the world..."
+          }
+        ]}
       />
       <WhyFormationSection
         title={currentContent.whyFormation.title}

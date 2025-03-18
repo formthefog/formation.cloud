@@ -1,5 +1,6 @@
 import Image from "next/image";
 import RightBottomCorner from "./icons/RightBottomCorner";
+import { FaCode, FaPerson } from "react-icons/fa6";
 
 const KeyFeaturesSection = ({ tagline, features }) => {
   return (
@@ -10,9 +11,43 @@ const KeyFeaturesSection = ({ tagline, features }) => {
           <span className="inline-block border border-formation-blue px-4 py-1 text-sm font-medium uppercase tracking-wider text-formation-blue font-geistMono">
             Key Features
           </span>
-          <h2 className="mt-4 text-4xl font-hauora tracking-[-0.05em] font-[500] text-gray-900 leading-tight">
-            {tagline}
-          </h2>
+
+          {/* Users and Developers columns */}
+          <div className="w-full mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Users Column */}
+              <div className="flex flex-col gap-4">
+                <h6 className="text-3xl font-hauora tracking-[-0.05em] font-[100] text-gray-900 leading-tight">
+                  For Users
+                </h6>
+                <div className="flex flex-row justify-center items-center text-primary gap-6">
+                  <div className={"w-32 text-5xl"}>
+                    <FaPerson />
+                  </div>
+                  <p className="text-gray-600 leading-relaxed font-inter">
+                    Unlock the power of the Autonomous Age with Formation. Deploy cutting-edge agents and AI models to bring your ideas to life quickly and efficiently.
+                  </p>
+                </div>
+              </div>
+
+              {/* Developers Column */}
+              <div className="flex flex-col gap-4">
+                <h6 className=" text-3xl font-hauora tracking-[-0.05em] font-[100] text-gray-900 leading-tight">
+                  For Developers
+                </h6>
+                <div className="flex flex-row justify-center items-center text-primary gap-6">
+
+                  <div className={"w-32 text-5xl"}>
+                    <FaCode />
+                  </div>
+                  <p className="text-gray-600 leading-relaxed font-inter">
+                    Share your innovations with the world. Register your agents and customized models on Formation’s marketplace and start earning from your creations.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <RightBottomCorner className="absolute bottom-0 right-0" />
         </div>
 

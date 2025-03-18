@@ -12,7 +12,7 @@ const WhyFormationSection = ({ title, subtitle, description }) => {
           <h2 className="text-[32px] md:text-[56px] max-w-[676px] font-hauora tracking-[-0.05em] font-[500] text-gray-900 leading-[40px] md:leading-[64px]">
             {title}
           </h2>
-          <span className="font-inter text-gray-500 tracking-[-0.01em] font-[400]">
+          <span className="font-inter max-w-md text-gray-500 tracking-[-0.01em] font-[400]">
             {description}
           </span>
           <RightBottomCorner className="absolute bottom-0 right-0" />
