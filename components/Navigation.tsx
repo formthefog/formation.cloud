@@ -114,7 +114,9 @@ const Navigation = () => {
             size="sm"
             onClick={openWaitlistModal}
           >
-            JOIN THE WAITLIST
+            <span className="block sm:hidden">WAITLIST</span>
+            <span className="hidden sm:block lg:hidden">JOIN THE WAITLIST</span>
+            <span className="hidden lg:block">JOIN THE WAITLIST</span>
             <RightCaret />
           </Button>
           <button onClick={toggleMenu} className="md:hidden">
@@ -184,7 +186,7 @@ const Navigation = () => {
                 openWaitlistModal();
               }}
             >
-              GET STARTED
+              JOIN THE WAITLIST
             </Button>
           </div>
         </div>

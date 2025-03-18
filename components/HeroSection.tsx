@@ -18,7 +18,7 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
         <div className="flex flex-col items-center">
           <h1 className="text-[56px] md:text-[80px] flex flex-col w-full max-w-[350px] md:max-w-[958px] font-[500] tracking-[-0.05em] font-hauora text-gray-900">
             {title.map((text, index) => (
-              <span key={index} className={cn("flex leading-[60px] md:leading-[85px] flex-row self-center")}>{text}</span>
+              <span key={index} className={cn("flex leading-[65px] md:leading-[85px] flex-row self-center")}>{text}</span>
             ))}
           </h1>
           <p className="mt-4 max-w-[297px] tracking-[-0.01em] leading-[28px] md:max-w-[654px] text-[18px] md:text-[20px] font-inter text-gray-700">
