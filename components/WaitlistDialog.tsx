@@ -83,7 +83,7 @@ export function WaitlistDialog({
     setError(null);
 
     try {
-      // Validate form
+      // Validate form (client-side)
       if (!formData.name || !formData.email) {
         throw new Error('Name and email are required');
       }
@@ -92,8 +92,25 @@ export function WaitlistDialog({
         throw new Error('Please enter a valid email address');
       }
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Submit to API
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company || null,
+          interests: formData.interests,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit. Please try again.');
+      }
 
       // Set success state
       setIsSuccess(true);
@@ -224,7 +241,7 @@ export function WaitlistDialog({
             </div>
             <h3 className="text-xl font-medium text-gray-900 mb-2">Thank You!</h3>
             <p className="text-gray-500 text-center">
-              You&apos;ve been added to our waitlist. We&apos;ll notify you when Formation is ready for you.
+              You've been added to our waitlist. We'll notify you when Formation is ready for you.
             </p>
           </div>
         )}
