@@ -33,7 +33,6 @@ export default function Home() {
         subtitle={currentContent.useCases.subtitle}
         useCases={currentContent.useCases.useCases}
       />
-      <GlobalNetworkSection />
       <FAQSection />
       <Footer
         headline={currentContent.footer.headline}

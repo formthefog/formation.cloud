@@ -2,10 +2,10 @@ export const content = [
   // 1. General/Universal Appeal
   {
     hero: {
-      title: ["Bring the Internet", "Closer to You."],
+      title: ["Discover, Deploy, Monetize"],
       subtitle:
-        "Formation is the next-gen Fog compute platform that combines cloud-scale power with edge-level speed to deliver seamless, localized data processing.",
-      buttonText: "Discover Fog compute",
+        "Formation makes it easy for you to discover and deploy agents and customized models, enabling everyone to go from idea to enterprise at record speed.",
+      buttonText: "Join the Waitlist",
     },
     keyFeatures: {
       tagline: (
@@ -17,31 +17,31 @@ export const content = [
         {
           title: "100% Uptime Guarantee",
           description:
-            "Stay online with globally distributed, fault-tolerant infrastructure ensuring maximum uptime.",
+            "Ensure your AI agents are always available with automated fail-over, so your operations run smoothly.",
           icon: "/uptime.jpg",
         },
         {
-          title: "Ultra-Low Latency",
+          title: "Fast Inference",
           description:
-            "Deliver exceptional response times by processing data closer to where it’s needed.",
+            "Minimize latency with state-of-the-art techniques and hardware for timely responses.",
           icon: "/latency.jpg",
         },
         {
           title: "Cost Savings",
           description:
-            "Optimize your expenses with a scalable network that leverages idle hardware globally.",
+            "Save up to 90% on inference costs with popular open-source models, boosting productivity and profitability.",
           icon: "/cost.jpg",
         },
         {
           title: "Scalability",
           description:
-            "Effortlessly grow with infrastructure that scales as your needs evolve.",
+            "Access a growing number of the latest GPUs to handle any compute demand efficiently.",
           icon: "/scalability.jpg",
         },
         {
           title: "Data Sovereignty",
           description:
-            "Retain full control over your data with local processing and enhanced privacy.",
+            "Protect data with end-to-end encryption on our private mesh architecture and encrypted storage for long term memory.",
           icon: "/sovereignty.jpg",
         },
       ],
@@ -53,29 +53,28 @@ export const content = [
       useCases: [
         {
           icon: "/smart-city.jpg",
-          title: "Smart Cities",
+          title: "Consumer Applications",
           description:
-            "Enable smart infrastructure with real-time data processing for public safety, traffic management, and energy optimization.",
-        },
-        {
-          icon: "/ar-game.jpg",
-          title: "AR/Gaming",
-          description:
-            "Deliver immersive gaming and AR experiences with ultra-low latency and responsive edge compute.",
-        },
-        {
-          icon: "/autonomous-vehicle.jpg",
-          title: "Autonomous Vehicles",
-          description:
-            "Enhance safety and performance with real-time decision-making powered by edge-first infrastructure.",
+            "Improve market research, analyze user data, rapidly iterate, automate feature requests and more with Formation.",
         },
         {
           icon: "/financial.jpg",
           title: "Financial Services",
           description:
-            "Streamline financial transactions with reliable uptime, fast processing, and secure data handling.",
+            "Augment your research team, make better decisions faster, deliver better results, manage relationships more effectively, automate onboarding and grow your customer base with Formation.",
         },
-      ],
+        {
+          icon: "/ar-game.jpg",
+          title: "Smart Businesses",
+          description:
+            "Small business is smart business, you no longer need a massive team to scale. Enhance profitability, reduce inefficiencies, and grow your sales with Formation",
+        },
+        {
+          icon: "/autonomous-vehicle.jpg",
+          title: "Independent Developers",
+          description:
+            "Your github commit grid is filled with bright green, but your open source agent projects are lost in a sea of noise, register them with Formation and access an audience of excited users on Formation.",
+        }],
     },
     whyFormation: {
       subtitle: "Why Formation",
@@ -86,7 +85,7 @@ export const content = [
     footer: {
       headline: (
         <>
-          Build and shape the <br /> future of compute.
+          Enter the Autonomous Age <br /> with Formation
         </>
       ),
       buttonText: "Get Started",

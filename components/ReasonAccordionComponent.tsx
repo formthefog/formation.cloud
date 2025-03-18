@@ -78,7 +78,7 @@ const ReasonAccordionComponent = () => {
       title: "Developers",
       index: "01",
       content:
-        "Deploy applications quickly with fast templates for common use cases, enjoy full control through Cloud-Init configuration and SSH access, and reduce DevOps challenges with features like elastic scaling, auto-clustering, and automated failover.",
+        "Your time and effort is valuable, capture that value while contributing to the Autonomous Age with Formations Agent & Model Marketplace.",
       value: "item-1",
       imageSrc: "/developers.jpg",
     },
@@ -86,25 +86,17 @@ const ReasonAccordionComponent = () => {
       title: "Businesses",
       index: "02",
       content:
-        "Harness the power of reliable infrastructure for seamless application performance and operational efficiency.",
+        "Your organization is ready to be supercharged, find the agents you need to increase productivity by multiple orders of magnitude in the Formation marketplace.",
       value: "item-2",
       imageSrc: "/businesses.jpg",
     },
     {
-      title: "Blockchain Infrastructure",
+      title: "Individuals",
       index: "03",
       content:
-        "Optimize blockchain operations with low-latency networking, distributed systems, and secure data handling.",
+        "Research, automate, build and scale in a fraction of the time at a fraction of the cost, it’s never been easier to accomplish your goals, whether getting the best deal on your upcoming trip, or building the app you’ve been thinking of for years.",
       value: "item-3",
       imageSrc: "/blockchain.jpg",
-    },
-    {
-      title: "AI/ML Workloads",
-      index: "04",
-      content:
-        "Run complex AI/ML computations efficiently with elastic scaling and high-performance resources.",
-      value: "item-4",
-      imageSrc: "/ai-ml.jpg",
     },
   ];
 
