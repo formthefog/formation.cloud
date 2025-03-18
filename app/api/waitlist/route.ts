@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Submit the waitlist entry
-    const { data, error } = await submitWaitlistEntry({
+    const { error } = await submitWaitlistEntry({
       name: body.name,
       email: body.email,
       company: body.company || null,

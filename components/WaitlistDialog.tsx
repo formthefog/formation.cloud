@@ -241,7 +241,7 @@ export function WaitlistDialog({
             </div>
             <h3 className="text-xl font-medium text-gray-900 mb-2">Thank You!</h3>
             <p className="text-gray-500 text-center">
-              You've been added to our waitlist. We'll notify you when Formation is ready for you.
+              You&apos;ve been addoed to our waitlist. We&apos;ll notify you when Formation is ready for you.
             </p>
           </div>
         )}
