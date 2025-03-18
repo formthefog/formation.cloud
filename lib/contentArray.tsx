@@ -52,7 +52,7 @@ export const content = [
         "Explore how Formation is revolutionizing the way businesses and technologies operate.",
       useCases: [
         {
-          icon: "/smart-city.jpg",
+          icon: "/ar-game.jpg",
           title: "Consumer Applications",
           description:
             "Improve market research, analyze user data, rapidly iterate, automate feature requests and more with Formation.",
@@ -64,7 +64,7 @@ export const content = [
             "Augment your research team, make better decisions faster, deliver better results, manage relationships more effectively, automate onboarding and grow your customer base with Formation.",
         },
         {
-          icon: "/ar-game.jpg",
+          icon: "/smart-city.jpg",
           title: "Smart Businesses",
           description:
             "Small business is smart business, you no longer need a massive team to scale. Enhance profitability, reduce inefficiencies, and grow your sales with Formation",
