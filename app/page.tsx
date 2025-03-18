@@ -1,6 +1,5 @@
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
-import GlobalNetworkSection from "@/components/GlobalNetworkSection";
 import HeroSection from "@/components/HeroSection";
 import KeyFeaturesSection from "@/components/KeyFeaturesSection";
 import Navigation from "@/components/Navigation";
@@ -37,7 +36,6 @@ export default function Home() {
       <Footer
         headline={currentContent.footer.headline}
         buttonText={currentContent.footer.buttonText}
-        buttonLink={currentContent.footer.buttonLink}
       />
     </div>
   );

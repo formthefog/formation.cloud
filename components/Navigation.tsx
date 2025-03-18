@@ -5,13 +5,14 @@ import FormationLogo from "./icons/FormationLogo";
 import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import Hamburger from "./icons/Hamburger";
-import Link from "next/link";
 import Image from "next/image";
+import { useModal } from "@/context/ModalContext";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { openWaitlistModal } = useModal();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -108,12 +109,14 @@ const Navigation = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          <Link target="_blank" href="https://forms.gle/GKWfrVbdD4M3VrMr5">
-            <Button variant="outline" size="sm">
-              GET STARTED
-              <RightCaret />
-            </Button>
-          </Link>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={openWaitlistModal}
+          >
+            JOIN THE WAITLIST
+            <RightCaret />
+          </Button>
           <button onClick={toggleMenu} className="md:hidden">
             <Hamburger />
           </button>
@@ -173,13 +176,16 @@ const Navigation = () => {
             >
               Ecosystem
             </a>
-            <Link
-              target="_blank"
-              href="https://forms.gle/BmZ2Hu2Px9R4u2jE8"
-              className="text-blue-500 font-bold"
+            <Button
+              className="text-blue-500 font-bold bg-transparent hover:bg-transparent"
+              variant="ghost"
+              onClick={() => {
+                toggleMenu();
+                openWaitlistModal();
+              }}
             >
               GET STARTED
-            </Link>
+            </Button>
           </div>
         </div>
       )}

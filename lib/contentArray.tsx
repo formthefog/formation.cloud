@@ -88,8 +88,7 @@ export const content = [
           Enter the Autonomous Age <br /> with Formation
         </>
       ),
-      buttonText: "Get Started",
-      buttonLink: "https://forms.gle/BmZ2Hu2Px9R4u2jE8",
+      buttonText: "Join the Waitlist",
     },
   },
   // 2. Startup Innovators

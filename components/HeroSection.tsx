@@ -1,10 +1,14 @@
-import Link from "next/link";
+'use client';
+
 import BackedBy from "./BackedByComponent";
 import RightCaret from "./icons/RightCaret";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { useModal } from "@/context/ModalContext";
 
 const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitle: string; buttonText: string }) => {
+  const { openWaitlistModal } = useModal();
+
   return (
     <section
       className="relative w-full h-[55vh] md:h-[85vh] bg-cover bg-top md:bg-center bg-no-repeat"
@@ -21,11 +25,13 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
             {subtitle}
           </p>
           <div className="mt-8">
-            <Link target="_blank" href="https://forms.gle/BmZ2Hu2Px9R4u2jE8">
-              <Button size="lg" className="button-with-gradient">
-                {buttonText} <RightCaret />
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              className="button-with-gradient"
+              onClick={openWaitlistModal}
+            >
+              {buttonText} <RightCaret />
+            </Button>
           </div>
         </div>
       </div>

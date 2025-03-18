@@ -1,9 +1,13 @@
+'use client';
+
 import Image from "next/image";
 import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
-import Link from "next/link";
+import { useModal } from "@/context/ModalContext";
 
-const Footer = ({ headline, buttonText, buttonLink }) => {
+const Footer = ({ headline, buttonText }) => {
+  const { openWaitlistModal } = useModal();
+
   return (
     <footer
       className="relative flex flex-col w-full bg-cover bg-top md:bg-center bg-no-repeat"
@@ -24,11 +28,13 @@ const Footer = ({ headline, buttonText, buttonLink }) => {
             </h2>
           </span>
           <div className="mt-8 mb-12">
-            <Link target="_blank" href={buttonLink}>
-              <Button size="lg" className="button-with-gradient">
-                {buttonText} <RightCaret />
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              className="button-with-gradient"
+              onClick={openWaitlistModal}
+            >
+              {buttonText} <RightCaret />
+            </Button>
           </div>
         </div>
       </div>
