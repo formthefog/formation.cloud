@@ -1,6 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import { ModalProvider } from "@/context/modal-context";
+import { ModalProvider } from "@/context/ModalContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
