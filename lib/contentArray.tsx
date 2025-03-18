@@ -85,7 +85,7 @@ export const content = [
     footer: {
       headline: (
         <>
-          Enter the Autonomous Age <br /> with Formation
+          Enter the Autonomous Age with Formation
         </>
       ),
       buttonText: "Join the Waitlist",
