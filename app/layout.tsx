@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { ModalProvider } from "@/context/ModalContext";
+import { Analytics } from '@vercel/analytics/react';
 import Head from "next/head";
 
 const geistSans = localFont({
@@ -76,6 +77,7 @@ export default function RootLayout({
         <ModalProvider>
           {children}
         </ModalProvider>
+        <Analytics />
       </body>
     </html>
   );
