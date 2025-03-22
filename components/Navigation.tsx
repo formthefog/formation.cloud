@@ -96,16 +96,6 @@ const Navigation = () => {
           >
             Use Cases
           </a>
-          <a
-            href="#ecosystem"
-            className={`font-medium uppercase text-gray-600 hover:text-black transition-all ${activeSection === "ecosystem"
-              ? "text-black underline underline-offset-[8px] decoration-formation-blue decoration-4"
-              : ""
-              }`}
-            onClick={(e) => handleSmoothScroll(e, "#ecosystem")}
-          >
-            Ecosystem
-          </a>
         </nav>
 
         <div className="flex items-center space-x-4">
@@ -170,13 +160,6 @@ const Navigation = () => {
               onClick={(e) => handleSmoothScroll(e, "#use-cases")}
             >
               Use Cases
-            </a>
-            <a
-              href="#ecosystem"
-              className="text-gray-800 uppercase font-semibold"
-              onClick={(e) => handleSmoothScroll(e, "#ecosystem")}
-            >
-              Ecosystem
             </a>
             <Button
               className="text-blue-500 font-bold bg-transparent hover:bg-transparent"
