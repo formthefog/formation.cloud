@@ -32,7 +32,6 @@ export default function Home() {
         subtitle={currentContent.useCases.subtitle}
         useCases={currentContent.useCases.useCases}
       />
-      <FAQSection />
       <Footer
         headline={currentContent.footer.headline}
         buttonText={currentContent.footer.buttonText}
