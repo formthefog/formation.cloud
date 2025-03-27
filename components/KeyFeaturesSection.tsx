@@ -50,7 +50,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
   ];
 
   return (
-    <section id="features" className="relative bg-white mb-24">
+    <section id="features" className="relative bg-white pt-[60px] pb-[120px]">
       <div className="max-w-screen-xl mx-auto">
         <span className="inline-block border border-formation-blue my-12 px-4 py-1 text-sm font-medium uppercase tracking-wider text-formation-blue font-geistMono">
             Key Features

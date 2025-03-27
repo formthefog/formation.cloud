@@ -32,7 +32,7 @@ const WhyFormationSection = ({ title, subtitle, description }) => {
   };
 
   return (
-    <section id="why-formation" className="relative bg-white border-t overflow-hidden mb-24">
+    <section id="why-formation" className="relative bg-white border-t overflow-hidden pb-[120px]">
       <div className="max-w-screen-xl mx-auto">
         <motion.div
           ref={ref}

@@ -50,7 +50,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
   ];
 
   return (
-    <section id="features" className="relative bg-white mb-12">
+    <section id="features" className="relative bg-white pt-[60px] pb-[64px]">
       <div className="max-w-screen-xl mx-auto">
         <div className="relative w-full z-10 container mx-auto max-w-[1280px] border-l border-r border-b h-full border-black/5 flex flex-col items-start px-8 md:px-12 pt-16 pb-20">
           {/* Marketplace Highlights */}
