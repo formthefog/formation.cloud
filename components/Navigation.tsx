@@ -15,15 +15,18 @@ const Navigation = () => {
   const { openWaitlistModal } = useModal();
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      const scrolled = window.pageYOffset > 0;
+      setIsScrolled(scrolled);
 
       const sections = document.querySelectorAll("section");
       let currentSection = "";
 
       sections.forEach((section) => {
-        const sectionTop = section.offsetTop - 100; // Adjust offset as needed
-        if (window.scrollY >= sectionTop) {
+        const sectionTop = section.offsetTop - 100;
+        if (window.pageYOffset >= sectionTop) {
           currentSection = section.getAttribute("id");
         }
       });
@@ -31,10 +34,12 @@ const Navigation = () => {
       setActiveSection(currentSection);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    // Call it once on mount to set initial state
+    handleScroll();
+    
+    // Use passive event listener for better performance
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleSmoothScroll = (e, targetId) => {
@@ -55,12 +60,15 @@ const Navigation = () => {
 
   return (
     <header
-      className={`w-full sticky top-0 z-50 transition-all duration-300 ${isScrolled
-        ? "bg-white shadow-md border-b"
-        : "bg-transparent border-b border-black border-opacity-[0.05]"
-        }`}
+      className={`w-full sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/100 shadow-sm border-b border-gray-200"
+          : ""
+      }`}
     >
-      <div className="container border-l border-r mx-auto max-w-[1280px] px-6 py-4 flex items-center justify-between">
+      <div className={`container border-l border-r border-black/5 mx-auto max-w-[1280px] px-6 py-4 flex items-center justify-between ${
+        !isScrolled ? "bg-transparent" : ""
+      }`}>
         <div className="flex-shrink-0">
           <FormationLogo />
         </div>
@@ -104,9 +112,9 @@ const Navigation = () => {
             size="sm"
             onClick={openWaitlistModal}
           >
-            <span className="block sm:hidden">WAITLIST</span>
-            <span className="hidden sm:block lg:hidden">JOIN THE WAITLIST</span>
-            <span className="hidden lg:block">JOIN THE WAITLIST</span>
+            <span className="block sm:hidden">ACCESS</span>
+            <span className="hidden sm:block lg:hidden">ACCESS MARKETPLACE</span>
+            <span className="hidden lg:block">ACCESS MARKETPLACE</span>
             <RightCaret />
           </Button>
           <button onClick={toggleMenu} className="md:hidden">
@@ -169,7 +177,7 @@ const Navigation = () => {
                 openWaitlistModal();
               }}
             >
-              JOIN THE WAITLIST
+              ACCESS MARKETPLACE
             </Button>
           </div>
         </div>

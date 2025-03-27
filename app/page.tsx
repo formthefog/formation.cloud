@@ -5,6 +5,7 @@ import KeyFeaturesSection from "@/components/KeyFeaturesSection";
 import Navigation from "@/components/Navigation";
 import UseCasesSection from "@/components/UseCasesSection";
 import WhyFormationSection from "@/components/WhyFormationSection";
+import FeaturedAgentsSection from "@/components/FeaturedAgentsSection";
 import { content } from "@/lib/contentArray";
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
         tagline={currentContent.keyFeatures.tagline}
         features={currentContent.keyFeatures.features}
       />
+      <FeaturedAgentsSection />
       <WhyFormationSection
         title={currentContent.whyFormation.title}
         subtitle={currentContent.whyFormation.subtitle}

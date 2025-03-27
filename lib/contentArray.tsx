@@ -1,94 +1,94 @@
 export const content = [
-  // 1. General/Universal Appeal
+  // 1. Agent Marketplace Focus
   {
     hero: {
-      title: ["Discover, Deploy, Monetize"],
+      title: ["AI Agent Marketplace", "Powered by Formation"],
       subtitle:
-        "Formation makes it easy for you to discover and deploy agents and customized models, enabling everyone to go from idea to enterprise at record speed.",
-      buttonText: "Join the Waitlist",
+        "Join a thriving ecosystem where AI innovation meets opportunity. Our decentralized platform connects creators, users, and enterprises in a secure, scalable marketplace.",
+      buttonText: "Explore Marketplace",
     },
     keyFeatures: {
       tagline: (
         <>
-          For Users and For Developers
+          Your Gateway to the AI Agent Economy
         </>
       ),
       features: [
         {
-          title: "100% Uptime Guarantee",
+          title: "Discover Agents",
           description:
-            "Ensure your AI agents are always available with automated fail-over, so your operations run smoothly.",
+            "Browse a curated marketplace of AI agents for every use case, from automation to analytics.",
           icon: "/uptime.jpg",
         },
         {
-          title: "Fast Inference",
+          title: "Earn Credits",
           description:
-            "Minimize latency with state-of-the-art techniques and hardware for timely responses.",
+            "Deploy your AI agents and earn Formation credits as users leverage your innovations.",
           icon: "/latency.jpg",
         },
         {
-          title: "Cost Savings",
+          title: "Decentralized Inference",
           description:
-            "Save up to 90% on inference costs with popular open-source models, boosting productivity and profitability.",
+            "Run agents on our fog network for unmatched performance at up to 90% lower cost.",
           icon: "/cost.jpg",
         },
         {
-          title: "Scalability",
+          title: "Developer Tools",
           description:
-            "Access a growing number of the latest GPUs to handle any compute demand efficiently.",
+            "Access comprehensive SDKs and APIs to build, test, and deploy your agents seamlessly.",
           icon: "/scalability.jpg",
         },
         {
-          title: "Data Sovereignty",
+          title: "Secure & Private",
           description:
-            "Protect data with end-to-end encryption on our private mesh architecture and encrypted storage for long term memory.",
+            "End-to-end encryption and private mesh architecture ensure your data and agents remain protected.",
           icon: "/sovereignty.jpg",
         },
       ],
     },
     useCases: {
-      title: "Transforming industries with Formation",
+      title: "AI Agents Transforming Industries",
       subtitle:
-        "Explore how Formation is revolutionizing the way businesses and technologies operate.",
+        "Explore how Formation's marketplace is revolutionizing access to AI capabilities across sectors.",
       useCases: [
         {
           icon: "/ar-game.jpg",
-          title: "Consumer Applications",
+          title: "For Users",
           description:
-            "Improve market research, analyze user data, rapidly iterate, automate feature requests and more with Formation.",
+            "Access a diverse ecosystem of AI agents to enhance productivity, automate tasks, and unlock new possibilities with Formation credits.",
         },
         {
           icon: "/financial.jpg",
-          title: "Financial Services",
+          title: "For Developers",
           description:
-            "Augment your research team, make better decisions faster, deliver better results, manage relationships more effectively, automate onboarding and grow your customer base with Formation.",
+            "Monetize your AI agents, reach a global audience, and earn Formation credits while focusing on building great solutions.",
         },
         {
           icon: "/smart-city.jpg",
-          title: "Smart Businesses",
+          title: "For Enterprises",
           description:
-            "Small business is smart business, you no longer need a massive team to scale. Enhance profitability, reduce inefficiencies, and grow your sales with Formation",
+            "Deploy custom AI agents across your organization with enterprise-grade security, compliance, and scalability.",
         },
         {
           icon: "/autonomous-vehicle.jpg",
-          title: "Independent Developers",
+          title: "For Innovators",
           description:
-            "Your github commit grid is filled with bright green, but your open source agent projects are lost in a sea of noise, register them with Formation and access an audience of excited users on Formation.",
+            "Create specialized AI agents for niche markets and monetize your expertise through our decentralized marketplace.",
         }],
     },
     whyFormation: {
-      subtitle: "Why Formation",
-      title: "Unlock your full potential with Formation",
+      subtitle: "Why Formation Marketplace",
+      title: "The Future of AI Agent Distribution",
       description:
-        "Formation provides the tools to succeed in the Age of Autonomy by providing a unified marketplace for agents, models and inference. Take control of your future with Formation.",
+        "Formation's marketplace connects AI agent developers with users worldwide, powered by our decentralized inference network. Earn and spend Formation credits in a thriving ecosystem of innovation.",
     },
     footer: {
       headline: (
         <>
-          Enter the Autonomous Age with Formation
+          Join the AI Agent Revolution
         </>
       ),
-      buttonText: "Join the Waitlist",
+      buttonText: "Launch Your Agent",
     },
   },
   // 2. Startup Innovators
@@ -127,7 +127,7 @@ export const content = [
         {
           title: "Scalability",
           description:
-            "Grow on demand. Formation’s distributed systems make scaling effortless and affordable.",
+            "Grow on demand. Formation's distributed systems make scaling effortless and affordable.",
           icon: "/scalability.jpg",
         },
         {
@@ -215,13 +215,13 @@ export const content = [
         {
           title: "Cost Savings",
           description:
-            "Optimize IT budgets with Formation’s efficient and scalable pricing model.",
+            "Optimize IT budgets with Formation's efficient and scalable pricing model.",
           icon: "/cost.jpg",
         },
         {
           title: "Scalability",
           description:
-            "Expand into new markets with ease—Formation’s global footprint is built to scale with your ambitions.",
+            "Expand into new markets with ease—Formation's global footprint is built to scale with your ambitions.",
           icon: "/scalability.jpg",
         },
         {
@@ -284,7 +284,7 @@ export const content = [
     hero: {
       title: ["Develop. Deploy.", "Redefine the Edge."],
       subtitle:
-        "Build decentralized apps with ease using Formation’s developer-first platform.",
+        "Build decentralized apps with ease using Formation's developer-first platform.",
       buttonText: "Start Building",
     },
     keyFeatures: {
@@ -297,7 +297,7 @@ export const content = [
         {
           title: "100% Uptime Guarantee",
           description:
-            "Keep your apps online with Formation’s decentralized, always-on infrastructure.",
+            "Keep your apps online with Formation's decentralized, always-on infrastructure.",
           icon: "/uptime.jpg",
         },
         {
@@ -589,7 +589,7 @@ export const content = [
         {
           title: "Cost Savings",
           description:
-            "Cut costs with Formation’s efficient and scalable infrastructure designed for decentralized applications.",
+            "Cut costs with Formation's efficient and scalable infrastructure designed for decentralized applications.",
           icon: "/cost.jpg",
         },
         {
