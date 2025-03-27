@@ -24,7 +24,7 @@ export default function Home() {
         tagline={currentContent.keyFeatures.tagline}
         features={currentContent.keyFeatures.features}
       />
-            <FeaturedAgentsSection />
+      <FeaturedAgentsSection />
       <KeyFeaturesSection
         tagline={currentContent.keyFeatures.tagline}
         features={currentContent.keyFeatures.features}

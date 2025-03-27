@@ -8,12 +8,12 @@ const AgentCard = ({ agent }) => {
 
   return (
     <div 
-      className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 overflow-hidden cursor-pointer group"
+      className="bg-blue-50/80 rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-blue-100 overflow-hidden cursor-pointer group"
       onClick={() => router.push('#marketplace')}
     >
       <div className="relative">
         {/* Agent Preview/Demo Area */}
-        <div className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 p-6 h-48 flex items-center justify-center">
+        <div className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 p-6 h-48 flex items-center justify-center">
           <div className="text-4xl text-formation-blue">
             {agent.icon}
           </div>
