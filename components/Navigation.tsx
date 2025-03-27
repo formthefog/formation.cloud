@@ -7,6 +7,7 @@ import RightCaret from "./icons/RightCaret";
 import Hamburger from "./icons/Hamburger";
 import Image from "next/image";
 import { useModal } from "@/context/ModalContext";
+import Link from "next/link";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -107,16 +108,17 @@ const Navigation = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
+        <Link href="/marketplace">
           <Button
             variant="outline"
             size="sm"
-            onClick={openWaitlistModal}
           >
             <span className="block sm:hidden">ACCESS</span>
             <span className="hidden sm:block lg:hidden">ACCESS MARKETPLACE</span>
             <span className="hidden lg:block">ACCESS MARKETPLACE</span>
             <RightCaret />
           </Button>
+          </Link>
           <button onClick={toggleMenu} className="md:hidden">
             <Hamburger />
           </button>
@@ -169,16 +171,14 @@ const Navigation = () => {
             >
               Use Cases
             </a>
+            <Link href="/marketplace">
             <Button
               className="text-blue-500 font-bold bg-transparent hover:bg-transparent"
               variant="ghost"
-              onClick={() => {
-                toggleMenu();
-                openWaitlistModal();
-              }}
             >
               ACCESS MARKETPLACE
             </Button>
+            </Link>
           </div>
         </div>
       )}
