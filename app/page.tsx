@@ -7,6 +7,7 @@ import UseCasesSection from "@/components/UseCasesSection";
 import WhyFormationSection from "@/components/WhyFormationSection";
 import FeaturedAgentsSection from "@/components/FeaturedAgentsSection";
 import { content } from "@/lib/contentArray";
+import TopSection from "@/components/TopSection";
 
 export default function Home() {
   const currentContent = content[0]
@@ -19,11 +20,16 @@ export default function Home() {
         subtitle={currentContent.hero.subtitle}
         buttonText={currentContent.hero.buttonText}
       />
+      <TopSection 
+        tagline={currentContent.keyFeatures.tagline}
+        features={currentContent.keyFeatures.features}
+      />
+            <FeaturedAgentsSection />
       <KeyFeaturesSection
         tagline={currentContent.keyFeatures.tagline}
         features={currentContent.keyFeatures.features}
       />
-      <FeaturedAgentsSection />
+
       <WhyFormationSection
         title={currentContent.whyFormation.title}
         subtitle={currentContent.whyFormation.subtitle}

@@ -36,7 +36,7 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
       <div className="relative w-full z-10 container mx-auto max-w-[1280px] px-6 py-8 md:py-16 text-center border-l border-r h-full border-black flex flex-col items-center justify-center border-opacity-[0.05]">
         <div className="flex flex-col items-center">
           <h1 className="text-[56px] md:text-[80px] flex flex-col w-full max-w-[350px] md:max-w-[958px] font-[600] tracking-[-0.05em] font-hauora text-gray-900">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-400 to-blue-600 leading-[65px] md:leading-[85px] flex flex-row self-center">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-blue-500 leading-[65px] md:leading-[85px] flex flex-row self-center">
             Discover, Deploy, and Monetize
             </span>
           </h1>
