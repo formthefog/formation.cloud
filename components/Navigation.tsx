@@ -13,7 +13,6 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { openWaitlistModal } = useModal();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -114,8 +113,8 @@ const Navigation = () => {
             size="sm"
           >
             <span className="block sm:hidden">ACCESS</span>
-            <span className="hidden sm:block lg:hidden">ACCESS MARKETPLACE</span>
-            <span className="hidden lg:block">ACCESS MARKETPLACE</span>
+            <span className="hidden sm:block lg:hidden">GO TO MARKETPLACE</span>
+            <span className="hidden lg:block">GO TO MARKETPLACE</span>
             <RightCaret />
           </Button>
           </Link>

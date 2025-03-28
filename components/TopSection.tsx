@@ -10,7 +10,7 @@ const MarketplaceHighlight = ({ icon: Icon, title, description }) => {
   
   return (
     <div 
-      className="group relative overflow-hidden flex flex-col items-center p-8 rounded-xl bg-white border border-gray-100 hover:border-formation-blue/20 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg hover:shadow-formation-blue/5"
+      className="group relative overflow-hidden flex flex-col items-center p-8 rounded-none bg-white border border-gray-100 hover:border-formation-blue/20 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg hover:shadow-formation-blue/5"
       onClick={() => router.push('#marketplace')}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-formation-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -62,15 +62,15 @@ const KeyFeaturesSection = ({ tagline, features }) => {
               Transform your AI innovations into reality on our high-performance network. Experience enterprise-grade security, seamless deployment, and unlimited scaling potential in the new era of decentralized AI.
             </p>
             <div className="flex justify-center gap-4 mb-16">
-              <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-lg border border-gray-200">
+              <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-none border border-gray-200">
                 <span className="text-2xl font-bold text-gray-900">100+</span>
                 <span className="text-sm text-gray-600">AI Agents</span>
               </div>
-              <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-lg border border-gray-200">
+              <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-none border border-gray-200">
                 <span className="text-2xl font-bold text-gray-900">10K+</span>
                 <span className="text-sm text-gray-600">Daily Users</span>
               </div>
-              <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-lg border border-gray-200">
+              <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-none border border-gray-200">
                 <span className="text-2xl font-bold text-gray-900">1M+</span>
                 <span className="text-sm text-gray-600">Credits Earned</span>
               </div>
@@ -86,7 +86,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
           <div className="w-full mt-16">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Users Column */}
-              <div className="group flex flex-col gap-6 p-8 rounded-xl bg-gray-50 hover:bg-white transition-all duration-300 border border-gray-100 hover:border-formation-blue/20 hover:shadow-lg hover:shadow-formation-blue/5">
+              <div className="group flex flex-col gap-6 p-8 rounded-none bg-gray-50 hover:bg-white transition-all duration-300 border border-gray-100 hover:border-formation-blue/20 hover:shadow-lg hover:shadow-formation-blue/5">
                 <h6 className="text-3xl font-hauora tracking-[-0.05em] font-[500] text-gray-900 leading-tight">
                   For Users
                 </h6>
@@ -103,7 +103,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
               </div>
 
               {/* Developers Column */}
-              <div className="group flex flex-col gap-6 p-8 rounded-xl bg-gray-50 hover:bg-white transition-all duration-300 border border-gray-100 hover:border-formation-blue/20 hover:shadow-lg hover:shadow-formation-blue/5">
+              <div className="group flex flex-col gap-6 p-8 rounded-none bg-gray-50 hover:bg-white transition-all duration-300 border border-gray-100 hover:border-formation-blue/20 hover:shadow-lg hover:shadow-formation-blue/5">
                 <h6 className="text-3xl font-hauora tracking-[-0.05em] font-[500] text-gray-900 leading-tight">
                   For Developers
                 </h6>

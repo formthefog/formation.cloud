@@ -54,36 +54,38 @@ export default function AgentCard({ agent }: AgentCardProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200"
+      className="group bg-white rounded-none shadow-sm hover:shadow-md transition-all border grow border-gray-200 h-full flex flex-col"
     >
-      <Link href={`/marketplace/agents/${agent.agent_id}`}>
-        <div className="p-6">
-          {/* Header Section */}
-          <div className="flex items-start justify-between mb-4">
+      <div className="p-6 flex flex-col h-full">
+        {/* Header Section */}
+        <div className="flex flex-col mb-3">
+          <div className="flex items-start gap-4 mb-1">
             <div className="flex-1">
-              <div className="flex items-start gap-2 mb-2">
+              <Link 
+                href={`/marketplace/agents/${agent.agent_id}`} 
+                className="hover:text-blue-600 transition-colors inline-block mb-1"
+              >
                 <h3 className="text-lg font-semibold text-gray-900">{agent.name}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {agent.is_featured && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-                      Featured
-                    </span>
-                  )}
-                  <span className="px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
-                    {agent.agent_type}
+              </Link>
+              <div className="flex flex-wrap gap-1">
+                {agent.is_featured && (
+                  <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-none whitespace-nowrap">
+                    Featured
                   </span>
-                  {agent.has_memory && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 rounded-full">
-                      Has Memory
-                    </span>
-                  )}
-                </div>
+                )}
+                <span className="px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-800 rounded-none whitespace-nowrap">
+                  {agent.agent_type}
+                </span>
+                {agent.has_memory && (
+                  <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 rounded-none whitespace-nowrap">
+                    Has Memory
+                  </span>
+                )}
               </div>
-              <p className="text-sm text-gray-600">{agent.description}</p>
             </div>
-            <div className="text-right">
-              <div className="text-xs text-gray-500 mb-1">Per Request</div>
-              <div className="text-lg font-bold text-[#0A84FF]">
+            <div className="text-right shrink-0">
+              <div className="text-xs text-gray-500 mb-0.5 whitespace-nowrap">Per Request</div>
+              <div className="text-lg font-bold text-[#0A84FF] whitespace-nowrap">
                 {agent.price_per_request ? (
                   `$${agent.price_per_request}`
                 ) : (
@@ -92,146 +94,152 @@ export default function AgentCard({ agent }: AgentCardProps) {
               </div>
             </div>
           </div>
+          <p className="text-sm text-gray-600 line-clamp-2">{agent.description}</p>
+        </div>
 
-          {/* Technical Details */}
-          <div className="grid grid-cols-2 gap-4 mb-4 py-4 border-y border-gray-100">
-            <div>
-              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Framework & Runtime</h4>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                    {agent.framework}
-                  </span>
-                  <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                    {agent.runtime}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">License</h4>
-              <div className="flex items-center gap-2">
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                  {agent.license}
+        {/* Technical Details */}
+        <div className="grid grid-cols-2 gap-3 mb-3 py-3 border-y border-gray-100">
+          <div>
+            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5">Framework & Runtime</h4>
+            <div className="space-y-1">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 line-clamp-1">
+                  {agent.framework}
                 </span>
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                  v{agent.version}
+                <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 line-clamp-1">
+                  {agent.runtime}
                 </span>
               </div>
             </div>
           </div>
+          <div>
+            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5">License</h4>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 line-clamp-1">
+                {agent.license}
+              </span>
+              <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 whitespace-nowrap">
+                v{agent.version}
+              </span>
+            </div>
+          </div>
+        </div>
 
-          {/* Capabilities Section */}
+        {/* Capabilities Section */}
+        <div className="mb-3">
+          <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5">Capabilities</h4>
+          <div className="flex flex-wrap gap-1.5">
+            {agent.capabilities.map((capability, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md line-clamp-1"
+              >
+                {capability}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Tools Section */}
+        {agent.tools && agent.tools.length > 0 && (
+          <div className="mb-3">
+            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5">Available Tools</h4>
+            <div className="flex flex-wrap gap-1.5">
+              {agent.tools.slice(0, 3).map((tool, index) => (
+                <div
+                  key={tool.id || index}
+                  className="group/tool relative"
+                >
+                  <span className="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md cursor-help line-clamp-1">
+                    {tool.name}
+                  </span>
+                  <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-gray-900 text-xs text-white rounded-md opacity-0 group-hover/tool:opacity-100 transition-opacity pointer-events-none z-10">
+                    {tool.description}
+                  </div>
+                </div>
+              ))}
+              {agent.tools.length > 3 && (
+                <span className="text-xs text-gray-500">+{agent.tools.length - 3} more</span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Resource Requirements */}
+        <div className="mb-4">
+          <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">System Requirements</h4>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-xs text-gray-500">CPU</div>
+              <div className="text-sm whitespace-nowrap">
+                <span className="font-medium">{agent.resource_requirements.min_vcpus}</span>
+                <span className="text-gray-400"> - </span>
+                <span className="font-medium">{agent.resource_requirements.recommended_vcpus}</span>
+                <span className="text-gray-400"> vCPUs</span>
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500">Memory</div>
+              <div className="text-sm whitespace-nowrap">
+                <span className="font-medium">{agent.resource_requirements.min_memory_mb / 1024}</span>
+                <span className="text-gray-400"> - </span>
+                <span className="font-medium">{agent.resource_requirements.recommended_memory_mb / 1024}</span>
+                <span className="text-gray-400"> GB</span>
+              </div>
+            </div>
+            {agent.resource_requirements.requires_gpu && (
+              <div className="col-span-2">
+                <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded whitespace-nowrap">
+                  Requires GPU
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Access & Permissions */}
+        <div className="mb-4">
+          <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Access & Permissions</h4>
+          <div className="flex flex-wrap gap-2">
+            {agent.has_external_api_access && (
+              <span className="px-2 py-1 text-xs bg-yellow-50 text-yellow-700 rounded-md whitespace-nowrap">
+                External API Access
+              </span>
+            )}
+            {agent.has_internet_access && (
+              <span className="px-2 py-1 text-xs bg-yellow-50 text-yellow-700 rounded-md whitespace-nowrap">
+                Internet Access
+              </span>
+            )}
+            {agent.has_filesystem_access && (
+              <span className="px-2 py-1 text-xs bg-yellow-50 text-yellow-700 rounded-md whitespace-nowrap">
+                Filesystem Access
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Tags */}
+        {agent.tags && agent.tags.length > 0 && (
           <div className="mb-4">
-            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Capabilities</h4>
+            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Tags</h4>
             <div className="flex flex-wrap gap-2">
-              {agent.capabilities.map((capability, index) => (
+              {agent.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md"
+                  className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md line-clamp-1"
                 >
-                  {capability}
+                  {tag}
                 </span>
               ))}
             </div>
           </div>
+        )}
 
-          {/* Tools Section */}
-          {agent.tools && agent.tools.length > 0 && (
-            <div className="mb-4">
-              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Available Tools</h4>
-              <div className="flex flex-wrap gap-2">
-                {agent.tools.map((tool) => (
-                  <div
-                    key={tool.id}
-                    className="group/tool relative"
-                  >
-                    <span className="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md cursor-help">
-                      {tool.name}
-                    </span>
-                    <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-gray-900 text-xs text-white rounded-md opacity-0 group-hover/tool:opacity-100 transition-opacity pointer-events-none">
-                      {tool.description}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Resource Requirements */}
-          <div className="mb-4">
-            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">System Requirements</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-xs text-gray-500">CPU</div>
-                <div className="text-sm">
-                  <span className="font-medium">{agent.resource_requirements.min_vcpus}</span>
-                  <span className="text-gray-400"> - </span>
-                  <span className="font-medium">{agent.resource_requirements.recommended_vcpus}</span>
-                  <span className="text-gray-400"> vCPUs</span>
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">Memory</div>
-                <div className="text-sm">
-                  <span className="font-medium">{agent.resource_requirements.min_memory_mb / 1024}</span>
-                  <span className="text-gray-400"> - </span>
-                  <span className="font-medium">{agent.resource_requirements.recommended_memory_mb / 1024}</span>
-                  <span className="text-gray-400"> GB</span>
-                </div>
-              </div>
-              {agent.resource_requirements.requires_gpu && (
-                <div className="col-span-2">
-                  <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded">
-                    Requires GPU
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Access & Permissions */}
-          <div className="mb-4">
-            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Access & Permissions</h4>
-            <div className="flex flex-wrap gap-2">
-              {agent.has_external_api_access && (
-                <span className="px-2 py-1 text-xs bg-yellow-50 text-yellow-700 rounded-md">
-                  External API Access
-                </span>
-              )}
-              {agent.has_internet_access && (
-                <span className="px-2 py-1 text-xs bg-yellow-50 text-yellow-700 rounded-md">
-                  Internet Access
-                </span>
-              )}
-              {agent.has_filesystem_access && (
-                <span className="px-2 py-1 text-xs bg-yellow-50 text-yellow-700 rounded-md">
-                  Filesystem Access
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Tags */}
-          {agent.tags && agent.tags.length > 0 && (
-            <div className="mb-4">
-              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Tags</h4>
-              <div className="flex flex-wrap gap-2">
-                {agent.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Metrics Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-            <div className="flex items-center gap-4">
+        {/* Push footer to bottom using margin-top: auto */}
+        <div className="mt-auto pt-3 border-t border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
               <div>
                 <div className="text-xs text-gray-500">Rating</div>
                 <div className="flex items-center gap-1">
@@ -245,30 +253,26 @@ export default function AgentCard({ agent }: AgentCardProps) {
                 <div className="text-xs text-gray-500">Uses</div>
                 <div className="text-sm font-semibold text-gray-900">{agent.usage_count.toLocaleString()}</div>
               </div>
-              <div>
-                <div className="text-xs text-gray-500">Deployments</div>
-                <div className="text-sm font-semibold text-gray-900">{agent.deployment_count.toLocaleString()}</div>
-              </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               {agent.is_private && (
-                <span className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md">
+                <span className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md whitespace-nowrap">
                   Private
                 </span>
               )}
               <Link
                 href={`/marketplace/agents/${agent.agent_id}`}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-none hover:bg-gray-200 transition-colors whitespace-nowrap"
               >
                 Details
               </Link>
-              <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+              <button className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-none hover:bg-blue-700 transition-colors whitespace-nowrap">
                 Deploy
               </button>
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </motion.div>
   );
 } 

@@ -48,7 +48,7 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
             <Link href="/marketplace">
             <Button
               size="lg"
-              className="button-with-gradient  h-full text-[16px] px-8 py-6 font-medium"
+              className="button-with-gradient  h-full text-[16px] px-8 py-6 font-medium transition-all duration-300"
               onClick={openWaitlistModal}
             >
               {buttonText} <RightCaret />
@@ -58,7 +58,7 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
             <Button
               size="lg"
               variant="outline"
-              className="border-2 hover:bg-gray-50 text-[16px] px-8 py-6 font-medium"
+              className="border-2 hover:bg-gray-50 text-[16px] px-8 py-6 font-medium hover:text-formation-blue"
               onClick={() => window.open('#marketplace', '_self')}
             >
               Browse Agents

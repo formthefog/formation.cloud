@@ -16,13 +16,6 @@ import {
   SelectValue 
 } from '@/components/ui/select';
 
-const metrics = [
-  { label: "Active Agents", value: "50,000+", description: "AI agents deployed globally" },
-  { label: "Processing Power", value: "1M+", description: "Requests processed daily" },
-  { label: "Customer Satisfaction", value: "98%", description: "Average satisfaction rate" },
-  { label: "Cost Savings", value: "$2M+", description: "Average yearly savings per enterprise customer" }
-];
-
 const ITEMS_PER_PAGE = 6;
 const sortOptions = [
   { value: 'popular', label: 'Most Popular' },
@@ -35,7 +28,6 @@ const sortOptions = [
 export default function Marketplace() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -138,26 +130,16 @@ export default function Marketplace() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB]">
+    <div className="min-h-screen bg-[#F9FAFB] pt-6">
       {/* Main Content with Sidebar */}
       <div className="flex relative">
-        <Sidebar
-          isSidebarOpen={isSidebarOpen}
-          categoryCount={categoryCount}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          metrics={metrics}
-        />
-
         {/* Main Content */}
-        <main className="flex-1 min-h-[calc(100vh-73px)] max-w-[1400px] mx-auto">
+        <main className="flex-1 min-h-[calc(100vh-73px)] max-w-[1280px] mx-auto">
           <div className=" flex flex-col">
             {/* Mobile Toggle */}
             <button
               onClick={() => setIsSidebarOpen(prev => !prev)}
-              className="md:hidden mb-6 px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
+              className="md:hidden mb-6 px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-none shadow-sm hover:bg-gray-50 transition-colors"
             >
               {isSidebarOpen ? "Hide Filters" : "Show Filters"}
             </button>
@@ -219,7 +201,7 @@ export default function Marketplace() {
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
               {loading ? (
                 Array(ITEMS_PER_PAGE).fill(0).map((_, index) => (
-                  <div key={index} className="bg-white rounded-lg shadow-sm p-6 animate-pulse">
+                  <div key={index} className="bg-white rounded-none shadow-sm p-6 animate-pulse">
                     <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
                     <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
                     <div className="h-4 bg-gray-200 rounded w-5/6"></div>

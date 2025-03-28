@@ -43,7 +43,7 @@ const MarketplaceNavigation = ({
             <FormationLogo />
           </Link>
           <span className="hidden md:block h-6 w-px bg-gray-200" />
-          <span className="hidden md:block text-sm font-medium text-gray-900">Marketplace</span>
+          <span className="hidden md:block text-sm font-bold text-gray-300">MARKETPLACE</span>
         </div>
 
         <div className="flex-1 max-w-lg mx-8 hidden md:block">
