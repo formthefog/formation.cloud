@@ -54,12 +54,11 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
               {buttonText} <RightCaret />
             </Button>
             </Link>
-            <Link href="/marketplace">
+            <Link href="/marketplace/agents">
             <Button
               size="lg"
               variant="outline"
               className="border-2 hover:bg-gray-50 text-[16px] px-8 py-6 font-medium hover:text-formation-blue"
-              onClick={() => window.open('#marketplace', '_self')}
             >
               Browse Agents
             </Button>

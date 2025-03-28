@@ -53,7 +53,7 @@ export default function FeaturedAgents({ agents }: FeaturedAgentsProps) {
                 <span>Highly rated • Extensively tested • Production-ready</span>
               </div>
               <Link
-                href="/marketplace"
+                href="/marketplace/agents"
                 className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-none text-blue-700 bg-blue-100 hover:bg-blue-200 transition-colors"
               >
                 View All Agents →

@@ -15,6 +15,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
+import Link from "next/link";
 
 const ITEMS_PER_PAGE = 6;
 const sortOptions = [
@@ -185,9 +186,9 @@ export default function Marketplace() {
                 </div>
               </div>
 
+              <Link href="/marketplace/agents">
               <Button
                 variant="outline"
-                onClick={() => window.location.href = '/marketplace/explore'}
                 className="whitespace-nowrap"
               >
                 Explore All Agents
@@ -195,6 +196,7 @@ export default function Marketplace() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Button>
+              </Link>
             </div>
 
             {/* All Agents Grid */}

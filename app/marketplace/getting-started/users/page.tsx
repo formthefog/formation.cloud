@@ -408,9 +408,9 @@ const report = await researchAgent.generateReport({
             Start with a free trial and see how Formation can automate your business processes.
           </p>
           <div className="flex justify-center gap-4">
-          <Link href="/marketplace">
+          <Link href="/marketplace/agents">
             <Button size="lg" variant="outline" className="text-formation-blue hover:text-white border-white hover:bg-blue-500">
-              Browse Marketplace
+              Browse Agents
             </Button>
 </Link>
           </div>

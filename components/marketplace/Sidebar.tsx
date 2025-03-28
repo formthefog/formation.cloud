@@ -61,7 +61,7 @@ const navigationItems = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
       </svg>
     ),
-    href: "/deployments",
+    href: "/marketplace/my-agents",
     section: "user",
     badge: true
   },
@@ -122,23 +122,6 @@ const navigationItems = [
   }
 ];
 
-const popularTutorials = [
-  {
-    title: "Getting Started with AI Agents",
-    category: "Fundamentals",
-    href: "/tutorials/getting-started/your-first-ai-agent"
-  },
-  {
-    title: "Building Your First Custom Agent",
-    category: "Development",
-    href: "/tutorials/agent-development/custom-tool-integration"
-  },
-  {
-    title: "Advanced Agent Deployment Strategies",
-    category: "Deployment",
-    href: "/tutorials/best-practices/agent-design-patterns"
-  }
-];
 
 export default function Sidebar({
   isSidebarOpen,
@@ -257,7 +240,7 @@ export default function Sidebar({
               </li>
             </ol>
             <Link
-              href="/docs/quickstart"
+              href="/marketplace/getting-started"
               className="text-xs text-blue-600 hover:text-blue-700 font-medium mt-3 inline-block"
             >
               View Quick Start Guide →

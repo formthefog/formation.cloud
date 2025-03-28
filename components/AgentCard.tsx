@@ -54,7 +54,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group bg-white rounded-none shadow-sm hover:shadow-md transition-all border grow border-gray-200 h-full flex flex-col"
+      className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all border grow border-gray-200 h-full flex flex-col"
     >
       <div className="p-6 flex flex-col h-full">
         {/* Header Section */}
@@ -69,15 +69,15 @@ export default function AgentCard({ agent }: AgentCardProps) {
               </Link>
               <div className="flex flex-wrap gap-1">
                 {agent.is_featured && (
-                  <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-none whitespace-nowrap">
+                  <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full whitespace-nowrap">
                     Featured
                   </span>
                 )}
-                <span className="px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-800 rounded-none whitespace-nowrap">
+                <span className="px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-800 rounded-full whitespace-nowrap">
                   {agent.agent_type}
                 </span>
                 {agent.has_memory && (
-                  <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 rounded-none whitespace-nowrap">
+                  <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 rounded-full whitespace-nowrap">
                     Has Memory
                   </span>
                 )}
@@ -262,13 +262,13 @@ export default function AgentCard({ agent }: AgentCardProps) {
               )}
               <Link
                 href={`/marketplace/agents/${agent.agent_id}`}
-                className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-none hover:bg-gray-200 transition-colors whitespace-nowrap"
+                className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors whitespace-nowrap"
               >
                 Details
               </Link>
-              <button className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-none hover:bg-blue-700 transition-colors whitespace-nowrap">
+              <Link href={`/marketplace/agents/${agent.agent_id}?tab=deploy`} className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap">
                 Deploy
-              </button>
+              </Link>
             </div>
           </div>
         </div>

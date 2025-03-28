@@ -94,7 +94,7 @@ const FeaturedAgentsSection = () => {
         </div>
 
         <div className="text-center mt-16">
-          <Link href="/marketplace">
+          <Link href="/marketplace/agents">
           <Button
               className="button-with-gradient  h-full text-[16px] px-8 py-6 font-medium"
           >

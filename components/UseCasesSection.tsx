@@ -5,6 +5,7 @@ import Dots from "./icons/Dots";
 import { FaArrowRight } from "react-icons/fa6";
 import { useRouter } from 'next/navigation';
 import AgentPlayground from "./AgentPlayground";
+import Link from "next/link";
 
 const UseCaseCard = ({ useCase, index }) => {
   const router = useRouter();
@@ -98,13 +99,14 @@ const UseCasesSection = ({ title, subtitle, useCases }) => {
         </div>
 
         <div className="w-full text-center mt-12">
+          <Link href="/marketplace/agents">
           <button
-            onClick={() => router.push('#marketplace')}
             className="inline-flex items-center px-6 py-3 bg-formation-blue text-white rounded-lg hover:bg-formation-blue/90 transition-colors"
           >
             View All Agents
             <FaArrowRight className="ml-2" size={14} />
           </button>
+</Link>
         </div>
       </div>
     </section>
