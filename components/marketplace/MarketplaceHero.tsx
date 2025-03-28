@@ -126,13 +126,13 @@ export default function MarketplaceHero() {
                 {activeTab === 'business' ? (
                   <>
                     <Link
-                      href="/signup"
+                      href="/marketplace/getting-started/users"
                       className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-all"
                     >
-                      Get Started Free
+                      Get Started 
                     </Link>
                     <Link
-                      href="/marketplace"
+                      href="/marketplace/agents"
                       className="inline-flex items-center justify-center px-4 py-3 text-base font-medium text-blue-600 hover:text-blue-700"
                     >
                       Browse Agents →
@@ -141,13 +141,13 @@ export default function MarketplaceHero() {
                 ) : (
                   <>
                     <Link
-                      href="/developers/signup"
+                      href="/marketplace/getting-started/developers"
                       className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all"
                     >
                       Start Building
                     </Link>
                     <Link
-                      href="/docs"
+                      href="/marketplace/getting-started/developers"
                       className="inline-flex items-center justify-center px-4 py-3 text-base font-medium text-indigo-600 hover:text-indigo-700"
                     >
                       View Documentation →
