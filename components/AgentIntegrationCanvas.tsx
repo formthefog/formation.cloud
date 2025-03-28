@@ -23,29 +23,73 @@ const getPosition = (index: number, total: number, radius: number) => {
   };
 };
 
+interface ActiveTool {
+  id: string;
+  expiresAt: number;
+}
+
 export default function AgentIntegrationCanvas() {
-  const [activeTools, setActiveTools] = useState<string[]>([]);
-  const radius = 180; // Increased radius for better spacing
+  const [activeTools, setActiveTools] = useState<ActiveTool[]>([]);
+  const radius = 180;
 
-  // Animation to cycle through tools
+  // Function to add new random connections
+  const addRandomConnections = () => {
+    const now = Date.now();
+    const numNewTools = Math.floor(Math.random() * 2) + 1; // Add 1-2 new tools
+    
+    // Get currently active tool IDs
+    const currentActiveIds = new Set(activeTools
+      .filter(tool => tool.expiresAt > now)
+      .map(tool => tool.id));
+
+    // Get available tools (not currently active)
+    const availableTools = TOOLS.filter(tool => !currentActiveIds.has(tool.id));
+    
+    if (availableTools.length === 0) return;
+
+    // Shuffle available tools and take what we need
+    const shuffled = [...availableTools]
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+
+    const newTools = shuffled.slice(0, numNewTools).map(tool => ({
+      id: tool.id,
+      expiresAt: now + (Math.random() * 4000 + 2000) // Random duration between 2-6 seconds
+    }));
+
+    setActiveTools(prev => {
+      // Remove expired tools and add new ones
+      const active = prev.filter(tool => tool.expiresAt > now);
+      return [...active, ...newTools];
+    });
+  };
+
+  // Effect to periodically add new connections
   useEffect(() => {
-    const interval = setInterval(() => {
-      const randomTool = TOOLS[Math.floor(Math.random() * TOOLS.length)].id;
-      setActiveTools(prev => {
-        // Keep only the last 2 active tools
-        const newTools = [...prev, randomTool].slice(-2);
-        return newTools;
-      });
-    }, 4000);
-
+    const interval = setInterval(addRandomConnections, 1000);
     return () => clearInterval(interval);
   }, []);
 
+  // Effect to cleanup expired connections
+  useEffect(() => {
+    const cleanup = setInterval(() => {
+      const now = Date.now();
+      setActiveTools(prev => prev.filter(tool => tool.expiresAt > now));
+    }, 1000);
+    return () => clearInterval(cleanup);
+  }, []);
+
+  // Get currently active tool IDs for rendering
+  const activeToolIds = activeTools
+    .filter(tool => tool.expiresAt > Date.now())
+    .map(tool => tool.id);
+
   return (
-    <div className="w-full h-full relative bg-[#0A0F2C] overflow-hidden">
+    <div className="w-full h-full relative bg-[#1C2B66] overflow-hidden">
       {/* Grid Background */}
       <div 
-        className="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-15"
         style={{
           backgroundImage: `
             linear-gradient(#4A88FF 1px, transparent 1px),
@@ -59,19 +103,19 @@ export default function AgentIntegrationCanvas() {
       <div 
         className="absolute inset-0"
         style={{
-          background: 'radial-gradient(circle at center, transparent 0%, #0A0F2C 70%)'
+          background: 'radial-gradient(circle at center, rgba(28, 43, 102, 0) 0%, rgba(28, 43, 102, 0.85) 70%)'
         }}
       />
 
       {/* Main Container */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-[600px] h-[600px]">
-          {/* Spokes Container - Rendered before tools for proper layering */}
+          {/* Spokes Container */}
           <div className="absolute inset-0">
             {TOOLS.map((tool, index) => {
               const pos = getPosition(index, TOOLS.length, radius);
               const angle = Math.atan2(pos.y, pos.x) * (180 / Math.PI);
-              const isActive = activeTools.includes(tool.id);
+              const isActive = activeToolIds.includes(tool.id);
 
               return (
                 <motion.div
@@ -214,7 +258,7 @@ export default function AgentIntegrationCanvas() {
           {/* Tools */}
           {TOOLS.map((tool, index) => {
             const pos = getPosition(index, TOOLS.length, radius);
-            const isActive = activeTools.includes(tool.id);
+            const isActive = activeToolIds.includes(tool.id);
 
             return (
               <div
