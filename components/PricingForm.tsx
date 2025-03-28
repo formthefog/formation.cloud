@@ -102,7 +102,7 @@ export default function PricingForm({ data, onUpdate }: PricingFormProps) {
             <label className="block text-sm font-medium mb-2">Billing Type</label>
             <select
               value={data.billingType}
-              onChange={(e) => handleUpdateField('billingType', e.target.value)}
+              onChange={(e) => handleUpdateField('billingType', e.target.value as PricingSettings['billingType'])}
               className="input-field"
             >
               <option value="per_request">Per Request</option>
@@ -115,26 +115,11 @@ export default function PricingForm({ data, onUpdate }: PricingFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">
-                Currency
-              </label>
-              <select
-                value={data.currency}
-                onChange={(e) => handleUpdateField('currency', e.target.value)}
-                className="input-field"
-              >
-                <option value="USD">USD ($)</option>
-                <option value="EUR">EUR (€)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="JPY">JPY (¥)</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">
                 Billing Cycle
               </label>
               <select
                 value={data.billingCycle}
-                onChange={(e) => handleUpdateField('billingCycle', e.target.value)}
+                onChange={(e) => handleUpdateField('billingCycle', e.target.value as PricingSettings['billingCycle'])}
                 className="input-field"
               >
                 <option value="monthly">Monthly</option>
@@ -200,7 +185,7 @@ export default function PricingForm({ data, onUpdate }: PricingFormProps) {
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">
-                Price ({data.currency})
+                Price (Credits)
               </label>
               <input
                 type="text"
@@ -208,7 +193,7 @@ export default function PricingForm({ data, onUpdate }: PricingFormProps) {
                 onChange={(e) =>
                   setNewTier((prev) => ({ ...prev, price: e.target.value }))
                 }
-                placeholder="e.g., 9.99"
+                placeholder="e.g., 100"
                 className="input-field"
               />
             </div>
@@ -284,7 +269,7 @@ export default function PricingForm({ data, onUpdate }: PricingFormProps) {
                     <div>
                       <h5 className="font-medium">{tier.name}</h5>
                       <p className="text-lg font-bold text-blue-600">
-                        {data.currency} {tier.price}
+                        {tier.price} Credits
                       </p>
                       <p className="text-sm text-gray-500">
                         {tier.requestLimit.toLocaleString()} requests
@@ -326,7 +311,8 @@ export default function PricingForm({ data, onUpdate }: PricingFormProps) {
             <p className="mt-1 text-sm text-blue-700 dark:text-blue-300">
               Consider offering a mix of pricing tiers to cater to different user
               needs. Include a free tier to attract new users and premium tiers
-              with advanced features for power users.
+              with advanced features for power users. Credits can be purchased separately
+              and used across all our services.
             </p>
           </div>
         </div>

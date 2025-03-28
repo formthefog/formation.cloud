@@ -124,14 +124,13 @@ export interface MonitoringSettings {
 // Pricing Types
 export interface PricingTier {
   name: string;
-  price: number;
+  price: number; // Price in credits
   requestLimit: number;
   features: string[];
 }
 
 export interface PricingSettings {
   billingType: 'per_request' | 'subscription' | 'usage_based' | 'hybrid';
-  currency: 'USD' | 'EUR' | 'GBP' | 'JPY';
   billingCycle: 'monthly' | 'quarterly' | 'annual';
   offerTrial: boolean;
   trialPeriod: number;
