@@ -4,13 +4,18 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, Clock, Zap, Server, Shield, Send, Settings, Cpu, Database, Globe, Cloud } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Agent } from "@/types/agent";
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-markdown";
+import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+import "prismjs/plugins/line-numbers/prism-line-numbers";
 
 const tabs = [
   { id: "overview", label: "Overview" },
@@ -70,8 +75,15 @@ const getExamplePrompts = (agentType: string) => {
 
 export default function AgentDetailPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const agentId = params.agentId as string;
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'documentation' || tab === 'deploy') {
+      return tab;
+    }
+    return "overview";
+  });
   const [showDemo, setShowDemo] = useState(true);
   const [agent, setAgent] = useState<Agent | null>(null);
   const [loading, setLoading] = useState(true);
@@ -135,9 +147,30 @@ export default function AgentDetailPage() {
     }
   }, [messages]);
 
-  // Add effect for syntax highlighting
+  // Update the syntax highlighting effect to run when tab content changes
   useEffect(() => {
-    Prism.highlightAll();
+    const highlight = () => {
+      requestAnimationFrame(() => {
+        Prism.highlightAll();
+      });
+    };
+    
+    highlight();
+    
+    // Add a small delay to ensure dynamic content is loaded
+    const timer = setTimeout(highlight, 100);
+    return () => clearTimeout(timer);
+  }, [activeTab, deploymentStep]);
+
+  useEffect(() => {
+    // Update URL when tab changes
+    const url = new URL(window.location.href);
+    if (activeTab === 'overview') {
+      url.searchParams.delete('tab');
+    } else {
+      url.searchParams.set('tab', activeTab);
+    }
+    window.history.replaceState({}, '', url.toString());
   }, [activeTab]);
 
   const handleSendMessage = async () => {
@@ -438,7 +471,7 @@ export default function AgentDetailPage() {
               </div>
               <div className="p-6 space-y-4">
                 <div className="bg-[#1E1E1E] rounded-lg overflow-hidden">
-                  <pre className="p-4 text-sm overflow-x-auto">
+                  <pre className="p-4 text-sm overflow-x-auto line-numbers">
                     <code className="language-typescript">{`import { FormationAgent } from '@formation/sdk';
 
 const agent = new FormationAgent('${agent.agent_id}');
@@ -517,7 +550,7 @@ const response = await agent.process({
                 <div>
                   <h3 className="text-sm font-medium text-gray-900 mb-3">Basic Usage</h3>
                   <div className="bg-[#1E1E1E] rounded-lg overflow-hidden">
-                    <pre className="p-4 text-sm overflow-x-auto">
+                    <pre className="p-4 text-sm overflow-x-auto line-numbers">
                       <code className="language-typescript">{`// Simple request
 const response = await agent.process({
   input: "Analyze this code for security vulnerabilities",
@@ -540,7 +573,7 @@ const stream = agent.streamProcess({
                 <div>
                   <h3 className="text-sm font-medium text-gray-900 mb-3">Advanced Usage</h3>
                   <div className="bg-[#1E1E1E] rounded-lg overflow-hidden">
-                    <pre className="p-4 text-sm overflow-x-auto">
+                    <pre className="p-4 text-sm overflow-x-auto line-numbers">
                       <code className="language-typescript">{`// Custom tool integration
 agent.registerTool({
   name: "custom_tool",
@@ -705,7 +738,7 @@ const results = await agent.batchProcess([
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <h3 className="text-sm font-medium text-blue-900 mb-2">Debug Mode</h3>
                     <div className="bg-[#1E1E1E] rounded-lg overflow-hidden">
-                      <pre className="p-4 text-sm overflow-x-auto">
+                      <pre className="p-4 text-sm overflow-x-auto line-numbers">
                         <code className="language-typescript">{`// Enable debug mode
 const agent = new FormationAgent('${agent.agent_id}', {
   debug: true,
@@ -1275,16 +1308,16 @@ agent.on('retry', (attempt) => {
                                 <h3 className="text-sm font-medium text-gray-700">Example Usage</h3>
                               </div>
                               <div className="p-4">
-                                <code className="block p-3 bg-gray-900 text-blue-400 rounded-lg text-sm font-mono whitespace-pre overflow-x-auto">
-{`curl -X POST \\
+                                <pre className="p-4 text-sm overflow-x-auto line-numbers">
+                                  <code className="language-bash">{`curl -X POST \\
   https://api.formation.cloud/v1/agents/${deploymentConfig.name || `${agent.name.toLowerCase()}-prod`} \\
   -H "Authorization: Bearer ${deploymentConfig.apiKey}" \\
   -H "Content-Type: application/json" \\
   -d '{
     "input": "Your request here",
     "context": {}
-  }'`}
-                                </code>
+  }'`}</code>
+                                </pre>
                                 <div className="flex justify-end mt-2">
                                   <Button
                                     variant="outline"
