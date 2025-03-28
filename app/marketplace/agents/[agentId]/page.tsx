@@ -411,7 +411,7 @@ export default function AgentDetailPage() {
                   <pre className="p-4 text-sm overflow-x-auto">
                     <code className="language-typescript">{`import { FormationAgent } from '@formation/sdk';
 
-const agent = new FormationAgent('${agent.id}');
+const agent = new FormationAgent('${agent.agent_id}');
 
 // Initialize with custom configuration
 await agent.init({
@@ -677,7 +677,7 @@ const results = await agent.batchProcess([
                     <div className="bg-[#1E1E1E] rounded-lg overflow-hidden">
                       <pre className="p-4 text-sm overflow-x-auto">
                         <code className="language-typescript">{`// Enable debug mode
-const agent = new FormationAgent('${agent.id}', {
+const agent = new FormationAgent('${agent.agent_id}', {
   debug: true,
   logLevel: 'verbose'
 });
@@ -789,8 +789,8 @@ agent.on('retry', (attempt) => {
               </div>
               
               <div className="p-6 bg-white rounded-xl border border-gray-200">
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
                     <Shield className="w-4 h-4 text-green-600" />
                   </div>
                   <div>
@@ -817,8 +817,8 @@ agent.on('retry', (attempt) => {
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
                     <Zap className="w-4 h-4 text-purple-600" />
-                  </div>
-                  <div>
+                    </div>
+                    <div>
                     <h3 className="text-sm font-medium text-gray-900 mb-1">Runtime Details</h3>
                     <div className="space-y-2">
                       <p className="text-sm">

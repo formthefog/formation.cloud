@@ -1,3 +1,4 @@
+import { Agent } from '@/types/agent';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -5,7 +6,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { agentId: string } }
 ) {
-  const agentId = await params.agentId;
+  const { agentId } = await params;
   
   try {
     // Fetch from the list endpoint instead
@@ -40,8 +41,8 @@ export async function GET(
     }
 
     // Find the specific agent by ID
-    const agent = agents.find((a: any) => 
-      String(a.id) === String(agentId) || 
+    const agent = agents.find((a: Agent) => 
+      String(a.agent_id) === String(agentId) || 
       a.name?.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase()
     );
     
@@ -61,30 +62,3 @@ export async function GET(
     );
   }
 }
-
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { agentId: string } }
-) {
-  const agentId = await params.agentId;
-  
-  try {
-    const body = await request.json();
-    const { message } = body;
-
-    // For chat, we'll simulate a response since we don't have a real chat endpoint
-    // In a real implementation, this would call your chat service
-    const response = {
-      response: `This is a simulated response for agent ${agentId}. You said: ${message}`,
-      timestamp: new Date().toISOString()
-    };
-
-    return NextResponse.json({ Success: response });
-  } catch (error) {
-    console.error('Error in chat:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to get chat response' },
-      { status: 500 }
-    );
-  }
-} 
