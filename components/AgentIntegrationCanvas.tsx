@@ -66,7 +66,77 @@ export default function AgentIntegrationCanvas() {
       {/* Main Container */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-[600px] h-[600px]">
-          {/* Center Robot - Absolutely positioned in the exact center */}
+          {/* Spokes Container - Rendered before tools for proper layering */}
+          <div className="absolute inset-0">
+            {TOOLS.map((tool, index) => {
+              const pos = getPosition(index, TOOLS.length, radius);
+              const angle = Math.atan2(pos.y, pos.x) * (180 / Math.PI);
+              const isActive = activeTools.includes(tool.id);
+
+              return (
+                <motion.div
+                  key={`spoke-${tool.id}`}
+                  className="absolute left-1/2 top-1/2 h-[2px] origin-left"
+                  style={{
+                    width: radius,
+                    rotate: `${angle}deg`,
+                    background: 'linear-gradient(90deg, rgba(67, 97, 238, 0.3) 0%, rgba(67, 97, 238, 0.1) 100%)',
+                    opacity: isActive ? 1 : 0.1
+                  }}
+                  animate={{
+                    opacity: isActive ? 1 : 0.1
+                  }}
+                  transition={{
+                    duration: 0.4
+                  }}
+                >
+                  {isActive && (
+                    <>
+                      {/* Incoming Packet Animation */}
+                      <motion.div
+                        className="absolute left-0 w-2 h-2 bg-blue-400 rounded-full"
+                        style={{
+                          boxShadow: '0 0 10px rgba(67, 97, 238, 0.5)'
+                        }}
+                        animate={{
+                          x: [0, radius],
+                          scale: [1.5, 0.5],
+                          opacity: [1, 0]
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          ease: "linear",
+                          repeat: Infinity,
+                          repeatDelay: 1
+                        }}
+                      />
+                      {/* Response Packet Animation */}
+                      <motion.div
+                        className="absolute right-0 w-2 h-2 bg-emerald-400 rounded-full"
+                        style={{
+                          boxShadow: '0 0 10px rgba(16, 185, 129, 0.5)'
+                        }}
+                        animate={{
+                          x: [-radius, 0],
+                          scale: [0.5, 1.5],
+                          opacity: [0, 1]
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          ease: "linear",
+                          repeat: Infinity,
+                          repeatDelay: 1,
+                          delay: 1.5
+                        }}
+                      />
+                    </>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Center Robot */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <motion.div
               className="w-32 h-32 bg-[#4361EE] rounded-full flex items-center justify-center"
@@ -118,63 +188,6 @@ export default function AgentIntegrationCanvas() {
                   top: `calc(50% + ${pos.y}px - 40px)`
                 }}
               >
-                {/* Connection Line */}
-                {isActive && (
-                  <motion.div
-                    className="absolute left-1/2 top-1/2 h-[2px]"
-                    style={{
-                      width: radius,
-                      rotate: `${Math.atan2(pos.y, pos.x) * (180 / Math.PI)}deg`,
-                      transformOrigin: '0 50%',
-                      background: 'linear-gradient(90deg, rgba(67, 97, 238, 0.3) 0%, rgba(67, 97, 238, 0.1) 100%)'
-                    }}
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{
-                      duration: 0.4,
-                      ease: "easeOut"
-                    }}
-                  >
-                    {/* Incoming Packet Animation */}
-                    <motion.div
-                      className="absolute left-0 w-2 h-2 bg-blue-400 rounded-full"
-                      style={{
-                        boxShadow: '0 0 10px rgba(67, 97, 238, 0.5)'
-                      }}
-                      animate={{
-                        x: [0, radius],
-                        scale: [1.5, 0.5],
-                        opacity: [1, 0]
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        ease: "linear",
-                        repeat: Infinity,
-                        repeatDelay: 1
-                      }}
-                    />
-                    {/* Response Packet Animation */}
-                    <motion.div
-                      className="absolute right-0 w-2 h-2 bg-emerald-400 rounded-full"
-                      style={{
-                        boxShadow: '0 0 10px rgba(16, 185, 129, 0.5)'
-                      }}
-                      animate={{
-                        x: [-radius, 0],
-                        scale: [0.5, 1.5],
-                        opacity: [0, 1]
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        ease: "linear",
-                        repeat: Infinity,
-                        repeatDelay: 1,
-                        delay: 1.5
-                      }}
-                    />
-                  </motion.div>
-                )}
-
                 {/* Tool Icon */}
                 <motion.div
                   className="w-full h-full rounded-full flex items-center justify-center text-3xl shadow-lg"
