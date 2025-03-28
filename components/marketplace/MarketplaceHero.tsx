@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import AgentIntegrationCanvas from "../AgentIntegrationCanvas";
+import DeveloperEarningsCanvas from "../DeveloperEarningsCanvas";
 
 export default function MarketplaceHero() {
   const [activeTab, setActiveTab] = useState<'business' | 'developer'>('business');
@@ -35,98 +36,25 @@ export default function MarketplaceHero() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-0">
+        {/* Hero Content */}
+        <div className="grid grid-cols-2">
           {/* Left Column - Content */}
-          <div className="p-8">
-            {activeTab === 'business' ? (
-              <>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Transform Your Business with AI Agents
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  Deploy intelligent AI agents that work 24/7, automating tasks and scaling your operations without adding headcount.
-                </p>
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-none flex items-center justify-center">
-                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">Instant Deployment</h3>
-                      <p className="text-sm text-gray-500">From setup to running in under 60 seconds</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-none flex items-center justify-center">
-                      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">Cost Effective</h3>
-                      <p className="text-sm text-gray-500">Pay only for what you use, starting at $0.01/request</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-none flex items-center justify-center">
-                      <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">Enterprise Ready</h3>
-                      <p className="text-sm text-gray-500">SOC 2 compliant with 99.9% uptime SLA</p>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Build & Monetize Your AI Agents
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  Join the future of AI development. Build, deploy, and monetize your custom AI agents on the world's leading AI marketplace.
-                </p>
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-none flex items-center justify-center">
-                      <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">Powerful SDK</h3>
-                      <p className="text-sm text-gray-500">Node.js & Python SDKs with TypeScript support</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-pink-100 rounded-none flex items-center justify-center">
-                      <svg className="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">Revenue Share</h3>
-                      <p className="text-sm text-gray-500">Earn up to 80% on every agent deployment</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-none flex items-center justify-center">
-                      <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">Instant Distribution</h3>
-                      <p className="text-sm text-gray-500">Access to enterprise customers from day one</p>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+          <div className="p-8 flex flex-col justify-center">
+            <h1 className="text-4xl font-bold mb-4">
+              {activeTab === 'business' ? (
+                'AI Agents for Every Business Need'
+              ) : (
+                'Build & Monetize AI Agents'
+              )}
+            </h1>
+            <p className="text-lg text-gray-600 mb-8">
+              {activeTab === 'business' ? (
+                'Deploy pre-built AI agents to automate workflows, enhance productivity, and scale your operations.'
+              ) : (
+                'Create powerful AI agents, publish them on our marketplace, and earn revenue from enterprise customers.'
+              )}
+            </p>
+
             <div className="flex items-center gap-4">
               {activeTab === 'business' ? (
                 <>
@@ -164,7 +92,11 @@ export default function MarketplaceHero() {
 
           {/* Right Column - Integration Canvas */}
           <div className="bg-gray-50 border-l border-gray-200 h-[500px]">
-            <AgentIntegrationCanvas />
+            {activeTab === 'business' ? (
+              <AgentIntegrationCanvas />
+            ) : (
+              <DeveloperEarningsCanvas />
+            )}
           </div>
         </div>
       </div>
