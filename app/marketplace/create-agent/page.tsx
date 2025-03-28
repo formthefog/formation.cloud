@@ -82,7 +82,6 @@ const defaultConfig: AgentConfiguration = {
   },
   pricingSettings: {
     billingType: 'per_request',
-    currency: 'USD',
     billingCycle: 'monthly',
     offerTrial: false,
     trialPeriod: 14,

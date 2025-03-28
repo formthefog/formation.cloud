@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MonitoringSettings } from '../app/marketplace/create-agent/types';
+import { MonitoringSettings, Alert } from '../app/marketplace/create-agent/types';
 import {
   ChartBarIcon,
   BellIcon,
@@ -17,11 +17,11 @@ interface MonitoringFormProps {
 }
 
 export default function MonitoringForm({ data, onUpdate }: MonitoringFormProps) {
-  const [newAlert, setNewAlert] = useState({
+  const [newAlert, setNewAlert] = useState<Omit<Alert, 'threshold'> & { threshold: string }>({
     metric: '',
     threshold: '',
-    condition: 'above',
-    duration: '5',
+    duration: 5,
+    condition: 'above'
   });
 
   const handleUpdateField = <K extends keyof MonitoringSettings>(
@@ -36,19 +36,18 @@ export default function MonitoringForm({ data, onUpdate }: MonitoringFormProps) 
 
   const handleAddAlert = () => {
     if (!newAlert.metric || !newAlert.threshold) return;
-    handleUpdateField('alerts', [
-      ...data.alerts,
-      {
-        ...newAlert,
-        threshold: parseFloat(newAlert.threshold),
-        duration: parseInt(newAlert.duration),
-      },
-    ]);
+    const alert: Alert = {
+      metric: newAlert.metric,
+      threshold: parseFloat(newAlert.threshold),
+      duration: newAlert.duration,
+      condition: newAlert.condition
+    };
+    handleUpdateField('alerts', [...data.alerts, alert]);
     setNewAlert({
       metric: '',
       threshold: '',
-      condition: 'above',
-      duration: '5',
+      duration: 5,
+      condition: 'above'
     });
   };
 
@@ -80,7 +79,7 @@ export default function MonitoringForm({ data, onUpdate }: MonitoringFormProps) 
             <label className="block text-sm font-medium mb-2">Log Level</label>
             <select
               value={data.logLevel}
-              onChange={(e) => handleUpdateField('logLevel', e.target.value)}
+              onChange={(e) => handleUpdateField('logLevel', e.target.value as 'error' | 'warn' | 'info' | 'debug' | 'trace')}
               className="input-field"
             >
               <option value="error">Error</option>
@@ -206,7 +205,10 @@ export default function MonitoringForm({ data, onUpdate }: MonitoringFormProps) 
               <select
                 value={newAlert.condition}
                 onChange={(e) =>
-                  setNewAlert((prev) => ({ ...prev, condition: e.target.value }))
+                  setNewAlert((prev) => ({
+                    ...prev,
+                    condition: e.target.value as 'above' | 'below' | 'equal',
+                  }))
                 }
                 className="input-field"
               >
@@ -236,7 +238,7 @@ export default function MonitoringForm({ data, onUpdate }: MonitoringFormProps) 
                 min="1"
                 value={newAlert.duration}
                 onChange={(e) =>
-                  setNewAlert((prev) => ({ ...prev, duration: e.target.value }))
+                  setNewAlert((prev) => ({ ...prev, duration: parseInt(e.target.value) }))
                 }
                 className="input-field"
               />

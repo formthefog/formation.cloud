@@ -66,7 +66,7 @@ export default function SecurityForm({ data, onUpdate }: SecurityFormProps) {
             </label>
             <select
               value={data.authMethod}
-              onChange={(e) => handleUpdateField('authMethod', e.target.value)}
+              onChange={(e) => handleUpdateField('authMethod', e.target.value as 'basic' | 'apiKey' | 'oauth2' | 'jwt')}
               className="input-field"
             >
               <option value="apiKey">API Key</option>

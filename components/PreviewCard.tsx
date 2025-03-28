@@ -55,9 +55,8 @@ export default function PreviewCard({ config }: PreviewCardProps) {
     if (config.monitoringSettings.alerts.length > 0) completed++;
 
     // Pricing Settings
-    total += 3; // billingType, currency, tiers
+    total += 2; // billingType, tiers
     if (config.pricingSettings.billingType) completed++;
-    if (config.pricingSettings.currency) completed++;
     if (config.pricingSettings.tiers.length > 0) completed++;
 
     return Math.round((completed / total) * 100);
@@ -151,10 +150,6 @@ export default function PreviewCard({ config }: PreviewCardProps) {
             <p className="text-sm">
               <span className="text-gray-500">Type:</span>{' '}
               {config.pricingSettings.billingType}
-            </p>
-            <p className="text-sm">
-              <span className="text-gray-500">Currency:</span>{' '}
-              {config.pricingSettings.currency}
             </p>
             <p className="text-sm">
               <span className="text-gray-500">Tiers:</span>{' '}

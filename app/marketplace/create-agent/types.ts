@@ -107,8 +107,8 @@ export interface SecuritySettings {
 export interface Alert {
   metric: string;
   threshold: number;
-  condition: 'above' | 'below' | 'equal';
   duration: number;
+  condition: 'above' | 'below' | 'equal';
 }
 
 export interface MonitoringSettings {
