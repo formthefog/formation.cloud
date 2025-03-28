@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, Clock, Zap, Server, Shield, Send } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, Clock, Zap, Server, Shield, Send, Settings, Cpu, Database, Globe, Cloud } from "lucide-react";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Agent } from "@/types/agent";
@@ -18,7 +18,8 @@ const tabs = [
   { id: "capabilities", label: "Capabilities" },
   { id: "integrations", label: "Integrations" },
   { id: "technical", label: "Technical" },
-  { id: "pricing", label: "Pricing" }
+  { id: "pricing", label: "Pricing" },
+  { id: "deploy", label: "Deploy", highlight: true }
 ];
 
 interface Message {
@@ -81,6 +82,24 @@ export default function AgentDetailPage() {
   const [currentMessage, setCurrentMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const [deploymentStep, setDeploymentStep] = useState(1);
+  const [deploymentConfig, setDeploymentConfig] = useState({
+    name: "",
+    environment: "production",
+    framework: "formation-agent",
+    model: "gpt-4-turbo",
+    memory: true,
+    streaming: true,
+    maxTokens: 4096,
+    temperature: 0.7,
+    instanceType: "serverless",
+    region: "us-west-2",
+    replicas: 1,
+    apiKey: ""
+  });
+  const [isDeploying, setIsDeploying] = useState(false);
+  const [deploymentStatus, setDeploymentStatus] = useState<null | 'success' | 'error'>(null);
 
   useEffect(() => {
     const fetchAgent = async () => {
@@ -170,6 +189,17 @@ export default function AgentDetailPage() {
     } finally {
       setIsSending(false);
     }
+  };
+
+  const handleDeploy = async () => {
+    setIsDeploying(true);
+    // Simulate deployment process and API key generation
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Generate a mock API key
+    const apiKey = `fmtn_${Math.random().toString(36).substring(2)}${Math.random().toString(36).substring(2)}`;
+    setDeploymentConfig(prev => ({ ...prev, apiKey }));
+    setDeploymentStatus('success');
+    setIsDeploying(false);
   };
 
   const renderTabContent = () => {
@@ -880,6 +910,466 @@ agent.on('retry', (attempt) => {
           </motion.div>
         );
 
+      case "deploy":
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="max-w-4xl mx-auto"
+          >
+            {/* Progress Steps */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between relative">
+                <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-gray-200 -z-10" />
+                {[1, 2, 3].map((step) => (
+                  <div
+                    key={step}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                      step <= deploymentStep
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-100 text-gray-400"
+                    } font-semibold transition-all`}
+                  >
+                    {step < deploymentStep ? (
+                      <CheckCircle2 className="w-5 h-5" />
+                    ) : (
+                      step
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-between mt-2 text-sm">
+                <span className="font-medium text-gray-900">Configuration</span>
+                <span className={deploymentStep >= 2 ? "font-medium text-gray-900" : "text-gray-400"}>
+                  Resources
+                </span>
+                <span className={deploymentStep >= 3 ? "font-medium text-gray-900" : "text-gray-400"}>
+                  Review & Deploy
+                </span>
+              </div>
+            </div>
+
+            {/* Step Content */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <AnimatePresence mode="wait">
+                {deploymentStep === 1 && (
+                  <motion.div
+                    key="step1"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="p-6 space-y-6"
+                  >
+                    <div>
+                      <h2 className="text-lg font-semibold text-gray-900 mb-4">Agent Configuration</h2>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Deployment Name
+                            </label>
+                            <input
+                              type="text"
+                              value={deploymentConfig.name}
+                              onChange={(e) => setDeploymentConfig(prev => ({ ...prev, name: e.target.value }))}
+                              placeholder={`${agent.name.toLowerCase()}-prod`}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Environment
+                            </label>
+                            <select
+                              value={deploymentConfig.environment}
+                              onChange={(e) => setDeploymentConfig(prev => ({ ...prev, environment: e.target.value }))}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="production">Production</option>
+                              <option value="staging">Staging</option>
+                              <option value="development">Development</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Agent Framework
+                            </label>
+                            <select
+                              value={deploymentConfig.framework}
+                              onChange={(e) => setDeploymentConfig(prev => ({ ...prev, framework: e.target.value }))}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="formation-agent">Formation Agent</option>
+                              <option value="langchain">LangChain</option>
+                              <option value="autogen">AutoGen</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Language Model
+                            </label>
+                            <select
+                              value={deploymentConfig.model}
+                              onChange={(e) => setDeploymentConfig(prev => ({ ...prev, model: e.target.value }))}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                              <option value="gpt-4">GPT-4</option>
+                              <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                              <option value="claude-3-opus">Claude 3 Opus</option>
+                              <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+                              <option value="mixtral-8x7b">Mixtral 8x7B</option>
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-700">
+                              Features
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={deploymentConfig.memory}
+                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, memory: e.target.checked }))}
+                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              />
+                              <span className="text-sm text-gray-600">Enable memory</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={deploymentConfig.streaming}
+                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, streaming: e.target.checked }))}
+                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              />
+                              <span className="text-sm text-gray-600">Enable streaming</span>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Max Tokens
+                            </label>
+                            <input
+                              type="number"
+                              value={deploymentConfig.maxTokens}
+                              onChange={(e) => setDeploymentConfig(prev => ({ ...prev, maxTokens: parseInt(e.target.value) }))}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {deploymentStep === 2 && (
+                  <motion.div
+                    key="step2"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="p-6 space-y-6"
+                  >
+                    <div>
+                      <h2 className="text-lg font-semibold text-gray-900 mb-4">Resource Configuration</h2>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Instance Type
+                            </label>
+                            <div className="grid grid-cols-1 gap-3">
+                              {[
+                                { id: 'serverless', label: 'Serverless', icon: Cloud },
+                                { id: 'dedicated', label: 'Dedicated Instance', icon: Server },
+                                { id: 'gpu', label: 'GPU Optimized', icon: Cpu }
+                              ].map((type) => (
+                                <button
+                                  key={type.id}
+                                  onClick={() => setDeploymentConfig(prev => ({ ...prev, instanceType: type.id }))}
+                                  className={`flex items-center gap-3 p-3 rounded-lg border ${
+                                    deploymentConfig.instanceType === type.id
+                                      ? 'border-blue-500 bg-blue-50'
+                                      : 'border-gray-200 hover:border-blue-500 hover:bg-blue-50'
+                                  } transition-all`}
+                                >
+                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                    deploymentConfig.instanceType === type.id
+                                      ? 'bg-blue-100'
+                                      : 'bg-gray-100'
+                                  }`}>
+                                    <type.icon className={`w-4 h-4 ${
+                                      deploymentConfig.instanceType === type.id
+                                        ? 'text-blue-600'
+                                        : 'text-gray-600'
+                                    }`} />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h3 className="text-sm font-medium text-gray-900">{type.label}</h3>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Region
+                            </label>
+                            <select
+                              value={deploymentConfig.region}
+                              onChange={(e) => setDeploymentConfig(prev => ({ ...prev, region: e.target.value }))}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="us-west-2">US West (Oregon)</option>
+                              <option value="us-east-1">US East (N. Virginia)</option>
+                              <option value="eu-west-1">EU (Ireland)</option>
+                              <option value="ap-southeast-1">Asia Pacific (Singapore)</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Number of Replicas
+                            </label>
+                            <input
+                              type="number"
+                              value={deploymentConfig.replicas}
+                              onChange={(e) => setDeploymentConfig(prev => ({ ...prev, replicas: parseInt(e.target.value) }))}
+                              min="1"
+                              max="10"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {deploymentStep === 3 && (
+                  <motion.div
+                    key="step3"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="p-6 space-y-6"
+                  >
+                    <div>
+                      <h2 className="text-lg font-semibold text-gray-900 mb-4">Review & Deploy</h2>
+                      
+                      {/* Configuration Cards */}
+                      <div className="grid grid-cols-2 gap-6 mb-8">
+                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                          <h3 className="text-sm font-semibold text-blue-900 mb-4 flex items-center gap-2">
+                            <Settings className="w-4 h-4" />
+                            Configuration
+                          </h3>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-blue-700">Name</span>
+                              <span className="text-sm font-medium text-blue-900">
+                                {deploymentConfig.name || `${agent.name.toLowerCase()}-prod`}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-blue-700">Environment</span>
+                              <span className="text-sm font-medium text-blue-900">
+                                {deploymentConfig.environment}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-blue-700">Framework</span>
+                              <span className="text-sm font-medium text-blue-900">
+                                {deploymentConfig.framework}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-blue-700">Model</span>
+                              <span className="text-sm font-medium text-blue-900">
+                                {deploymentConfig.model}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                          <h3 className="text-sm font-semibold text-purple-900 mb-4 flex items-center gap-2">
+                            <Server className="w-4 h-4" />
+                            Resources
+                          </h3>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-purple-700">Instance Type</span>
+                              <span className="text-sm font-medium text-purple-900">
+                                {deploymentConfig.instanceType}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-purple-700">Region</span>
+                              <span className="text-sm font-medium text-purple-900">
+                                {deploymentConfig.region}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-purple-700">Replicas</span>
+                              <span className="text-sm font-medium text-purple-900">
+                                {deploymentConfig.replicas}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {deploymentStatus === 'success' && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="space-y-6"
+                        >
+                          {/* Success Message */}
+                          <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+                            <div className="flex items-center gap-2 text-green-600">
+                              <CheckCircle2 className="w-5 h-5" />
+                              <span className="font-medium">Deployment successful!</span>
+                            </div>
+                            <p className="text-sm text-green-600 mt-1">
+                              Your agent is now live and ready to use.
+                            </p>
+                          </div>
+
+                          {/* API Details */}
+                          <div className="space-y-6">
+                            {/* Endpoint URL */}
+                            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                              <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                                <h3 className="text-sm font-medium text-gray-700">Endpoint URL</h3>
+                              </div>
+                              <div className="p-4">
+                                <code className="block p-3 bg-gray-900 text-green-400 rounded-lg text-sm font-mono">
+                                  https://api.formation.cloud/v1/agents/{deploymentConfig.name || `${agent.name.toLowerCase()}-prod`}
+                                </code>
+                              </div>
+                            </div>
+
+                            {/* API Key */}
+                            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                              <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                                <h3 className="text-sm font-medium text-gray-700">API Key</h3>
+                              </div>
+                              <div className="p-4">
+                                <code className="block p-3 bg-gray-900 text-amber-400 rounded-lg text-sm font-mono">
+                                  {deploymentConfig.apiKey}
+                                </code>
+                                <p className="text-xs text-gray-500 mt-2">
+                                  Keep this key secure. You won't be able to see it again.
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Example Usage */}
+                            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                              <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                                <h3 className="text-sm font-medium text-gray-700">Example Usage</h3>
+                              </div>
+                              <div className="p-4">
+                                <code className="block p-3 bg-gray-900 text-blue-400 rounded-lg text-sm font-mono whitespace-pre overflow-x-auto">
+{`curl -X POST \\
+  https://api.formation.cloud/v1/agents/${deploymentConfig.name || `${agent.name.toLowerCase()}-prod`} \\
+  -H "Authorization: Bearer ${deploymentConfig.apiKey}" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "input": "Your request here",
+    "context": {}
+  }'`}
+                                </code>
+                                <div className="flex justify-end mt-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-xs"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(`curl -X POST \\
+  https://api.formation.cloud/v1/agents/${deploymentConfig.name || `${agent.name.toLowerCase()}-prod`} \\
+  -H "Authorization: Bearer ${deploymentConfig.apiKey}" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "input": "Your request here",
+    "context": {}
+  }'`);
+                                    }}
+                                  >
+                                    Copy to Clipboard
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {deploymentStatus === 'error' && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl"
+                        >
+                          <div className="flex items-center gap-2 text-red-600">
+                            <AlertCircle className="w-5 h-5" />
+                            <span className="font-medium">Deployment failed</span>
+                          </div>
+                          <p className="text-sm text-red-600 mt-1">
+                            There was an error deploying your agent. Please try again or contact support.
+                          </p>
+                        </motion.div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Navigation */}
+              <div className="flex items-center justify-between px-6 py-4 bg-gray-50 border-t border-gray-200">
+                {(!deploymentStatus || deploymentStatus !== 'success') && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setDeploymentStep(prev => Math.max(1, prev - 1))}
+                    disabled={deploymentStep === 1}
+                  >
+                    Previous
+                  </Button>
+                )}
+                <Button
+                  onClick={() => {
+                    if (deploymentStep < 3) {
+                      setDeploymentStep(prev => prev + 1);
+                    } else {
+                      handleDeploy();
+                    }
+                  }}
+                  disabled={isDeploying}
+                  className={`${deploymentStatus === 'success' ? "bg-green-600 hover:bg-green-700 ml-auto" : "bg-[#0A84FF] hover:bg-[#0A84FF]/90"}`}
+                >
+                  {isDeploying ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Deploying...
+                    </>
+                  ) : deploymentStatus === 'success' ? (
+                    'VIEW DEPLOYMENT'
+                  ) : deploymentStep === 3 ? (
+                    'DEPLOY AGENT'
+                  ) : (
+                    'Next'
+                  )}
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        );
+
       default:
         return null;
     }
@@ -983,11 +1473,47 @@ agent.on('retry', (attempt) => {
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <Button variant="outline" size="lg">
-                    Documentation
+                  <Button 
+                    variant="outline" 
+                    size="lg"
+                    onClick={() => setActiveTab("documentation")}
+                    className="hover:bg-gray-50"
+                  >
+                    DOCUMENTATION
                   </Button>
-                  <Button size="lg" className="bg-[#0A84FF] hover:bg-[#0A84FF]/90">
-                    Deploy Agent
+                  <Button 
+                    size="lg" 
+                    onClick={() => {
+                      if (deploymentStatus === 'success') {
+                        // If already deployed, just view the deployment
+                        setActiveTab("deploy");
+                        setDeploymentStep(3);
+                      } else {
+                        // Start new deployment
+                        setActiveTab("deploy");
+                        setDeploymentStep(1);
+                        setDeploymentStatus(null);
+                        setDeploymentConfig({
+                          name: "",
+                          environment: "production",
+                          framework: "formation-agent",
+                          model: "gpt-4-turbo",
+                          memory: true,
+                          streaming: true,
+                          maxTokens: 4096,
+                          temperature: 0.7,
+                          instanceType: "serverless",
+                          region: "us-west-2",
+                          replicas: 1,
+                          apiKey: ""
+                        });
+                      }
+                    }}
+                    className={deploymentStatus === 'success' 
+                      ? "bg-green-600 hover:bg-green-700" 
+                      : "bg-[#0A84FF] hover:bg-[#0A84FF]/90"}
+                  >
+                    {deploymentStatus === 'success' ? 'VIEW DEPLOYMENT' : 'DEPLOY AGENT'}
                   </Button>
                 </div>
               </div>
@@ -1000,7 +1526,9 @@ agent.on('retry', (attempt) => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-1 py-3 text-sm font-medium border-b-2 transition-all ${
                       activeTab === tab.id
-                        ? "text-[#0A84FF] border-[#0A84FF]"
+                        ? tab.highlight
+                          ? "text-green-600 border-green-600"
+                          : "text-[#0A84FF] border-[#0A84FF]"
                         : "text-gray-600 border-transparent hover:text-gray-900 hover:border-gray-300"
                     }`}
                   >
