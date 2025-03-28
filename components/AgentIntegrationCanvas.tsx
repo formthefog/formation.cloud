@@ -92,41 +92,78 @@ export default function AgentIntegrationCanvas() {
                 >
                   {isActive && (
                     <>
-                      {/* Incoming Packet Animation */}
+                      {/* Tool to Robot Packets (Blue) */}
                       <motion.div
-                        className="absolute left-0 w-2 h-2 bg-blue-400 rounded-full"
+                        className="absolute right-0 w-3 h-3 bg-blue-400 rounded-full"
                         style={{
-                          boxShadow: '0 0 10px rgba(67, 97, 238, 0.5)'
+                          boxShadow: '0 0 15px rgba(67, 97, 238, 0.6)'
                         }}
                         animate={{
-                          x: [0, radius],
-                          scale: [1.5, 0.5],
+                          x: [0, -radius],
+                          scale: [1.5, 0.8],
                           opacity: [1, 0]
                         }}
                         transition={{
-                          duration: 1.5,
+                          duration: 2,
                           ease: "linear",
                           repeat: Infinity,
-                          repeatDelay: 1
+                          repeatDelay: 0
                         }}
                       />
-                      {/* Response Packet Animation */}
+                      {/* Robot to Tool Response (Green) */}
                       <motion.div
-                        className="absolute right-0 w-2 h-2 bg-emerald-400 rounded-full"
+                        className="absolute left-0 w-3 h-3 bg-emerald-400 rounded-full"
                         style={{
-                          boxShadow: '0 0 10px rgba(16, 185, 129, 0.5)'
+                          boxShadow: '0 0 15px rgba(16, 185, 129, 0.6)'
                         }}
                         animate={{
-                          x: [-radius, 0],
-                          scale: [0.5, 1.5],
+                          x: [0, radius],
+                          scale: [0.8, 1.5],
                           opacity: [0, 1]
                         }}
                         transition={{
-                          duration: 1.5,
+                          duration: 2,
                           ease: "linear",
                           repeat: Infinity,
-                          repeatDelay: 1,
-                          delay: 1.5
+                          repeatDelay: 0
+                        }}
+                      />
+                      {/* Second Set - Tool to Robot (Blue) */}
+                      <motion.div
+                        className="absolute right-0 w-3 h-3 bg-blue-400 rounded-full"
+                        style={{
+                          boxShadow: '0 0 15px rgba(67, 97, 238, 0.6)'
+                        }}
+                        animate={{
+                          x: [0, -radius],
+                          scale: [1.5, 0.8],
+                          opacity: [1, 0]
+                        }}
+                        transition={{
+                          duration: 2,
+                          ease: "linear",
+                          repeat: Infinity,
+                          repeatDelay: 0,
+                          delay: 1
+                        }}
+                      />
+                      {/* Second Set - Robot to Tool Response (Green) */}
+                      <motion.div
+                        className="absolute left-0 w-3 h-3 bg-emerald-400 rounded-full"
+                        style={{
+                          boxShadow: '0 0 15px rgba(16, 185, 129, 0.6)'
+                        }}
+                        animate={{
+                          x: [0, radius],
+                          scale: [0.8, 1.5],
+                          opacity: [0, 1]
+                        }}
+                        transition={{
+                          duration: 2,
+                          ease: "linear",
+                          repeat: Infinity,
+                          repeatDelay: 0,
+                          delay: 1
                         }}
                       />
                     </>
