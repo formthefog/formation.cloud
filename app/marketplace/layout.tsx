@@ -23,17 +23,19 @@ export default function MarketplaceLayout({
   return (
     <div className="min-h-screen bg-[#F9FAFB] overflow-x-hidden">
       <MarketplaceNavigation searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <div className="flex relative">
-        <Sidebar
-          isSidebarOpen={isSidebarOpen}
-          categoryCount={{}}
-          selectedCategory="all"
-          setSelectedCategory={() => {}}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          metrics={metrics}
-        />
-        <main className="flex-1">
+      <div className="flex relative h-[calc(100vh-73px)]">
+        <div className="sticky top-0 h-[calc(100vh-73px)]">
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            categoryCount={{}}
+            selectedCategory="all"
+            setSelectedCategory={() => {}}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            metrics={metrics}
+          />
+        </div>
+        <main className="flex-1 overflow-y-auto">
           {children}
         </main>
       </div>

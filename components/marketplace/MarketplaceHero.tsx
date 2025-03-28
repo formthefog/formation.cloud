@@ -61,7 +61,7 @@ export default function MarketplaceHero() {
                       Trusted by 500+ Companies
                     </div>
                     <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-                      AI Agents for Every Business Need
+                      Agents for Every Business Need
                     </h1>
                     <p className="text-lg text-gray-600 mb-4 leading-relaxed">
                       Deploy pre-built AI agents in minutes, not months. Automate workflows, 
@@ -94,7 +94,7 @@ export default function MarketplaceHero() {
                       $2.5M+ Paid to Developers in 2024
                     </div>
                     <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-                      Build & Monetize AI Agents
+                      Build & Monetize Agents
                     </h1>
                     <p className="text-lg text-gray-600 mb-4 leading-relaxed">
                       Turn your AI expertise into recurring revenue. Build once, earn forever. 

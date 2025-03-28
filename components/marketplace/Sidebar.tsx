@@ -28,6 +28,17 @@ const categories = [
 
 const navigationItems = [
   {
+    id: "discover",
+    name: "Discover",
+    icon: (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    ),
+    href: "/marketplace",
+    section: "top"
+  },
+  {
     id: "getting-started",
     name: "Getting Started",
     icon: (
@@ -36,17 +47,6 @@ const navigationItems = [
       </svg>
     ),
     href: "/marketplace/getting-started",
-    section: "top"
-  },
-  {
-    id: "discover",
-    name: "Discover",
-    icon: (
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-    ),
-    href: "/discover",
     section: "top"
   },
   {
@@ -226,7 +226,7 @@ export default function Sidebar({
   return (
     <aside className={`w-[280px] bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 
       ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-      fixed md:sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto z-30`}>
+      fixed md:relative md:translate-x-0 top-[73px] md:top-0 h-[calc(100vh-73px)] overflow-y-auto z-30`}>
       <div className="p-6 space-y-6">
         {/* Quick Start Guide */}
         {showQuickStart && (
