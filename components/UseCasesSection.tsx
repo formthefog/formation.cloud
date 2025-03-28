@@ -11,7 +11,7 @@ const UseCaseCard = ({ useCase, index }) => {
   const router = useRouter();
   
   const handleClick = () => {
-    router.push('#marketplace');
+    router.push('/marketplace/agents');
   };
 
   return (
