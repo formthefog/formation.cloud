@@ -60,14 +60,14 @@ const FeaturedAgentsSection = () => {
       <div className="max-w-screen-xl mx-auto px-6">
         <div className="text-center mb-16">
           <span className="inline-block border border-formation-blue px-4 py-1 text-sm font-medium uppercase tracking-wider text-formation-blue font-geistMono mb-4">
-            Featured Agents
+            Launch Agents
           </span>
           <h2 className="text-4xl font-hauora font-[500] tracking-[-0.05em] text-gray-900 mb-4">
-            Discover Popular AI Agents
+            Meet Our First AI Agents
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Explore our curated selection of high-performance AI agents. From coding assistance to market analysis,
-            find the perfect agent to enhance your workflow.
+            Be among the first to experience our carefully crafted AI agents. From coding assistance to market analysis,
+            these agents are ready to transform your workflow.
           </p>
         </div>
 
@@ -95,12 +95,12 @@ const FeaturedAgentsSection = () => {
 
         <div className="text-center mt-16">
           <Link href="/marketplace/agents">
-          <Button
-              className="button-with-gradient  h-full text-[16px] px-8 py-6 font-medium"
-          >
-            Explore All Agents
-            <FaArrowRight className="ml-2" size={16} />
-          </Button>
+            <Button
+              className="button-with-gradient h-full text-[16px] px-8 py-6 font-medium"
+            >
+              View Launch Agents
+              <FaArrowRight className="ml-2" size={16} />
+            </Button>
           </Link>
         </div>
       </div>

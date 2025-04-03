@@ -58,19 +58,19 @@ export default function MarketplaceHero() {
                 <>
                   <div>
                     <div className="inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-50 text-blue-600 mb-3">
-                      Trusted by 500+ Companies
+                      Launching Soon
                     </div>
                     <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-                      Agents for Every Business Need
+                      The Future of AI Agents
                     </h1>
                     <p className="text-lg text-gray-600 mb-4 leading-relaxed">
-                      Deploy pre-built AI agents in minutes, not months. Automate workflows, 
-                      enhance productivity, and scale your operations with enterprise-grade AI.
+                      Be among the first to deploy AI agents that transform your business. 
+                      Automate workflows, enhance productivity, and scale your operations with enterprise-grade AI.
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="bg-white p-3 border border-gray-100 shadow-sm">
                         <div className="text-3xl font-bold text-blue-600">60%</div>
-                        <div className="text-sm text-gray-600">Average Cost Reduction</div>
+                        <div className="text-sm text-gray-600">Potential Cost Reduction</div>
                       </div>
                       <div className="bg-white p-3 border border-gray-100 shadow-sm">
                         <div className="text-3xl font-bold text-blue-600">24/7</div>
@@ -82,7 +82,7 @@ export default function MarketplaceHero() {
                       </div>
                       <div className="bg-white p-3 border border-gray-100 shadow-sm">
                         <div className="text-3xl font-bold text-blue-600">99.9%</div>
-                        <div className="text-sm text-gray-600">Uptime SLA</div>
+                        <div className="text-sm text-gray-600">Target Uptime</div>
                       </div>
                     </div>
                   </div>
@@ -91,14 +91,14 @@ export default function MarketplaceHero() {
                 <>
                   <div>
                     <div className="inline-flex items-center px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-600 mb-3">
-                      $2.5M+ Paid to Developers in 2024
+                      Early Access Program
                     </div>
                     <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-                      Build & Monetize Agents
+                      Build the Future of AI
                     </h1>
                     <p className="text-lg text-gray-600 mb-4 leading-relaxed">
-                      Turn your AI expertise into recurring revenue. Build once, earn forever. 
-                      Get instant access to enterprise customers and world-class infrastructure.
+                      Join our early access program and help shape the future of AI agents. 
+                      Build once, earn forever with our generous revenue sharing model.
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="bg-white p-3 border border-gray-100 shadow-sm">
@@ -106,16 +106,16 @@ export default function MarketplaceHero() {
                         <div className="text-sm text-gray-600">Revenue Share</div>
                       </div>
                       <div className="bg-white p-3 border border-gray-100 shadow-sm">
-                        <div className="text-3xl font-bold text-indigo-600">5K+</div>
-                        <div className="text-sm text-gray-600">Active Developers</div>
+                        <div className="text-3xl font-bold text-indigo-600">0%</div>
+                        <div className="text-sm text-gray-600">Platform Fee at Launch</div>
                       </div>
                       <div className="bg-white p-3 border border-gray-100 shadow-sm">
-                        <div className="text-3xl font-bold text-indigo-600">10M+</div>
-                        <div className="text-sm text-gray-600">Monthly Requests</div>
+                        <div className="text-3xl font-bold text-indigo-600">24/7</div>
+                        <div className="text-sm text-gray-600">Developer Support</div>
                       </div>
                       <div className="bg-white p-3 border border-gray-100 shadow-sm">
-                        <div className="text-3xl font-bold text-indigo-600">$50K</div>
-                        <div className="text-sm text-gray-600">Avg. Monthly Earnings</div>
+                        <div className="text-3xl font-bold text-indigo-600">$1.3T</div>
+                        <div className="text-sm text-gray-600">AI Market by 2030</div>
                       </div>
                     </div>
                   </div>
@@ -129,13 +129,13 @@ export default function MarketplaceHero() {
                       href="/marketplace/getting-started/users"
                       className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-all"
                     >
-                      Get Started 
+                      Join Waitlist
                     </Link>
                     <Link
                       href="/marketplace/agents"
                       className="inline-flex items-center justify-center px-4 py-3 text-base font-medium text-blue-600 hover:text-blue-700"
                     >
-                      Browse Agents →
+                      Learn More →
                     </Link>
                   </>
                 ) : (
@@ -144,7 +144,7 @@ export default function MarketplaceHero() {
                       href="/marketplace/getting-started/developers"
                       className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all"
                     >
-                      Start Building
+                      Apply for Early Access
                     </Link>
                     <Link
                       href="/marketplace/getting-started/developers"
@@ -193,7 +193,7 @@ export default function MarketplaceHero() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Enterprise-Ready</h3>
-                  <p className="text-gray-600">SOC 2 compliant, with 99.9% uptime SLA and dedicated support team.</p>
+                  <p className="text-gray-600">Built with enterprise-grade security and reliability in mind.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-gradient-to-br from-purple-50 to-white border border-purple-100">
@@ -228,7 +228,7 @@ export default function MarketplaceHero() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Industry-Leading Revenue</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Generous Revenue Share</h3>
                   <p className="text-gray-600">Earn up to 80% revenue share with transparent pricing and instant payouts.</p>
                 </div>
               </div>
@@ -240,7 +240,7 @@ export default function MarketplaceHero() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Built to Scale</h3>
-                  <p className="text-gray-600">Infrastructure that handles millions of requests with automatic scaling.</p>
+                  <p className="text-gray-600">Infrastructure designed to handle millions of requests with automatic scaling.</p>
                 </div>
               </div>
             </>

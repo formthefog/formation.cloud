@@ -14,54 +14,71 @@ export default function GettingStarted() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <motion.div {...fadeIn} className="space-y-12">
-        {/* Hero Section */}
-        <div className="text-center space-y-4 bg-gradient-to-b from-white to-gray-50 rounded-none p-8 mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
-            Get Started with <span className="text-blue-600">Formation</span>
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Choose your path: Use agents to supercharge your workflow, or build and monetize your own agents on our marketplace.
-          </p>
-          <div className="w-16 h-1 bg-blue-500 mx-auto mt-2 rounded-full opacity-75"></div>
-        </div>
-
-        {/* Path Selection */}
-        <div className="grid md:grid-cols-2 gap-8">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="bg-white p-8 rounded-none shadow-lg border-2 border-transparent hover:border-blue-500 cursor-pointer"
-            onClick={() => router.push('/marketplace/getting-started/users')}
-          >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-3 bg-blue-100 rounded-none">
-                <Users className="w-8 h-8 text-blue-600" />
-              </div>
-              <h2 className="text-2xl font-bold">Use Agents</h2>
-            </div>
-            <p className="text-gray-600">
-              Deploy pre-built agents for your business needs. Get started in minutes with our extensive marketplace of specialized agents.
+    <div className="w-full min-h-[calc(100vh-73px)] bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <motion.div {...fadeIn} className="space-y-6 md:space-y-12">
+          {/* Hero Section */}
+          <div className="text-left space-y-3 md:text-center">
+            <span className="text-sm font-medium text-blue-600 uppercase tracking-wider">
+              WELCOME TO FORMATION
+            </span>
+            <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-gray-900">
+              Discover the Power of <br className="hidden md:block" />
+              AI with <span className="text-blue-600">Formation</span>
+            </h1>
+            <p className="text-base md:text-lg text-gray-600 max-w-2xl md:mx-auto leading-relaxed">
+              Whether you're a developer, creator, or just getting started with AI, Formation helps you harness the potential of AI agents for your unique needs.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="bg-white p-8 rounded-none shadow-lg border-2 border-transparent hover:border-blue-500 cursor-pointer"
-            onClick={() => router.push('/marketplace/getting-started/developers')}
-          >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-3 bg-blue-100 rounded-none">
-                <Code2 className="w-8 h-8 text-blue-600" />
-              </div>
-              <h2 className="text-2xl font-bold">Provide Agents</h2>
-            </div>
-            <p className="text-gray-600">
-              Build and monetize your own agents. Reach enterprise customers and grow your revenue on our marketplace.
+          {/* Getting Started */}
+          <div className="pt-4">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+              Choose Your Path
+            </h2>
+            <p className="text-sm md:text-base text-gray-600 mb-6">
+              Get started with Formation in the way that best suits your goals.
             </p>
-          </motion.div>
-        </div>
-      </motion.div>
+
+            {/* Path Selection */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer transition-all duration-200"
+                onClick={() => router.push('/marketplace/getting-started/users')}
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-2 bg-blue-50 rounded-lg">
+                    <Users className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">Use Agents</h3>
+                </div>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Find and deploy AI agents that match your needs. Browse our marketplace and start automating tasks in minutes.
+                </p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer transition-all duration-200"
+                onClick={() => router.push('/marketplace/getting-started/developers')}
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-2 bg-blue-50 rounded-lg">
+                    <Code2 className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">Create Agents</h3>
+                </div>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Build and share your own AI agents. Join our community of creators and help shape the future of AI.
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 } 

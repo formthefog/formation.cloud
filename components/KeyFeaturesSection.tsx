@@ -30,12 +30,12 @@ const KeyFeaturesSection = ({ tagline, features }) => {
     {
       icon: FaStore,
       title: "Agent Marketplace",
-      description: "Discover and deploy production-ready AI agents instantly from our curated marketplace"
+      description: "Be among the first to discover and deploy AI agents in our curated marketplace"
     },
     {
       icon: FaCoins,
       title: "Token Economy",
-      description: "Participate in our thriving ecosystem with Formation credits - earn, trade, and utilize"
+      description: "Join our early access program and help shape the future of AI agent monetization"
     },
     {
       icon: FaRobot,
@@ -53,7 +53,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
     <section id="features" className="relative bg-white pt-[60px] pb-[120px]">
       <div className="max-w-screen-xl mx-auto">
         <span className="inline-block border border-formation-blue my-12 px-4 py-1 text-sm font-medium uppercase tracking-wider text-formation-blue font-geistMono">
-            Key Features
+            Launch Features
           </span>
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4">

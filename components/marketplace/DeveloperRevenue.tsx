@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 export default function DeveloperRevenue() {
   return (
@@ -12,10 +11,10 @@ export default function DeveloperRevenue() {
               For Developers
             </div>
             <h2 className="text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-              Turn Your AI Agents into Revenue
+              Be Among the First AI Agent Developers
             </h2>
             <p className="text-gray-600 mb-6">
-              Join the Formation marketplace and monetize your AI agents. Reach enterprise customers and generate passive income through our revenue-sharing model.
+              Join Formation's marketplace at launch and position yourself as a pioneer in the AI agent economy. Build and monetize your AI agents with our revenue-sharing model.
             </p>
             
             {/* Key Benefits */}
@@ -27,7 +26,7 @@ export default function DeveloperRevenue() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900">Revenue Sharing</h3>
+                  <h3 className="font-medium text-gray-900">Generous Revenue Share</h3>
                   <p className="text-sm text-gray-600">Earn up to 80% on every request</p>
                 </div>
               </div>
@@ -38,8 +37,8 @@ export default function DeveloperRevenue() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900">Enterprise Distribution</h3>
-                  <p className="text-sm text-gray-600">Access to Fortune 500 customers</p>
+                  <h3 className="font-medium text-gray-900">Early Access Advantage</h3>
+                  <p className="text-sm text-gray-600">Be among the first to reach enterprise customers</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -71,43 +70,43 @@ export default function DeveloperRevenue() {
             </div>
           </div>
 
-          {/* Right Column - Stats & Social Proof */}
+          {/* Right Column - Market Opportunity */}
           <div className="space-y-8">
-            {/* Quick Stats */}
+            {/* Market Opportunity */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-none p-4 shadow-sm border border-gray-100">
-                <div className="text-3xl font-bold text-gray-900">$2.5M+</div>
-                <div className="text-sm text-gray-600 mt-1">Paid to developers in 2024</div>
+                <div className="text-3xl font-bold text-gray-900">$1.3T</div>
+                <div className="text-sm text-gray-600 mt-1">AI Market by 2030</div>
               </div>
               <div className="bg-white rounded-none p-4 shadow-sm border border-gray-100">
-                <div className="text-3xl font-bold text-gray-900">5,000+</div>
-                <div className="text-sm text-gray-600 mt-1">Active developers</div>
-              </div>
-              <div className="bg-white rounded-none p-4 shadow-sm border border-gray-100">
-                <div className="text-3xl font-bold text-gray-900">10M+</div>
-                <div className="text-sm text-gray-600 mt-1">Monthly requests</div>
+                <div className="text-3xl font-bold text-gray-900">80%</div>
+                <div className="text-sm text-gray-600 mt-1">Revenue Share</div>
               </div>
               <div className="bg-white rounded-none p-4 shadow-sm border border-gray-100">
                 <div className="text-3xl font-bold text-gray-900">24/7</div>
-                <div className="text-sm text-gray-600 mt-1">Developer support</div>
+                <div className="text-sm text-gray-600 mt-1">Developer Support</div>
+              </div>
+              <div className="bg-white rounded-none p-4 shadow-sm border border-gray-100">
+                <div className="text-3xl font-bold text-gray-900">0%</div>
+                <div className="text-sm text-gray-600 mt-1">Platform Fee at Launch</div>
               </div>
             </div>
 
-            {/* Developer Quote */}
+            {/* Value Proposition */}
             <div className="bg-white rounded-none p-6 shadow-sm border border-gray-100">
               <div className="flex items-center gap-4 mb-4">
-                <img
-                  src="/testimonials/developer-1.jpg"
-                  alt="Developer"
-                  className="w-12 h-12 rounded-none"
-                />
+                <div className="w-12 h-12 rounded-none bg-blue-100 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
                 <div>
-                  <div className="font-medium text-gray-900">Sarah Chen</div>
-                  <div className="text-sm text-gray-600">AI Developer @ TechFlow</div>
+                  <div className="font-medium text-gray-900">Launch Opportunity</div>
+                  <div className="text-sm text-gray-600">Be a Founding Developer</div>
                 </div>
               </div>
-              <p className="text-gray-600 italic">
-                "Formation's marketplace has been a game-changer. Our AI agents generate consistent revenue while helping businesses automate their workflows. The developer experience is unmatched."
+              <p className="text-gray-600">
+                Join Formation at launch and help shape the future of AI agents. As a founding developer, you'll have the opportunity to establish your presence in the marketplace and set the standard for AI agent development.
               </p>
             </div>
           </div>

@@ -30,12 +30,12 @@ const KeyFeaturesSection = ({ tagline, features }) => {
     {
       icon: FaStore,
       title: "Agent Marketplace",
-      description: "Discover and deploy production-ready AI agents instantly from our curated marketplace"
+      description: "Be among the first to discover and deploy AI agents in our curated marketplace"
     },
     {
       icon: FaCoins,
       title: "Token Economy",
-      description: "Participate in our thriving ecosystem with Formation credits - earn, trade, and utilize"
+      description: "Join our early access program and help shape the future of AI agent monetization"
     },
     {
       icon: FaRobot,
@@ -59,20 +59,20 @@ const KeyFeaturesSection = ({ tagline, features }) => {
               {tagline}
             </h2>
             <p className="text-lg md:text-xl text-gray-600 text-center mb-12 max-w-2xl mx-auto leading-relaxed">
-              Transform your AI innovations into reality on our high-performance network. Experience enterprise-grade security, seamless deployment, and unlimited scaling potential in the new era of decentralized AI.
+              Be among the first to transform your AI innovations into reality. Experience enterprise-grade security, seamless deployment, and unlimited scaling potential in the new era of decentralized AI.
             </p>
             <div className="flex justify-center gap-4 mb-16">
               <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-none border border-gray-200">
-                <span className="text-2xl font-bold text-gray-900">100+</span>
-                <span className="text-sm text-gray-600">AI Agents</span>
+                <span className="text-2xl font-bold text-gray-900">0%</span>
+                <span className="text-sm text-gray-600">Platform Fee at Launch</span>
               </div>
               <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-none border border-gray-200">
-                <span className="text-2xl font-bold text-gray-900">10K+</span>
-                <span className="text-sm text-gray-600">Daily Users</span>
+                <span className="text-2xl font-bold text-gray-900">24/7</span>
+                <span className="text-sm text-gray-600">Developer Support</span>
               </div>
               <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-none border border-gray-200">
-                <span className="text-2xl font-bold text-gray-900">1M+</span>
-                <span className="text-sm text-gray-600">Credits Earned</span>
+                <span className="text-2xl font-bold text-gray-900">80%</span>
+                <span className="text-sm text-gray-600">Revenue Share</span>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -96,7 +96,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
                   </div>
                   <div className="flex-1">
                     <p className="text-gray-600 leading-relaxed font-inter text-lg">
-                      Access a curated marketplace of production-ready AI agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
+                      Be among the first to access our marketplace of AI agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
                     </p>
                   </div>
                 </div>
@@ -113,7 +113,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
                   </div>
                   <div className="flex-1">
                     <p className="text-gray-600 leading-relaxed font-inter text-lg">
-                      List your AI agents on our marketplace and earn Formation credits. Reach a global audience while focusing on building innovative solutions.
+                      Join our early access program and help shape the future of AI agents. List your agents on our marketplace and earn Formation credits while building innovative solutions.
                     </p>
                   </div>
                 </div>

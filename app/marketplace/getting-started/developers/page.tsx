@@ -146,31 +146,32 @@ class CodeReviewAgent(Agent):
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <motion.div {...fadeIn} className="space-y-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+      <motion.div {...fadeIn} className="space-y-8 md:space-y-16">
         <PathNavigation />
         
         {/* Hero Section */}
-        <div className="text-center space-y-4">
-          <span className="text-purple-600 font-semibold">FOR DEVELOPERS</span>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
-            Build & Monetize AI Agents with <span className="text-purple-600">Formation</span>
+        <div className="text-left md:text-center space-y-4">
+          <span className="text-purple-600 text-sm md:text-base font-semibold">FOR DEVELOPERS</span>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900">
+            Build & Monetize AI Agents <br className="hidden md:block" />
+            with <span className="text-purple-600">Formation</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl md:mx-auto leading-relaxed">
             Create powerful AI agents, reach enterprise customers, and earn revenue with our developer-first platform.
           </p>
-          <div className="flex justify-center gap-4 mt-8">
-            <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
+            <Button size="lg" className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700">
               Start Building <Terminal className="w-4 h-4 ml-2" />
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto">
               View Documentation
             </Button>
           </div>
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -180,24 +181,27 @@ class CodeReviewAgent(Agent):
               <div className={`p-3 bg-${feature.color}-100 rounded-lg w-fit mb-4`}>
                 <div className={`text-${feature.color}-600`}>{feature.icon}</div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+              <p className="text-sm md:text-base text-gray-600">{feature.description}</p>
             </motion.div>
           ))}
         </div>
 
         {/* Code Examples Section */}
-        <section className="bg-gray-50 rounded-2xl p-8">
+        <section className="bg-gray-50 rounded-2xl p-4 md:p-8">
           <div className="max-w-4xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-bold">Build Your First Agent</h2>
-              <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold">Build Your First Agent</h2>
+              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 {frameworks.map((framework, index) => (
                   <Button
                     key={framework.name}
                     variant={selectedFramework === index ? "default" : "outline"}
                     onClick={() => setSelectedFramework(index)}
-                    className={selectedFramework === index ? "bg-purple-600" : ""}
+                    className={classNames(
+                      "w-full sm:w-auto justify-start sm:justify-center",
+                      selectedFramework === index ? "bg-purple-600" : ""
+                    )}
                   >
                     {framework.icon}
                     <span className="ml-2">{framework.name}</span>
@@ -206,10 +210,10 @@ class CodeReviewAgent(Agent):
               </div>
             </div>
             <Tab.Group>
-              <Tab.List className="flex space-x-4 bg-white rounded-lg p-2 mb-4">
+              <Tab.List className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 bg-white rounded-lg p-2 mb-4">
                 <Tab className={({ selected }) =>
                   classNames(
-                    'w-32 py-2.5 text-sm font-medium rounded-md',
+                    'py-2.5 text-sm font-medium rounded-md w-full sm:w-32',
                     selected ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'
                   )
                 }>
@@ -217,14 +221,14 @@ class CodeReviewAgent(Agent):
                 </Tab>
                 <Tab className={({ selected }) =>
                   classNames(
-                    'w-32 py-2.5 text-sm font-medium rounded-md',
+                    'py-2.5 text-sm font-medium rounded-md w-full sm:w-32',
                     selected ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'
                   )
                 }>
                   Python
                 </Tab>
               </Tab.List>
-              <Tab.Panels>
+              <Tab.Panels className="overflow-x-auto">
                 <Tab.Panel>
                   <CodeBlock
                     language="typescript"
@@ -243,24 +247,24 @@ class CodeReviewAgent(Agent):
         </section>
 
         {/* Benefits Section */}
-        <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center">Why Build on Formation</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+        <section className="space-y-6 md:space-y-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-left md:text-center">Why Build on Formation</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={benefit.title}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white p-8 rounded-xl shadow-lg"
+                className="bg-white p-6 md:p-8 rounded-xl shadow-lg"
               >
-                <div className="p-3 bg-purple-100 rounded-lg w-fit mb-6">
+                <div className="p-3 bg-purple-100 rounded-lg w-fit mb-4 md:mb-6">
                   <div className="text-purple-600">{benefit.icon}</div>
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
-                <p className="text-gray-600 mb-6">{benefit.description}</p>
+                <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">{benefit.title}</h3>
+                <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">{benefit.description}</p>
                 <ul className="space-y-2">
                   {benefit.metrics.map((metric, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-500" />
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                       <span>{metric}</span>
                     </li>
                   ))}
@@ -271,61 +275,42 @@ class CodeReviewAgent(Agent):
         </section>
 
         {/* Developer Resources */}
-        <section className="grid md:grid-cols-2 gap-8">
-          <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-8 text-white">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-6 md:p-8 text-white">
             <GitBranch className="w-8 h-8 mb-4" />
-            <h3 className="text-2xl font-bold mb-4">Open Source SDK</h3>
-            <p className="text-purple-100 mb-6">
+            <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Open Source SDK</h3>
+            <p className="text-sm md:text-base text-purple-100 mb-6">
               Our SDK is open source and available on GitHub. Contribute, customize, and help us build the future of AI agents.
             </p>
-            <Button variant="secondary" className="bg-white text-purple-600 hover:bg-purple-50">
+            <Button variant="secondary" className="w-full sm:w-auto bg-white text-purple-600 hover:bg-purple-50">
               View on GitHub <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-8 text-white">
+          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 md:p-8 text-white">
             <Share2 className="w-8 h-8 mb-4" />
-            <h3 className="text-2xl font-bold mb-4">Developer Community</h3>
-            <p className="text-blue-100 mb-6">
+            <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Developer Community</h3>
+            <p className="text-sm md:text-base text-blue-100 mb-6">
               Join our thriving developer community. Share knowledge, get help, and collaborate with other agent builders.
             </p>
-            <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50">
+            <Button variant="secondary" className="w-full sm:w-auto bg-white text-blue-600 hover:bg-blue-50">
               Join Discord <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl p-12 text-white text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Building?</h2>
-          <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+        <section className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl p-6 md:p-12 text-white text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Start Building?</h2>
+          <p className="text-lg md:text-xl text-purple-100 mb-6 md:mb-8 max-w-2xl mx-auto">
             Join hundreds of developers already building and monetizing AI agents on Formation.
           </p>
-          <div className="flex justify-center gap-4">
-            <Button size="lg" variant="secondary" className="bg-white text-purple-600 hover:bg-purple-50">
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-white text-purple-600 hover:bg-purple-50">
               Create Account
             </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-purple-500">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto text-white border-white hover:bg-purple-500">
               Read Documentation
             </Button>
-          </div>
-        </section>
-
-        {/* Success Stories */}
-        <section className="text-center space-y-6">
-          <h2 className="text-2xl font-semibold">Success Stories</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-            {Array(3).fill(0).map((_, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl shadow-lg text-left">
-                <div className="h-12 w-12 rounded-full bg-gray-200 mb-4"></div>
-                <div className="h-4 w-24 bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 w-32 bg-gray-200 rounded mb-4"></div>
-                <div className="space-y-2">
-                  <div className="h-3 bg-gray-200 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-                  <div className="h-3 bg-gray-200 rounded w-4/6"></div>
-                </div>
-              </div>
-            ))}
           </div>
         </section>
       </motion.div>

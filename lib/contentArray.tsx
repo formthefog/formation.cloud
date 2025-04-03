@@ -4,7 +4,7 @@ export const content = [
     hero: {
       title: ["AI Agent Marketplace", "Powered by Formation"],
       subtitle:
-        "Join a thriving ecosystem where AI innovation meets opportunity. Our decentralized platform connects creators, users, and enterprises in a secure, scalable marketplace.",
+        "Be among the first to join our AI agent marketplace. Connect with early adopters, deploy your agents, and help shape the future of AI automation.",
       buttonText: "Explore Marketplace",
     },
     keyFeatures: {
@@ -15,33 +15,33 @@ export const content = [
       ),
       features: [
         {
-          title: "Discover Agents",
+          title: "Launch Agents",
           description:
-            "Browse a curated marketplace of AI agents for every use case, from automation to analytics.",
+            "Be among the first to experience our carefully curated selection of AI agents designed for real-world applications.",
           icon: "/uptime.jpg",
         },
         {
-          title: "Earn Credits",
+          title: "Early Access Program",
           description:
-            "Deploy your AI agents and earn Formation credits as users leverage your innovations.",
+            "Join our exclusive early access program and help shape the future of AI agent monetization.",
           icon: "/latency.jpg",
-        },
-        {
-          title: "Decentralized Inference",
-          description:
-            "Run agents on our fog network for unmatched performance at up to 90% lower cost.",
-          icon: "/cost.jpg",
         },
         {
           title: "Developer Tools",
           description:
             "Access comprehensive SDKs and APIs to build, test, and deploy your agents seamlessly.",
+          icon: "/cost.jpg",
+        },
+        {
+          title: "Secure Platform",
+          description:
+            "Enterprise-grade security and compliance for all marketplace transactions.",
           icon: "/scalability.jpg",
         },
         {
-          title: "Secure & Private",
+          title: "Revenue Share",
           description:
-            "End-to-end encryption and private mesh architecture ensure your data and agents remain protected.",
+            "Earn 80% revenue share on your agent deployments with 0% platform fee at launch.",
           icon: "/sovereignty.jpg",
         },
       ],

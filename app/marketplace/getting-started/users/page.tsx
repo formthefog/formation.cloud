@@ -223,45 +223,49 @@ const report = await researchAgent.generateReport({
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <motion.div {...fadeIn} className="space-y-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+      <motion.div {...fadeIn} className="space-y-8 md:space-y-16">
         <PathNavigation />
         
         {/* Hero Section */}
-        <div className="text-center space-y-4">
-          <span className="text-blue-600 font-semibold">FOR BUSINESSES & ENTERPRISES</span>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
-            Build Powerful AI Workflows with <span className="text-blue-600">Formation</span>
+        <div className="text-left md:text-center space-y-4">
+          <span className="text-blue-600 text-sm md:text-base font-semibold">WELCOME TO FORMATION</span>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900">
+            Build Powerful AI <br className="hidden md:block" />
+            Workflows with <span className="text-blue-600">Formation</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Deploy pre-built AI agents to automate workflows, process data, and enhance productivity across your organization.
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl md:mx-auto leading-relaxed">
+            Deploy pre-built AI agents to automate workflows, process data, and enhance productivity.
           </p>
-          <div className="flex justify-center gap-4 mt-8">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
+            <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700">
               Start Free Trial <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-            <Button size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto border-blue-600 text-blue-600 hover:bg-blue-50">
               View Documentation
             </Button>
           </div>
         </div>
 
         {/* Real World Examples */}
-        <section className="space-y-12">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4">Real-World Applications</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+        <section className="space-y-8 md:space-y-12">
+          <div className="text-left md:text-center">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Real-World Applications</h2>
+            <p className="text-gray-600 max-w-2xl md:mx-auto">
               Explore practical examples of how Formation agents can be integrated into your existing workflows.
             </p>
           </div>
 
-          <div className="flex gap-4 justify-center mb-8">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
             {realWorldExamples.map((example, index) => (
               <Button
                 key={example.title}
                 variant={selectedExample === index ? "default" : "outline"}
                 onClick={() => setSelectedExample(index)}
-                className={selectedExample === index ? "bg-blue-600 hover:bg-blue-700" : "border-blue-600 text-blue-600 hover:bg-blue-50"}
+                className={classNames(
+                  "w-full sm:w-auto justify-start sm:justify-center",
+                  selectedExample === index ? "bg-blue-600 hover:bg-blue-700" : "border-blue-600 text-blue-600 hover:bg-blue-50"
+                )}
               >
                 {example.icon}
                 <span className="ml-2">{example.title}</span>
@@ -269,20 +273,20 @@ const report = await researchAgent.generateReport({
             ))}
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold">{realWorldExamples[selectedExample].title}</h3>
+              <h3 className="text-xl md:text-2xl font-bold">{realWorldExamples[selectedExample].title}</h3>
               <p className="text-gray-600">{realWorldExamples[selectedExample].description}</p>
               <ul className="space-y-3">
                 {realWorldExamples[selectedExample].examples.map((example, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <Check className="w-5 h-5 text-blue-600" />
+                  <li key={index} className="flex items-start gap-2">
+                    <Check className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                     <span>{example}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="bg-gray-50 rounded-xl p-6">
+            <div className="bg-gray-50 rounded-xl p-4 md:p-6 overflow-x-auto">
               <CodeBlock
                 language="javascript"
                 code={realWorldExamples[selectedExample].code}
@@ -292,9 +296,9 @@ const report = await researchAgent.generateReport({
         </section>
 
         {/* Integration Types */}
-        <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center">Flexible Integration Options</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+        <section className="space-y-6 md:space-y-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-left md:text-center">Flexible Integration Options</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {integrationTypes.map((type) => (
               <motion.div
                 key={type.name}
@@ -304,8 +308,8 @@ const report = await researchAgent.generateReport({
                 <div className="p-3 bg-blue-50 rounded-lg w-fit mb-4">
                   <div className="text-blue-600">{type.icon}</div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{type.name}</h3>
-                <p className="text-gray-600 mb-4">{type.description}</p>
+                <h3 className="text-lg md:text-xl font-semibold mb-2">{type.name}</h3>
+                <p className="text-sm md:text-base text-gray-600 mb-4">{type.description}</p>
                 <div className="flex flex-wrap gap-2">
                   {type.platforms.map((platform) => (
                     <Badge key={platform} variant="secondary" className="bg-blue-50 text-blue-600 hover:bg-blue-100">{platform}</Badge>
@@ -317,17 +321,17 @@ const report = await researchAgent.generateReport({
         </section>
 
         {/* Integration Examples */}
-        <section className="bg-gray-50 rounded-2xl p-8">
+        <section className="bg-gray-50 rounded-2xl p-4 md:p-8">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">Integration Examples</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-6">Integration Examples</h2>
             <Tab.Group>
-              <Tab.List className="flex space-x-4 bg-white rounded-lg p-2 mb-4">
+              <Tab.List className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 bg-white rounded-lg p-2 mb-4">
                 {['Slack', 'Zapier', 'Direct API'].map((tab) => (
                   <Tab
                     key={tab}
                     className={({ selected }) =>
                       classNames(
-                        'w-32 py-2.5 text-sm font-medium rounded-md transition-colors',
+                        'py-2.5 text-sm font-medium rounded-md transition-colors',
                         selected ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-blue-50'
                       )
                     }
@@ -336,7 +340,7 @@ const report = await researchAgent.generateReport({
                   </Tab>
                 ))}
               </Tab.List>
-              <Tab.Panels>
+              <Tab.Panels className="overflow-x-auto">
                 <Tab.Panel>
                   <CodeBlock
                     language="javascript"
@@ -361,9 +365,9 @@ const report = await researchAgent.generateReport({
         </section>
 
         {/* Quick Start Guide */}
-        <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center">Getting Started is Easy</h2>
-          <div className="grid md:grid-cols-4 gap-6">
+        <section className="space-y-6 md:space-y-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-left md:text-center">Getting Started is Easy</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {[
               {
                 icon: <GitPullRequest className="w-6 h-6" />,
@@ -395,24 +399,24 @@ const report = await researchAgent.generateReport({
                   <div className="text-blue-600">{step.icon}</div>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                <p className="text-gray-600 text-sm">{step.description}</p>
+                <p className="text-sm text-gray-600">{step.description}</p>
               </motion.div>
             ))}
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-12 text-white text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Workflow?</h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Start with a free trial and see how Formation can automate your business processes.
+        <section className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 md:p-12 text-white text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Workflow?</h2>
+          <p className="text-lg md:text-xl text-blue-100 mb-6 md:mb-8 max-w-2xl mx-auto">
+            Start with a free trial and see how Formation can automate your processes.
           </p>
-          <div className="flex justify-center gap-4">
-          <Link href="/marketplace/agents">
-            <Button size="lg" variant="outline" className="text-formation-blue hover:text-white border-white hover:bg-blue-500">
-              Browse Agents
-            </Button>
-</Link>
+          <div className="flex justify-center">
+            <Link href="/marketplace/agents" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto text-white hover:text-white border-white hover:bg-blue-500">
+                Browse Agents
+              </Button>
+            </Link>
           </div>
         </section>
       </motion.div>
