@@ -126,58 +126,62 @@ const Navigation = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="fixed inset-x-0 border-t text-2xl bottom-0 z-40 bg-white shadow-xl transition-transform h-[50%]  duration-300 ease-in-out transform translate-y-0">
-
-          <Image
-            alt="Orb"
-            width={75}
-            height={75}
-            src="/orb.png"
-            onClick={toggleMenu}
-            className="absolute left-0"
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            x="0px"
-            y="0px"
-            width={30}
-            height={30}
-            viewBox="0 0 50 50"
-            className="absolute right-5 top-5"
-            onClick={toggleMenu}
-          >
-            <path d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
-          </svg>
-          <div className="p-8 flex flex-col justify-center h-full space-y-4 text-center">
-            <a
-              href="#features"
-              className="text-gray-800 uppercase font-semibold"
-              onClick={(e) => handleSmoothScroll(e, "#features")}
+        <div className="fixed inset-x-0 border-t text-lg bottom-0 z-40 bg-white shadow-xl transition-transform h-[60vh] duration-300 ease-in-out transform translate-y-0">
+          <div className="relative w-full h-full">
+            <Image
+              alt="Orb"
+              width={60}
+              height={60}
+              src="/orb.png"
+              onClick={toggleMenu}
+              className="absolute left-4 top-4 cursor-pointer"
+            />
+            <button
+              onClick={toggleMenu}
+              className="absolute right-4 top-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              Features
-            </a>
-            <a
-              href="#why-formation"
-              className="text-gray-800 uppercase font-semibold"
-              onClick={(e) => handleSmoothScroll(e, "#why-formation")}
-            >
-              Why Formation
-            </a>
-            <a
-              href="#use-cases"
-              className="text-gray-800 uppercase font-semibold"
-              onClick={(e) => handleSmoothScroll(e, "#use-cases")}
-            >
-              Use Cases
-            </a>
-            <Link href="/marketplace">
-            <Button
-              className="text-blue-500 font-bold bg-transparent hover:bg-transparent"
-              variant="ghost"
-            >
-              ACCESS MARKETPLACE
-            </Button>
-            </Link>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={24}
+                height={24}
+                viewBox="0 0 50 50"
+                className="text-gray-600"
+              >
+                <path d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+            <div className="p-8 pt-20 flex flex-col justify-start h-full space-y-6 text-center">
+              <a
+                href="#features"
+                className="text-gray-800 uppercase font-semibold hover:text-formation-blue transition-colors"
+                onClick={(e) => handleSmoothScroll(e, "#features")}
+              >
+                Features
+              </a>
+              <a
+                href="#why-formation"
+                className="text-gray-800 uppercase font-semibold hover:text-formation-blue transition-colors"
+                onClick={(e) => handleSmoothScroll(e, "#why-formation")}
+              >
+                Why Formation
+              </a>
+              <a
+                href="#use-cases"
+                className="text-gray-800 uppercase font-semibold hover:text-formation-blue transition-colors"
+                onClick={(e) => handleSmoothScroll(e, "#use-cases")}
+              >
+                Use Cases
+              </a>
+              <Link href="/marketplace" className="mt-4">
+                <Button
+                  className="w-full py-6 text-white bg-formation-blue hover:bg-formation-blue/90"
+                  variant="default"
+                >
+                  ACCESS MARKETPLACE
+                  <RightCaret className="ml-2" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       )}

@@ -25,10 +25,10 @@ export default function Home() {
         features={currentContent.keyFeatures.features}
       />
       <FeaturedAgentsSection />
-      <KeyFeaturesSection
+      {/* <KeyFeaturesSection
         tagline={currentContent.keyFeatures.tagline}
         features={currentContent.keyFeatures.features}
-      />
+      /> */}
 
       <WhyFormationSection
         title={currentContent.whyFormation.title}
