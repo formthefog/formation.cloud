@@ -69,8 +69,13 @@ const Navigation = () => {
       <div className={`container border-l border-r border-black/5 mx-auto max-w-[1280px] px-6 py-4 flex items-center justify-between ${
         !isScrolled ? "bg-transparent" : ""
       }`}>
-        <div className="flex-shrink-0">
-          <FormationLogo />
+        <div className="flex items-center gap-4">
+          <button onClick={toggleMenu} className="md:hidden">
+            <Hamburger />
+          </button>
+          <div className="flex-shrink-0">
+            <FormationLogo />
+          </div>
         </div>
 
         <nav className="hidden md:flex flex-1 text-[13px] justify-evenly leading-[1.5385] tracking-[0.05em] font-geistMono font-[600] items-center">
@@ -107,83 +112,100 @@ const Navigation = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-        <Link href="/marketplace">
-          <Button
-            variant="outline"
-            size="sm"
-          >
-            <span className="block sm:hidden">ACCESS</span>
-            <span className="hidden sm:block lg:hidden">GO TO MARKETPLACE</span>
-            <span className="hidden lg:block">GO TO MARKETPLACE</span>
-            <RightCaret />
-          </Button>
+          <Link href="/marketplace">
+            <Button
+              variant="outline"
+              size="sm"
+            >
+              <span className="block sm:hidden">ACCESS</span>
+              <span className="hidden sm:block lg:hidden">GO TO MARKETPLACE</span>
+              <span className="hidden lg:block">GO TO MARKETPLACE</span>
+              <RightCaret />
+            </Button>
           </Link>
-          <button onClick={toggleMenu} className="md:hidden">
-            <Hamburger />
-          </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="fixed inset-x-0 border-t text-lg bottom-0 z-40 bg-white shadow-xl transition-transform h-[60vh] duration-300 ease-in-out transform translate-y-0">
-          <div className="relative w-full h-full">
-            <Image
-              alt="Orb"
-              width={60}
-              height={60}
-              src="/orb.png"
-              onClick={toggleMenu}
-              className="absolute left-4 top-4 cursor-pointer"
-            />
+      <div 
+        className={`fixed inset-y-0 left-0 w-[280px] bg-white border-r border-gray-200 z-40 transform transition-transform duration-300 ease-in-out ${
+          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col h-full p-6">
+          <div className="flex items-center justify-between mb-6">
+            <FormationLogo />
             <button
               onClick={toggleMenu}
-              className="absolute right-4 top-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Close menu"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={24}
-                height={24}
-                viewBox="0 0 50 50"
-                className="text-gray-600"
-              >
-                <path d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <div className="p-8 pt-20 flex flex-col justify-start h-full space-y-6 text-center">
-              <a
-                href="#features"
-                className="text-gray-800 uppercase font-semibold hover:text-formation-blue transition-colors"
-                onClick={(e) => handleSmoothScroll(e, "#features")}
-              >
-                Features
-              </a>
-              <a
-                href="#why-formation"
-                className="text-gray-800 uppercase font-semibold hover:text-formation-blue transition-colors"
-                onClick={(e) => handleSmoothScroll(e, "#why-formation")}
-              >
-                Why Formation
-              </a>
-              <a
-                href="#use-cases"
-                className="text-gray-800 uppercase font-semibold hover:text-formation-blue transition-colors"
-                onClick={(e) => handleSmoothScroll(e, "#use-cases")}
-              >
-                Use Cases
-              </a>
-              <Link href="/marketplace" className="mt-4">
-                <Button
-                  className="w-full py-6 text-white bg-formation-blue hover:bg-formation-blue/90"
-                  variant="default"
+          </div>
+
+          <nav className="flex-grow space-y-6">
+            <div>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Navigation</h3>
+              <div className="space-y-1">
+                <a
+                  href="#features"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all text-gray-600 hover:bg-gray-50"
+                  onClick={(e) => handleSmoothScroll(e, "#features")}
                 >
-                  ACCESS MARKETPLACE
-                  <RightCaret className="ml-2" />
-                </Button>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                  <span>Features</span>
+                </a>
+                <a
+                  href="#why-formation"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all text-gray-600 hover:bg-gray-50"
+                  onClick={(e) => handleSmoothScroll(e, "#why-formation")}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <span>Why Formation</span>
+                </a>
+                <a
+                  href="#use-cases"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all text-gray-600 hover:bg-gray-50"
+                  onClick={(e) => handleSmoothScroll(e, "#use-cases")}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  <span>Use Cases</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Quick Access</h3>
+              <Link
+                href="/marketplace"
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-600 font-medium"
+                onClick={toggleMenu}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Go to Marketplace</span>
               </Link>
             </div>
-          </div>
+          </nav>
         </div>
+      </div>
+
+      {/* Overlay */}
+      {isMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 transition-opacity duration-300"
+          onClick={toggleMenu}
+        />
       )}
     </header>
   );
