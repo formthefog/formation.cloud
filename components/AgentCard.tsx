@@ -56,10 +56,10 @@ export default function AgentCard({ agent }: AgentCardProps) {
       animate={{ opacity: 1, y: 0 }}
       className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all border grow border-gray-200 h-full flex flex-col"
     >
-      <div className="p-6 flex flex-col h-full">
+      <div className="p-4 sm:p-6 flex flex-col h-full">
         {/* Header Section */}
         <div className="flex flex-col mb-3">
-          <div className="flex items-start gap-4 mb-1">
+          <div className="flex flex-col sm:flex-row items-start gap-2 sm:gap-4 mb-2">
             <div className="flex-1">
               <Link 
                 href={`/marketplace/agents/${agent.agent_id}`} 
@@ -83,7 +83,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
                 )}
               </div>
             </div>
-            <div className="text-right shrink-0">
+            <div className="sm:text-right shrink-0 mt-2 sm:mt-0">
               <div className="text-xs text-gray-500 mb-0.5 whitespace-nowrap">Per Request</div>
               <div className="text-lg font-bold text-[#0A84FF] whitespace-nowrap">
                 {agent.price_per_request ? (
@@ -98,11 +98,11 @@ export default function AgentCard({ agent }: AgentCardProps) {
         </div>
 
         {/* Technical Details */}
-        <div className="grid grid-cols-2 gap-3 mb-3 py-3 border-y border-gray-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 py-3 border-y border-gray-100">
           <div>
             <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5">Framework & Runtime</h4>
             <div className="space-y-1">
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 line-clamp-1">
                   {agent.framework}
                 </span>
@@ -114,7 +114,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
           </div>
           <div>
             <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5">License</h4>
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 line-clamp-1">
                 {agent.license}
               </span>
@@ -168,7 +168,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
         {/* Resource Requirements */}
         <div className="mb-4">
           <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">System Requirements</h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
             <div>
               <div className="text-xs text-gray-500">CPU</div>
               <div className="text-sm whitespace-nowrap">
@@ -188,7 +188,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
               </div>
             </div>
             {agent.resource_requirements.requires_gpu && (
-              <div className="col-span-2">
+              <div className="col-span-full">
                 <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded whitespace-nowrap">
                   Requires GPU
                 </span>

@@ -206,7 +206,7 @@ export default function Sidebar({
   return (
     <aside 
       className={`w-[280px] bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 ease-in-out
-        fixed md:relative top-[73px] md:top-0 h-[calc(100vh-73px)] 
+        fixed md:sticky top-[73px] h-[calc(100vh-73px)] 
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         overflow-y-auto z-30`}
     >

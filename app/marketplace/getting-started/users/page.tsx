@@ -50,52 +50,97 @@ export default function UsersGettingStarted() {
   };
 
   const integrationExamples = {
-    slack: `// Integrate with Slack
-const agent = await formation.deployAgent('customer-support');
+    slack: `// Integrate with Slack using Formation's API
+const FORMATION_API_ENDPOINT = 'https://api.formation.cloud/v1';
 
-// Set up Slack integration
-agent.connect('slack', {
-  channel: 'support',
-  triggerOn: ['mention', 'direct-message']
-});
+async function handleSlackMessage(message) {
+  const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/customer-support/process\`, {
+    method: 'POST',
+    headers: {
+      'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      message: message.text,
+      context: {
+        channel: message.channel,
+        user: message.user,
+        thread: message.thread_ts
+      }
+    })
+  });
 
-// Example response
-agent.on('message', async (message) => {
-  const response = await agent.process(message.text);
-  await message.reply(response);
-});`,
-    zapier: `// Connect to Zapier
-const agent = await formation.deployAgent('data-processor');
+  const { response: aiResponse } = await response.json();
+  return aiResponse;
+}
 
-// Set up Zapier trigger
-agent.connect('zapier', {
-  trigger: {
-    app: 'gmail',
-    event: 'new_email'
-  },
-  action: async (email) => {
-    const summary = await agent.summarize(email.body);
-    await agent.tools.notion.createPage({
-      title: email.subject,
-      content: summary
-    });
+// Example Slack bot implementation
+app.post('/slack/events', async (req, res) => {
+  const { event } = req.body;
+  if (event.type === 'message') {
+    const response = await handleSlackMessage(event);
+    await postToSlack(event.channel, response);
   }
 });`,
-    api: `// Direct API integration
-const agent = await formation.deployAgent('content-generator');
 
+    zapier: `// Formation + Zapier Integration Example
+async function processNewEmail(email) {
+  // Call Formation's API to analyze the email
+  const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/email-processor/analyze\`, {
+    method: 'POST',
+    headers: {
+      'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      content: email.body,
+      metadata: {
+        subject: email.subject,
+        sender: email.from,
+        timestamp: email.date
+      }
+    })
+  });
+
+  const { summary, category, priority } = await response.json();
+
+  // Use the results in your Zapier workflow
+  await notionAPI.createPage({
+    title: email.subject,
+    content: summary,
+    properties: {
+      Category: category,
+      Priority: priority
+    }
+  });
+}`,
+
+    api: `// Direct REST API Integration
 app.post('/generate-content', async (req, res) => {
   const { topic, length, tone } = req.body;
   
-  const content = await agent.generate({
-    prompt: topic,
-    parameters: {
-      maxLength: length,
-      style: tone
-    }
-  });
+  try {
+    const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/content/generate\`, {
+      method: 'POST',
+      headers: {
+        'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        topic,
+        parameters: {
+          maxLength: length,
+          tone,
+          format: 'markdown'
+        }
+      })
+    });
 
-  res.json({ content });
+    const { content } = await response.json();
+    res.json({ content });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to generate content' });
+  }
 });`
   };
 
@@ -105,120 +150,165 @@ app.post('/generate-content', async (req, res) => {
       description: "Handle support tickets automatically with context-aware responses",
       icon: <MessageSquare className="w-6 h-6" />,
       examples: [
-        "Automatically categorize and route support tickets",
-        "Generate contextual responses based on user history",
-        "Escalate complex issues to human agents",
-        "Maintain conversation history and context"
+        "Instant, context-aware responses to customer inquiries",
+        "Smart ticket routing based on content analysis",
+        "Automated escalation with confidence scoring",
+        "Seamless human handoff when needed"
       ],
-      code: `const supportAgent = await formation.deployAgent('support');
+      code: `// Formation Customer Support API Integration
+const FORMATION_API_ENDPOINT = 'https://api.formation.cloud/v1';
 
-// Configure knowledge base
-await supportAgent.loadDocs('support-articles');
-
-// Handle incoming ticket
-supportAgent.on('ticket', async (ticket) => {
-  // Analyze ticket content
-  const category = await supportAgent.categorize(ticket.content);
-  
-  // Generate response based on similar cases
-  const response = await supportAgent.respond({
-    content: ticket.content,
-    userHistory: await ticket.getUserHistory(),
-    category
+async function handleSupportTicket(ticket) {
+  // Analyze ticket with Formation's AI
+  const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/support/analyze\`, {
+    method: 'POST',
+    headers: {
+      'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      content: ticket.description,
+      context: {
+        customerId: ticket.customerId,
+        history: await getCustomerHistory(ticket.customerId)
+      }
+    })
   });
 
-  if (response.confidence > 0.8) {
-    await ticket.reply(response.text);
+  const { 
+    category,
+    suggestedResponse,
+    confidence,
+    priority
+  } = await response.json();
+
+  // Automated response for high-confidence cases
+  if (confidence > 0.8) {
+    await sendResponse(ticket.id, suggestedResponse);
   } else {
-    await ticket.escalateToHuman();
+    await routeToHumanAgent(ticket.id, {
+      category,
+      priority,
+      aiSuggestion: suggestedResponse
+    });
   }
-});`
+}`
     },
     {
       title: "Document Processing Pipeline",
-      description: "Process, analyze, and extract data from documents at scale",
+      description: "Transform documents into structured data with AI-powered analysis",
       icon: <FileText className="w-6 h-6" />,
       examples: [
-        "Extract key information from invoices and receipts",
-        "Analyze legal documents for compliance",
-        "Generate document summaries and reports",
-        "Convert unstructured data to structured formats"
+        "Extract key data from any document format",
+        "Intelligent document classification",
+        "Automated compliance checking",
+        "Rich metadata extraction"
       ],
-      code: `const docAgent = await formation.deployAgent('document-processor');
+      code: `// Formation Document Processing API
+async function processDocument(document) {
+  const formData = new FormData();
+  formData.append('file', document.file);
+  formData.append('metadata', JSON.stringify({
+    type: document.type,
+    workflow: 'invoice-processing'
+  }));
 
-// Configure document processing pipeline
-const pipeline = docAgent.createPipeline([
-  'extract-text',
-  'analyze-structure',
-  'identify-entities',
-  'generate-summary'
-]);
-
-// Process incoming documents
-docAgent.on('document', async (doc) => {
-  const result = await pipeline.process(doc);
-  
-  // Store structured data
-  await database.store({
-    documentId: doc.id,
-    entities: result.entities,
-    summary: result.summary,
-    metadata: result.metadata
+  const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/document/process\`, {
+    method: 'POST',
+    headers: {
+      'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`
+    },
+    body: formData
   });
-});`
+
+  const {
+    extractedData,
+    entities,
+    summary,
+    confidence
+  } = await response.json();
+
+  // Store processed results
+  await saveToDatabase({
+    documentId: document.id,
+    data: extractedData,
+    metadata: {
+      entities,
+      summary,
+      confidence
+    }
+  });
+
+  return extractedData;
+}`
     },
     {
       title: "Research Assistant",
-      description: "Conduct comprehensive research and generate insights",
+      description: "Harness AI for comprehensive market research and analysis",
       icon: <Search className="w-6 h-6" />,
       examples: [
-        "Analyze market trends and competitor data",
-        "Generate research reports and summaries",
-        "Monitor news and social media sentiment",
-        "Create data visualizations and insights"
+        "Real-time market trend analysis",
+        "Competitive intelligence gathering",
+        "Automated research summaries",
+        "Data-driven insights"
       ],
-      code: `const researchAgent = await formation.deployAgent('research');
+      code: `// Formation Research API Integration
+async function conductResearch(topic) {
+  const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/research/analyze\`, {
+    method: 'POST',
+    headers: {
+      'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      topic,
+      parameters: {
+        sources: ['news', 'academic', 'social'],
+        timeframe: 'last_3_months',
+        depth: 'comprehensive'
+      }
+    })
+  });
 
-// Configure research parameters
-const research = await researchAgent.research({
-  topic: 'AI Market Trends 2024',
-  sources: ['news', 'academic', 'social'],
-  timeframe: 'last_3_months',
-  deliverables: ['summary', 'insights', 'visualization']
-});
+  const {
+    insights,
+    trends,
+    competitors,
+    recommendations
+  } = await response.json();
 
-// Generate comprehensive report
-const report = await researchAgent.generateReport({
-  research,
-  format: 'pdf',
-  sections: [
-    'executive_summary',
-    'key_findings',
-    'market_analysis',
-    'recommendations'
-  ]
-});`
+  // Generate report with findings
+  const report = await generateReport({
+    insights,
+    trends,
+    competitors,
+    recommendations,
+    format: 'pdf'
+  });
+
+  return report;
+}`
     }
   ];
 
   const integrationTypes = [
     {
-      name: "Chat Platforms",
-      description: "Integrate with Slack, Discord, or custom chat solutions",
-      icon: <MessageSquare className="w-8 h-8" />,
-      platforms: ["Slack", "Discord", "Microsoft Teams", "Custom WebSocket"]
+      name: "RESTful API",
+      description: "Simple, powerful REST endpoints for any use case",
+      icon: <Code2 className="w-8 h-8" />,
+      platforms: ["OpenAPI Spec", "Swagger UI", "Postman Collections", "cURL Ready"]
     },
     {
-      name: "Workflow Automation",
-      description: "Connect with Zapier, n8n, or direct API integration",
+      name: "Platform Integrations",
+      description: "Pre-built connectors for popular platforms",
       icon: <Workflow className="w-8 h-8" />,
-      platforms: ["Zapier", "n8n", "Make.com", "Custom Workflows"]
+      platforms: ["Slack", "Discord", "Microsoft Teams", "Zapier"]
     },
     {
-      name: "Data Processing",
-      description: "Process data from various sources and formats",
-      icon: <Database className="w-8 h-8" />,
-      platforms: ["CSV/Excel", "JSON/XML", "PDFs", "Images/OCR"]
+      name: "Enterprise Solutions",
+      description: "Secure, scalable deployment options",
+      icon: <Building2 className="w-8 h-8" />,
+      platforms: ["Private Cloud", "Custom Endpoints", "SSO", "Audit Logs"]
     }
   ];
 
@@ -231,19 +321,30 @@ const report = await researchAgent.generateReport({
         <div className="text-left md:text-center space-y-4">
           <span className="text-blue-600 text-sm md:text-base font-semibold">WELCOME TO FORMATION</span>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900">
-            Build Powerful AI <br className="hidden md:block" />
-            Workflows with <span className="text-blue-600">Formation</span>
+            Powerful AI Agents <br className="hidden md:block" />
+            One API Call Away
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl md:mx-auto leading-relaxed">
-            Deploy pre-built AI agents to automate workflows, process data, and enhance productivity.
+            Deploy enterprise-grade AI agents in seconds with our simple, powerful API. No setup, no configuration - just instant AI capabilities for your applications.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
             <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700">
-              Start Free Trial <ArrowRight className="w-4 h-4 ml-2" />
+              Get API Key <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
             <Button size="lg" variant="outline" className="w-full sm:w-auto border-blue-600 text-blue-600 hover:bg-blue-50">
-              View Documentation
+              View API Docs
             </Button>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            <Badge variant="secondary" className="bg-blue-50 text-blue-600">
+              <Zap className="w-4 h-4 mr-1" /> Instant Deployment
+            </Badge>
+            <Badge variant="secondary" className="bg-blue-50 text-blue-600">
+              <Shield className="w-4 h-4 mr-1" /> Enterprise Security
+            </Badge>
+            <Badge variant="secondary" className="bg-blue-50 text-blue-600">
+              <Brain className="w-4 h-4 mr-1" /> State-of-the-art AI
+            </Badge>
           </div>
         </div>
 
@@ -371,23 +472,23 @@ const report = await researchAgent.generateReport({
             {[
               {
                 icon: <GitPullRequest className="w-6 h-6" />,
-                title: "1. Install SDK",
-                description: "Install our SDK via npm or pip"
+                title: "1. Get API Key",
+                description: "Sign up and get your API key in seconds"
               },
               {
                 icon: <Bot className="w-6 h-6" />,
                 title: "2. Choose Agent",
-                description: "Select from our marketplace of pre-built agents"
+                description: "Select from our marketplace of specialized AI agents"
               },
               {
                 icon: <Settings className="w-6 h-6" />,
-                title: "3. Configure",
-                description: "Set up integrations and customize behavior"
+                title: "3. Make API Call",
+                description: "One API call to unlock AI capabilities"
               },
               {
                 icon: <Rocket className="w-6 h-6" />,
-                title: "4. Deploy",
-                description: "Deploy your agent in under 60 seconds"
+                title: "4. Scale Instantly",
+                description: "Enterprise-ready infrastructure that grows with you"
               }
             ].map((step) => (
               <motion.div

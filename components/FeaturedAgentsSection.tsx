@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import AgentCard from './AgentCard';
 import Link from 'next/link';
+import RightCaret from './icons/RightCaret';
 
 const FeaturedAgentsSection = () => {
   const router = useRouter();
@@ -56,22 +57,22 @@ const FeaturedAgentsSection = () => {
   }
 
   return (
-    <section className="relative bg-gradient-to-b from-gray-50 to-white pt-24">
-      <div className="max-w-screen-xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <span className="inline-block border border-formation-blue px-4 py-1 text-sm font-medium uppercase tracking-wider text-formation-blue font-geistMono mb-4">
+    <section className="relative bg-gradient-to-b from-gray-50 to-white pt-12 sm:pt-24 pb-12 sm:pb-24">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-8 sm:mb-16">
+          <span className="inline-block border border-formation-blue px-4 py-1 text-sm font-medium uppercase tracking-wider text-formation-blue font-geistMono mb-6">
             Launch Agents
           </span>
-          <h2 className="text-4xl font-hauora font-[500] tracking-[-0.05em] text-gray-900 mb-4">
-            Meet Our First AI Agents
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-hauora font-[600] tracking-[-0.05em] text-gray-900 mb-6 leading-[1.1]">
+            Meet Our First <br className="hidden sm:block" />AI Agents
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">
             Be among the first to experience our carefully crafted AI agents. From coding assistance to market analysis,
             these agents are ready to transform your workflow.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {loading ? (
             // Loading skeleton
             Array(3).fill(0).map((_, index) => (
@@ -93,13 +94,12 @@ const FeaturedAgentsSection = () => {
           )}
         </div>
 
-        <div className="text-center mt-16">
+        <div className="text-center mt-8 sm:mt-16">
           <Link href="/marketplace/agents">
             <Button
-              className="button-with-gradient h-full text-[16px] px-8 py-6 font-medium"
+              className="inline-flex items-center px-8 py-4 bg-[#0A84FF] text-white rounded-full hover:bg-[#0A84FF]/90 transition-all text-[15px] font-medium uppercase tracking-wide"
             >
-              View Launch Agents
-              <FaArrowRight className="ml-2" size={16} />
+              VIEW LAUNCH AGENTS <RightCaret className="ml-2 w-4 h-4" />
             </Button>
           </Link>
         </div>

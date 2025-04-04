@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import FormationLogo from "@/components/icons/FormationLogo";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import RightCaret from './icons/RightCaret';
 
 interface MarketplaceNavigationProps {
   searchQuery: string;
@@ -33,6 +34,11 @@ const MarketplaceNavigation = ({
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavigation = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    window.location.href = href;
+  };
 
   return (
     <header
@@ -95,13 +101,19 @@ const MarketplaceNavigation = ({
         </div>
 
         <div className="flex items-center">
-          <Button
-            variant="outline"
-            size="sm"
-            className="font-medium"
+          <Link 
+            href="/marketplace" 
+            onClick={(e) => handleNavigation(e, '/marketplace')}
           >
-            Login
-          </Button>
+            <Button
+              className="inline-flex items-center px-8 py-4 bg-[#0A84FF] text-white rounded-full hover:bg-[#0A84FF]/90 transition-all text-[15px] font-medium uppercase tracking-wide"
+            >
+              <span className="block sm:hidden">ACCESS</span>
+              <span className="hidden sm:block lg:hidden">GO TO MARKETPLACE</span>
+              <span className="hidden lg:block">GO TO MARKETPLACE</span>
+              <RightCaret className="ml-2 w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </div>
 

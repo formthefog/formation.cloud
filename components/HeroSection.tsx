@@ -46,11 +46,11 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
           </h1>
           <div className="h-3 sm:h-4" /> {/* Spacer */}
           <p className="text-[18px] sm:text-[24px] md:text-[28px] text-gray-600 max-w-[280px] sm:max-w-[450px] md:max-w-[600px] font-[500] leading-[1.3]">
-            The World's First AI Agent Marketplace
+            The First Marketplace for Stateless AI Agents
           </p>
           <div className="h-4 sm:h-6" /> {/* Spacer */}
           <p className="mt-0 max-w-[280px] sm:max-w-[450px] md:max-w-[600px] tracking-[-0.01em] leading-[1.5] md:leading-[1.7] text-[15px] sm:text-[18px] md:text-[20px] font-inter text-gray-600">
-            From custom agents to enterprise solutions. Deploy, monetize, and scale your AI capabilities with Formation's developer-first platform.
+            Deploy headless AI agents in seconds or monetize your own. Our stateless architecture ensures maximum reliability and instant scalability for both developers and businesses.
           </p>
           <div className="h-8 sm:h-10" /> {/* Spacer */}
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-4 sm:px-0">
