@@ -8,11 +8,19 @@ import Hamburger from "./icons/Hamburger";
 import Image from "next/image";
 import { useModal } from "@/context/ModalContext";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Scroll to top when pathname changes
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -52,6 +60,12 @@ const Navigation = () => {
       });
     }
     setIsMenuOpen(false); // Close menu after clicking a link
+  };
+
+  const handleNavigation = (e, href) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+    router.push(href);
   };
 
   const toggleMenu = () => {
@@ -112,7 +126,10 @@ const Navigation = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          <Link href="/marketplace">
+          <Link 
+            href="/marketplace" 
+            onClick={(e) => handleNavigation(e, '/marketplace')}
+          >
             <Button
               variant="outline"
               size="sm"
@@ -187,8 +204,8 @@ const Navigation = () => {
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Quick Access</h3>
               <Link
                 href="/marketplace"
+                onClick={(e) => handleNavigation(e, '/marketplace')}
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-600 font-medium"
-                onClick={toggleMenu}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -204,7 +221,7 @@ const Navigation = () => {
       {isMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 transition-opacity duration-300"
-          onClick={toggleMenu}
+          onClick={() => setIsMenuOpen(false)}
         />
       )}
     </header>
