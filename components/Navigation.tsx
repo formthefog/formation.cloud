@@ -9,6 +9,8 @@ import Image from "next/image";
 import { useModal } from "@/context/ModalContext";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,6 +18,7 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     // Scroll to top when pathname changes
@@ -126,20 +129,24 @@ const Navigation = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          <Link 
-            href="/marketplace" 
-            onClick={(e) => handleNavigation(e, '/marketplace')}
-          >
-            <Button
-              variant="outline"
-              size="sm"
+          {isAuthenticated ? (
+            <Link 
+              href="/marketplace" 
+              onClick={(e) => handleNavigation(e, '/marketplace')}
             >
-              <span className="block sm:hidden">ACCESS</span>
-              <span className="hidden sm:block lg:hidden">GO TO MARKETPLACE</span>
-              <span className="hidden lg:block">GO TO MARKETPLACE</span>
-              <RightCaret />
-            </Button>
-          </Link>
+              <Button
+                variant="outline"
+                size="sm"
+              >
+                <span className="block sm:hidden">ACCESS</span>
+                <span className="hidden sm:block lg:hidden">GO TO MARKETPLACE</span>
+                <span className="hidden lg:block">GO TO MARKETPLACE</span>
+                <RightCaret />
+              </Button>
+            </Link>
+          ) : (
+            <DynamicWidget />
+          )}
         </div>
       </div>
 
@@ -202,16 +209,22 @@ const Navigation = () => {
 
             <div className="border-t border-gray-200 pt-6">
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Quick Access</h3>
-              <Link
-                href="/marketplace"
-                onClick={(e) => handleNavigation(e, '/marketplace')}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-600 font-medium"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span>Go to Marketplace</span>
-              </Link>
+              {isAuthenticated ? (
+                <Link
+                  href="/marketplace"
+                  onClick={(e) => handleNavigation(e, '/marketplace')}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-600 font-medium"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  <span>Go to Marketplace</span>
+                </Link>
+              ) : (
+                <div className="px-3">
+                  <DynamicWidget />
+                </div>
+              )}
             </div>
           </nav>
         </div>

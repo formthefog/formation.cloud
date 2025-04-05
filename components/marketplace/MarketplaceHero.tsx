@@ -162,7 +162,7 @@ export default function MarketplaceHero() {
       </div>
 
       {/* Quick Value Props */}
-      <div className="bg-white shadow-sm border border-gray-200 p-4 mt-4">
+      <div className="bg-white shadow-sm border border-gray-200 p-4 mt-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {activeTab === 'business' ? (
             <>

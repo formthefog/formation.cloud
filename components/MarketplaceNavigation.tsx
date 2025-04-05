@@ -5,6 +5,8 @@ import FormationLogo from "@/components/icons/FormationLogo";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import RightCaret from './icons/RightCaret';
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 interface MarketplaceNavigationProps {
   searchQuery: string;
@@ -21,6 +23,7 @@ const MarketplaceNavigation = ({
 }: MarketplaceNavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -101,19 +104,22 @@ const MarketplaceNavigation = ({
         </div>
 
         <div className="flex items-center">
-          <Link 
-            href="/marketplace" 
-            onClick={(e) => handleNavigation(e, '/marketplace')}
-          >
-            <Button
-              className="inline-flex items-center px-8 py-4 bg-[#0A84FF] text-white rounded-full hover:bg-[#0A84FF]/90 transition-all text-[15px] font-medium uppercase tracking-wide"
-            >
-              <span className="block sm:hidden">ACCESS</span>
-              <span className="hidden sm:block lg:hidden">GO TO MARKETPLACE</span>
-              <span className="hidden lg:block">GO TO MARKETPLACE</span>
-              <RightCaret className="ml-2 w-4 h-4" />
-            </Button>
-          </Link>
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">
+                {user?.email}
+              </span>
+              <Button
+                variant="outline"
+                onClick={logout}
+                className="text-red-600 border-red-200 hover:bg-red-50"
+              >
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <DynamicWidget />
+          )}
         </div>
       </div>
 

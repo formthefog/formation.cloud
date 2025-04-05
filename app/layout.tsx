@@ -1,8 +1,8 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import { ModalProvider } from "@/context/ModalContext";
 import { Analytics } from '@vercel/analytics/react';
 import Head from "next/head";
+import { Providers } from "@/components/providers/Providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -14,7 +14,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
 
 // Hauora Sans Font Configurations
 const hauoraSans = localFont({
@@ -74,9 +73,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${hauoraSans.variable} ${interDisplay.variable} ${geistMono.variable} antialiased`}
       >
-        <ModalProvider>
+        <Providers>
           {children}
-        </ModalProvider>
+        </Providers>
         <Analytics />
       </body>
     </html>
