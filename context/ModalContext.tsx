@@ -2,17 +2,28 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { WaitlistDialog } from '@/components/WaitlistDialog';
-import { Button } from '@/components/ui/button';
 
-type ModalContextType = {
+interface ModalContextType {
   openWaitlistModal: () => void;
   closeWaitlistModal: () => void;
   isWaitlistModalOpen: boolean;
-};
+}
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-export function ModalProvider({ children }: { children: ReactNode }) {
+export function useModal() {
+  const context = useContext(ModalContext);
+  if (context === undefined) {
+    throw new Error('useModal must be used within a ModalProvider');
+  }
+  return context;
+}
+
+interface ModalProviderProps {
+  children: ReactNode;
+}
+
+export function ModalProvider({ children }: ModalProviderProps) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
 
   const openWaitlistModal = () => {
@@ -32,15 +43,10 @@ export function ModalProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-
+      <WaitlistDialog
+        isOpen={isWaitlistModalOpen}
+        onOpenChange={setIsWaitlistModalOpen}
+      />
     </ModalContext.Provider>
   );
-};
-
-export function useModal() {
-  const context = useContext(ModalContext);
-  if (context === undefined) {
-    throw new Error('useModal must be used within a ModalProvider');
-  }
-  return context;
 }

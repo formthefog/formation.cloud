@@ -10,8 +10,10 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <DynamicAuthProvider>
-      {children}
-    </DynamicAuthProvider>
+    <ModalProvider>
+      <DynamicAuthProvider>
+        {children}
+      </DynamicAuthProvider>
+    </ModalProvider>
   );
 } 

@@ -1,12 +1,12 @@
 import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
-import { JwtService } from './jwt';
+import { JWTService } from '@/lib/services/jwt';
 
 export class DynamicAuthService {
   private static instance: DynamicAuthService;
-  private jwtService: JwtService;
+  private jwtService: JWTService;
 
   private constructor() {
-    this.jwtService = new JwtService();
+    this.jwtService = JWTService.getInstance();
   }
 
   public static getInstance(): DynamicAuthService {
@@ -16,46 +16,32 @@ export class DynamicAuthService {
     return DynamicAuthService.instance;
   }
 
-  public async handleAuthSuccess(user: any) {
+  public async handleAuthSuccess(user: any): Promise<void> {
     try {
-      // Generate JWT token using our custom service
-      const token = await this.jwtService.generateToken({
-        userId: user.id,
-        email: user.email,
-        walletAddress: user.walletAddress
-      });
+      // Generate a token for the authenticated user
+      const token = this.jwtService.generateToken(
+        user.userId || user.id,
+        user.walletAddress
+      );
 
-      // Store the token
-      localStorage.setItem('auth_token', token);
-      
-      return token;
+      // Store the token in a cookie (this will be picked up by Dynamic)
+      document.cookie = `${process.env.JWT_COOKIE_NAME || 'formation_auth_token'}=${token}; path=/; max-age=${60 * 60 * 24}; SameSite=Lax`;
     } catch (error) {
-      console.error('Auth success handling failed:', error);
+      console.error('Failed to handle auth success:', error);
       throw error;
     }
   }
 
-  public async handleAuthError(error: any) {
+  public async handleAuthError(error: any): Promise<void> {
     console.error('Authentication error:', error);
-    localStorage.removeItem('auth_token');
-    throw error;
+    this.clearAuthCookie();
   }
 
-  public async logout() {
-    try {
-      localStorage.removeItem('auth_token');
-      // Add any additional logout logic here
-    } catch (error) {
-      console.error('Logout failed:', error);
-      throw error;
-    }
+  public async logout(): Promise<void> {
+    this.clearAuthCookie();
   }
 
-  public isAuthenticated(): boolean {
-    return !!localStorage.getItem('auth_token');
-  }
-
-  public getToken(): string | null {
-    return localStorage.getItem('auth_token');
+  private clearAuthCookie(): void {
+    document.cookie = `${process.env.JWT_COOKIE_NAME || 'formation_auth_token'}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   }
 } 

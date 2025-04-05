@@ -15,8 +15,8 @@ export class JWTService {
   private privateKey: string;
 
   private constructor() {
-    // Load private key from environment or secure storage
-    this.privateKey = process.env.JWT_PRIVATE_KEY || '';
+    // Load private key from environment and replace \n with actual newlines
+    this.privateKey = (process.env.JWT_PRIVATE_KEY || '').replace(/\\n/g, '\n');
   }
 
   public static getInstance(): JWTService {
@@ -58,12 +58,12 @@ export class JWTService {
     }
   }
 
-  public async decodeToken(token: string): Promise<TokenPayload | null> {
+  public decodeToken(token: string): JWTPayload | null {
     try {
-      const decoded = jwt.decode(token) as TokenPayload;
+      const decoded = jwt.decode(token) as JWTPayload;
       return decoded;
     } catch (error) {
-      console.error('Token decoding failed:', error);
+      console.error('Token decode failed:', error);
       return null;
     }
   }
