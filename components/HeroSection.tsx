@@ -60,7 +60,7 @@ const HeroSection = ({ title, subtitle, buttonText }: { title: string[]; subtitl
                 className="w-full sm:w-auto bg-gradient-to-r from-formation-blue via-blue-500 to-blue-600 hover:opacity-90 text-white h-full text-[14px] sm:text-[16px] px-6 sm:px-10 py-5 sm:py-7 font-medium transition-all duration-300 uppercase tracking-wider shadow-lg shadow-blue-500/20"
                 onClick={openWaitlistModal}
               >
-                JOIN THE WAITLIST <RightCaret className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                GO TO MARKETPLACE <RightCaret className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </Link>
           </div>

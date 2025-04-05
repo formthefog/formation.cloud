@@ -30,17 +30,17 @@ const KeyFeaturesSection = ({ tagline, features }) => {
     {
       icon: FaStore,
       title: "Agent Marketplace",
-      description: "Be among the first to discover and deploy AI agents in our curated marketplace"
+      description: "Be among the first to discover and deploy agents in our curated marketplace"
     },
     {
       icon: FaCoins,
       title: "Token Economy",
-      description: "Join our early access program and help shape the future of AI agent monetization"
+      description: "Join our early access program and help shape the future of agent monetization"
     },
     {
       icon: FaRobot,
       title: "Agent Development",
-      description: "Build, test, and monetize your AI agents with our enterprise-grade development tools"
+      description: "Build, test, and monetize your agents with our enterprise-grade development tools"
     },
     {
       icon: FaShieldHalved,
@@ -96,7 +96,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
                   </div>
                   <div className="flex-1">
                     <p className="text-gray-600 leading-relaxed font-inter text-sm sm:text-base md:text-lg text-center sm:text-left">
-                      Be among the first to access our marketplace of AI agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
+                      Be among the first to access our marketplace of agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
                     </p>
                   </div>
                 </div>
@@ -113,7 +113,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
                   </div>
                   <div className="flex-1">
                     <p className="text-gray-600 leading-relaxed font-inter text-sm sm:text-base md:text-lg text-center sm:text-left">
-                      Join our early access program and help shape the future of AI agents. List your agents on our marketplace and earn Formation credits while building innovative solutions.
+                      Join our early access program and help shape the future of agents. List your agents on our marketplace and earn Formation credits while building innovative solutions.
                     </p>
                   </div>
                 </div>

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function DeveloperRevenue() {
   return (
-    <div className="mb-12">
+    <div className="my-12">
       <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-none p-8 border border-blue-100">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left Column - Content */}

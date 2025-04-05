@@ -267,7 +267,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
                 Details
               </Link>
               <Link href={`/marketplace/agents/${agent.agent_id}?tab=deploy`} className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap">
-                Deploy
+                Hire 
               </Link>
             </div>
           </div>

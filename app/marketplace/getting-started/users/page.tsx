@@ -52,13 +52,19 @@ export default function UsersGettingStarted() {
   const integrationExamples = {
     slack: `// Integrate with Slack using Formation's API
 const FORMATION_API_ENDPOINT = 'https://api.formation.cloud/v1';
+const FORMATION_API_KEY = process.env.FORMATION_API_KEY;
+const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
+const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 
 async function handleSlackMessage(message) {
   const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/customer-support/process\`, {
     method: 'POST',
     headers: {
-      'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`,
-      'Content-Type': 'application/json'
+      'Authorization': \`Bearer \${FORMATION_API_KEY}\`,
+      'X-API-Key': FORMATION_API_KEY,
+      'Content-Type': 'application/json',
+      'User-Agent': 'Formation-Slack-Integration/1.0',
+      'X-Slack-Token': SLACK_BOT_TOKEN
     },
     body: JSON.stringify({
       message: message.text,
@@ -76,21 +82,36 @@ async function handleSlackMessage(message) {
 
 // Example Slack bot implementation
 app.post('/slack/events', async (req, res) => {
+  // Verify Slack request signature using SLACK_SIGNING_SECRET
+  if (!verifySlackRequest(req, SLACK_SIGNING_SECRET)) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
   const { event } = req.body;
   if (event.type === 'message') {
     const response = await handleSlackMessage(event);
-    await postToSlack(event.channel, response);
+    // Use Slack's Bot Token to post response
+    await postToSlack(event.channel, response, SLACK_BOT_TOKEN);
   }
 });`,
 
     zapier: `// Formation + Zapier Integration Example
+const FORMATION_API_ENDPOINT = 'https://api.formation.cloud/v1';
+const FORMATION_API_KEY = process.env.FORMATION_API_KEY;
+const NOTION_API_KEY = process.env.NOTION_API_KEY;
+const ZAPIER_WEBHOOK_SECRET = process.env.ZAPIER_WEBHOOK_SECRET;
+
 async function processNewEmail(email) {
   // Call Formation's API to analyze the email
   const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/email-processor/analyze\`, {
     method: 'POST',
     headers: {
-      'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`,
-      'Content-Type': 'application/json'
+      'Authorization': \`Bearer \${FORMATION_API_KEY}\`,
+      'X-API-Key': FORMATION_API_KEY,
+      'Content-Type': 'application/json',
+      'User-Agent': 'Formation-Zapier-Integration/1.0',
+      'X-Request-ID': crypto.randomUUID(),
+      'X-Zapier-Webhook-Secret': ZAPIER_WEBHOOK_SECRET
     },
     body: JSON.stringify({
       content: email.body,
@@ -106,6 +127,11 @@ async function processNewEmail(email) {
 
   // Use the results in your Zapier workflow
   await notionAPI.createPage({
+    headers: {
+      'Authorization': \`Bearer \${NOTION_API_KEY}\`,
+      'Notion-Version': '2022-06-28',
+      'X-Notion-Token': NOTION_API_KEY
+    },
     title: email.subject,
     content: summary,
     properties: {
@@ -116,22 +142,34 @@ async function processNewEmail(email) {
 }`,
 
     api: `// Direct REST API Integration
+const FORMATION_API_ENDPOINT = 'https://api.formation.cloud/v1';
+const FORMATION_API_KEY = process.env.FORMATION_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;  // If using OpenAI integration
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;  // If using Anthropic integration
+
 app.post('/generate-content', async (req, res) => {
-  const { topic, length, tone } = req.body;
+  const { topic, length, tone, model } = req.body;
   
   try {
     const response = await fetch(\`\${FORMATION_API_ENDPOINT}/agents/content/generate\`, {
       method: 'POST',
       headers: {
-        'Authorization': \`Bearer \${process.env.FORMATION_API_KEY}\`,
-        'Content-Type': 'application/json'
+        'Authorization': \`Bearer \${FORMATION_API_KEY}\`,
+        'X-API-Key': FORMATION_API_KEY,
+        'Content-Type': 'application/json',
+        'User-Agent': 'Formation-Direct-Integration/1.0',
+        'X-Request-ID': crypto.randomUUID(),
+        // Include relevant model API keys based on the model being used
+        ...(model === 'openai' && { 'X-OpenAI-Key': OPENAI_API_KEY }),
+        ...(model === 'anthropic' && { 'X-Anthropic-Key': ANTHROPIC_API_KEY })
       },
       body: JSON.stringify({
         topic,
         parameters: {
           maxLength: length,
           tone,
-          format: 'markdown'
+          format: 'markdown',
+          model: model
         }
       })
     });
@@ -139,6 +177,7 @@ app.post('/generate-content', async (req, res) => {
     const { content } = await response.json();
     res.json({ content });
   } catch (error) {
+    console.error('Formation API Error:', error);
     res.status(500).json({ error: 'Failed to generate content' });
   }
 });`
@@ -314,7 +353,7 @@ async function conductResearch(topic) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
-      <motion.div {...fadeIn} className="space-y-8 md:space-y-16">
+      <motion.div {...fadeIn} className="space-y-12 md:space-y-24">
         <PathNavigation />
         
         {/* Hero Section */}
@@ -432,7 +471,7 @@ async function conductResearch(topic) {
                     key={tab}
                     className={({ selected }) =>
                       classNames(
-                        'py-2.5 text-sm font-medium rounded-md transition-colors',
+                        'py-2.5 text-sm px-4 font-medium rounded-md transition-colors',
                         selected ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-blue-50'
                       )
                     }
@@ -514,7 +553,11 @@ async function conductResearch(topic) {
           </p>
           <div className="flex justify-center">
             <Link href="/marketplace/agents" className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto text-white hover:text-white border-white hover:bg-blue-500">
+              <Button 
+                size="lg" 
+                variant="secondary" 
+                className="w-full sm:w-auto px-10 bg-white hover:bg-white/90 text-[#0A84FF] transition-colors"
+              >
                 Browse Agents
               </Button>
             </Link>

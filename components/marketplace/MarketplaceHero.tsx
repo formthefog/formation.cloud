@@ -48,95 +48,90 @@ export default function MarketplaceHero() {
         {/* Hero Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* Left Column - Content */}
-          <div className="p-8 lg:p-12 flex flex-col h-[550px] bg-gradient-to-br from-gray-50 to-white">
+          <div className="p-8 lg:p-12 flex flex-col min-h-[600px] bg-gradient-to-br from-gray-50 to-white">
             <motion.div
               key={activeTab}
               initial="initial"
               animate="animate"
               variants={fadeIn}
-              className="flex flex-col h-full max-w-xl"
+              className="flex flex-col h-full"
             >
-              {activeTab === 'business' ? (
-                <>
-                  <div>
-                    <div className="inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-50 text-blue-600 mb-4">
-                      Launching Soon
-                    </div>
-                    <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-                      The Future of AI Agents
-                    </h1>
-                    <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                      Be among the first to access our marketplace of AI agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
-                    </p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                        <div className="text-3xl font-bold text-blue-600">60%</div>
-                        <div className="text-sm text-gray-600">Potential Cost Reduction</div>
+              <div className="flex-1">
+                {activeTab === 'business' ? (
+                  <>
+                    <div>
+                      <div className="inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-50 text-blue-600 mb-4">
+                        Launching Soon
                       </div>
-                      <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                        <div className="text-3xl font-bold text-blue-600">24/7</div>
-                        <div className="text-sm text-gray-600">Continuous Operation</div>
-                      </div>
-                      <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                        <div className="text-3xl font-bold text-blue-600">&lt;60s</div>
-                        <div className="text-sm text-gray-600">Deployment Time</div>
-                      </div>
-                      <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                        <div className="text-3xl font-bold text-blue-600">99.9%</div>
-                        <div className="text-sm text-gray-600">Target Uptime</div>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div>
-                    <div className="inline-flex items-center px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-600 mb-4">
-                      Early Access Program
-                    </div>
-                    <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-                      Build the Future of AI
-                    </h1>
-                    <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                      Join our early access program and help shape the future of AI agents. List your agents on our marketplace and earn Formation credits while building innovative solutions.
-                    </p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                        <div className="text-3xl font-bold text-indigo-600">80%</div>
-                        <div className="text-sm text-gray-600">Revenue Share</div>
-                      </div>
-                      <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                        <div className="text-3xl font-bold text-indigo-600">0%</div>
-                        <div className="text-sm text-gray-600">Platform Fee at Launch</div>
-                      </div>
-                      <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                        <div className="text-3xl font-bold text-indigo-600">24/7</div>
-                        <div className="text-sm text-gray-600">Developer Support</div>
-                      </div>
-                      <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                        <div className="text-3xl font-bold text-indigo-600">$1.3T</div>
-                        <div className="text-sm text-gray-600">AI Market by 2030</div>
+                      <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                        The Future of AI Agents
+                      </h1>
+                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Be among the first to access our marketplace of AI agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
+                          <div className="text-3xl font-bold text-blue-600">60%</div>
+                          <div className="text-sm text-gray-600">Potential Cost Reduction</div>
+                        </div>
+                        <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
+                          <div className="text-3xl font-bold text-blue-600">24/7</div>
+                          <div className="text-sm text-gray-600">Continuous Operation</div>
+                        </div>
+                        <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
+                          <div className="text-3xl font-bold text-blue-600">&lt;60s</div>
+                          <div className="text-sm text-gray-600">Deployment Time</div>
+                        </div>
+                        <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
+                          <div className="text-3xl font-bold text-blue-600">99.9%</div>
+                          <div className="text-sm text-gray-600">Target Uptime</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </>
-              )}
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <div className="inline-flex items-center px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-600 mb-4">
+                        Early Access Program
+                      </div>
+                      <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                        Build the Future of AI
+                      </h1>
+                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Join our early access program and help shape the future of AI agents. List your agents on our marketplace and earn Formation credits while building innovative solutions.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
+                          <div className="text-3xl font-bold text-indigo-600">80%</div>
+                          <div className="text-sm text-gray-600">Revenue Share</div>
+                        </div>
+                        <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
+                          <div className="text-3xl font-bold text-indigo-600">0%</div>
+                          <div className="text-sm text-gray-600">Platform Fee at Launch</div>
+                        </div>
+                        <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
+                          <div className="text-3xl font-bold text-indigo-600">24/7</div>
+                          <div className="text-sm text-gray-600">Developer Support</div>
+                        </div>
+                        <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
+                          <div className="text-3xl font-bold text-indigo-600">$1.3T</div>
+                          <div className="text-sm text-gray-600">AI Market by 2030</div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-4 mt-auto">
+              <div className="mt-12 mb-6">
                 {activeTab === 'business' ? (
                   <>
                     <Link href="/marketplace/getting-started/users" className="w-full sm:w-auto">
                       <Button
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-[#0A84FF] text-white rounded-full hover:bg-[#0A84FF]/90 transition-all text-[15px] font-medium uppercase tracking-wide"
+                        className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-[#0A84FF] bg-transparent text-[#0A84FF] rounded-full hover:bg-[#0A84FF]/5 transition-all text-[15px] font-medium uppercase tracking-wide"
                       >
-                        JOIN WAITLIST <RightCaret className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
-                    <Link href="/marketplace/agents" className="w-full sm:w-auto">
-                      <Button
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-[#0A84FF] text-white rounded-full hover:bg-[#0A84FF]/90 transition-all text-[15px] font-medium uppercase tracking-wide"
-                      >
-                        LEARN MORE <RightCaret className="ml-2 w-4 h-4" />
+                        GET STARTED <RightCaret className="ml-2 w-4 h-4" />
                       </Button>
                     </Link>
                   </>
@@ -144,16 +139,9 @@ export default function MarketplaceHero() {
                   <>
                     <Link href="/marketplace/getting-started/developers" className="w-full sm:w-auto">
                       <Button
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-[#0A84FF] text-white rounded-full hover:bg-[#0A84FF]/90 transition-all text-[15px] font-medium uppercase tracking-wide"
+                        className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-[#0A84FF] bg-transparent text-[#0A84FF] rounded-full hover:bg-[#0A84FF]/5 transition-all text-[15px] font-medium uppercase tracking-wide"
                       >
-                        APPLY FOR EARLY ACCESS <RightCaret className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
-                    <Link href="/marketplace/getting-started/developers" className="w-full sm:w-auto">
-                      <Button
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-[#0A84FF] text-white rounded-full hover:bg-[#0A84FF]/90 transition-all text-[15px] font-medium uppercase tracking-wide"
-                      >
-                        VIEW DOCUMENTATION <RightCaret className="ml-2 w-4 h-4" />
+                        GET STARTED <RightCaret className="ml-2 w-4 h-4" />
                       </Button>
                     </Link>
                   </>
@@ -163,7 +151,7 @@ export default function MarketplaceHero() {
           </div>
 
           {/* Right Column - Integration Canvas */}
-          <div className="bg-gray-50 border-l border-gray-200 h-[550px]">
+          <div className="bg-gray-50 border-l border-gray-200 min-h-[600px]">
             {activeTab === 'business' ? (
               <AgentIntegrationCanvas />
             ) : (
