@@ -367,12 +367,11 @@ async function conductResearch(topic) {
             Deploy enterprise-grade AI agents in seconds with our simple, powerful API. No setup, no configuration - just instant AI capabilities for your applications.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
-            <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700">
-              Get API Key <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto border-blue-600 text-blue-600 hover:bg-blue-50">
-              View API Docs
-            </Button>
+            <Link href="/marketplace/settings">
+              <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700">
+                Get API Key <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <Badge variant="secondary" className="bg-blue-50 text-blue-600">
