@@ -6,47 +6,128 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { useDynamicContext, useIsLoggedIn } from '@dynamic-labs/sdk-react-core';
 import {
-  UserIcon,
-  BellIcon,
-  ShieldCheckIcon,
   CreditCardIcon,
-  KeyIcon,
-  GlobeAltIcon,
   CodeBracketIcon,
+  ArrowRightIcon,
+  SparklesIcon,
+  RocketLaunchIcon,
+  ShieldCheckIcon,
+  ArrowLeftOnRectangleIcon
 } from '@heroicons/react/24/outline';
+import { toast } from 'sonner';
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
+  const isLoggedIn = useIsLoggedIn();
+  const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+
+  const onLogout = async () => {
+    try {
+      await handleLogOut();
+      toast.success('Successfully logged out');
+    } catch (error) {
+      toast.error('Failed to log out');
+    }
+  };
+
+  if (!isLoggedIn) {
+    return (
+      <div className="flex min-h-screen flex-col bg-background">
+        <div className="flex-1">
+          <div className="border-b">
+            <div className="container flex h-16 items-center px-4">
+              <h1 className="text-lg font-semibold">Get Started</h1>
+            </div>
+          </div>
+
+          <div className="container p-4 md:p-8 mx-auto max-w-5xl">
+            <div className="max-w-2xl mx-auto">
+              <Card className="relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50/50 to-white" />
+                <CardHeader className="relative">
+                  <CardTitle className="text-2xl md:text-3xl flex items-center gap-3">
+                    <SparklesIcon className="w-8 h-8 text-blue-500" />
+                    Welcome to Formation
+                  </CardTitle>
+                  <CardDescription className="text-base">
+                    Sign in to access your API keys, manage billing, and deploy AI agents.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="relative space-y-6">
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div className="flex items-start gap-3 p-4 rounded-lg bg-white/50 border border-blue-100">
+                      <RocketLaunchIcon className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                      <div>
+                        <h3 className="font-medium">Quick Deployment</h3>
+                        <p className="text-sm text-muted-foreground">Deploy AI agents in under 60 seconds with our streamlined process.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 rounded-lg bg-white/50 border border-blue-100">
+                      <CodeBracketIcon className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                      <div>
+                        <h3 className="font-medium">API Access</h3>
+                        <p className="text-sm text-muted-foreground">Get instant access to our API and start integrating AI capabilities.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 rounded-lg bg-white/50 border border-blue-100">
+                      <CreditCardIcon className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                      <div>
+                        <h3 className="font-medium">Simple Billing</h3>
+                        <p className="text-sm text-muted-foreground">Pay-per-use pricing with no hidden fees or long-term commitments.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 rounded-lg bg-white/50 border border-blue-100">
+                      <ShieldCheckIcon className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                      <div>
+                        <h3 className="font-medium">Enterprise Ready</h3>
+                        <p className="text-sm text-muted-foreground">SOC 2 compliant with advanced security features built-in.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4">
+                    <Button 
+                      size="lg" 
+                      className="w-full md:w-auto"
+                      onClick={() => setShowAuthFlow(true)}
+                    >
+                      Get Started
+                      <ArrowRightIcon className="ml-2 w-5 h-5" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <div className="flex-1">
         <div className="border-b">
-          <div className="container flex h-16 items-center px-4">
+          <div className="container flex h-16 items-center justify-between px-4">
             <h1 className="text-lg font-semibold">Settings</h1>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onLogout}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              <ArrowLeftOnRectangleIcon className="w-5 h-5 mr-1.5" />
+              Sign Out
+            </Button>
           </div>
         </div>
 
         <div className="container p-4 md:p-8 mx-auto max-w-5xl space-y-8">
-          <Tabs defaultValue="profile" className="space-y-8">
+          <Tabs defaultValue="billing" className="space-y-8">
             <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground relative w-full space-x-1">
-              <TabsTrigger value="profile" className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow">
-                <UserIcon className="mr-2 h-4 w-4" />
-                Profile
-              </TabsTrigger>
-              <TabsTrigger value="notifications" className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow">
-                <BellIcon className="mr-2 h-4 w-4" />
-                Notifications
-              </TabsTrigger>
-              <TabsTrigger value="security" className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow">
-                <ShieldCheckIcon className="mr-2 h-4 w-4" />
-                Security
-              </TabsTrigger>
               <TabsTrigger value="billing" className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow">
                 <CreditCardIcon className="mr-2 h-4 w-4" />
                 Billing
@@ -56,147 +137,6 @@ export default function SettingsPage() {
                 API
               </TabsTrigger>
             </TabsList>
-
-            {/* Profile Section */}
-            <TabsContent value="profile" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Profile Information</CardTitle>
-                  <CardDescription>
-                    Update your profile information and public presence.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <Avatar className="h-24 w-24">
-                      <AvatarImage src="/placeholder-avatar.jpg" />
-                      <AvatarFallback>JD</AvatarFallback>
-                    </Avatar>
-                    <div className="space-y-2">
-                      <Button>Change Avatar</Button>
-                      <p className="text-sm text-muted-foreground">
-                        JPG, GIF or PNG. Max size 2MB.
-                      </p>
-                    </div>
-                  </div>
-                  <Separator />
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Name</Label>
-                      <Input id="name" placeholder="John Doe" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="username">Username</Label>
-                      <Input id="username" placeholder="johndoe" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="john@example.com" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="website">Website</Label>
-                      <Input id="website" type="url" placeholder="https://yourwebsite.com" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
-                    <Input id="bio" placeholder="Tell us about yourself" />
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button>Save Changes</Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-
-            {/* Notifications Section */}
-            <TabsContent value="notifications" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Notification Preferences</CardTitle>
-                  <CardDescription>
-                    Choose what notifications you want to receive.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label>Agent Activity</Label>
-                        <p className="text-sm text-muted-foreground">
-                          Receive notifications about your agents' performance and usage.
-                        </p>
-                      </div>
-                      <Switch />
-                    </div>
-                    <Separator />
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label>Earnings Updates</Label>
-                        <p className="text-sm text-muted-foreground">
-                          Get notified about your earnings and payouts.
-                        </p>
-                      </div>
-                      <Switch defaultChecked />
-                    </div>
-                    <Separator />
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label>Marketing Updates</Label>
-                        <p className="text-sm text-muted-foreground">
-                          Receive news about Formation features and updates.
-                        </p>
-                      </div>
-                      <Switch />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Security Section */}
-            <TabsContent value="security" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Security Settings</CardTitle>
-                  <CardDescription>
-                    Manage your security preferences and authentication methods.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label>Two-Factor Authentication</Label>
-                        <p className="text-sm text-muted-foreground">
-                          Add an extra layer of security to your account.
-                        </p>
-                      </div>
-                      <Switch />
-                    </div>
-                    <Separator />
-                    <div>
-                      <Label>Active Sessions</Label>
-                      <div className="mt-2 space-y-2">
-                        <div className="flex items-center justify-between rounded-lg border p-4">
-                          <div className="space-y-0.5">
-                            <p className="text-sm font-medium">Current Session</p>
-                            <p className="text-xs text-muted-foreground">
-                              Last active: Just now
-                            </p>
-                          </div>
-                          <Badge variant="secondary">Active</Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                  <Button variant="outline">Reset Password</Button>
-                  <Button variant="destructive">Sign Out All Devices</Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
 
             {/* Billing Section */}
             <TabsContent value="billing" className="space-y-6">
