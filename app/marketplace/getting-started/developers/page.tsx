@@ -325,7 +325,7 @@ async with httpx.AsyncClient() as client:
             with Our <span className="text-purple-600">API Platform</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl md:mx-auto leading-relaxed">
-            Create powerful AI agents with our simple REST API, reach enterprise customers, and earn revenue with our developer-first platform.
+            Create powerful agents with our simple REST API, reach enterprise customers, and earn revenue with our developer-first platform.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
             <Button size="lg" className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700">

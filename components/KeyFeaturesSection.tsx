@@ -30,7 +30,7 @@ const KeyFeaturesSection = ({ tagline, features }) => {
     {
       icon: FaStore,
       title: "Agent Marketplace",
-      description: "Be among the first to discover and deploy AI agents in our curated marketplace"
+      description: "Be among the first to discover and deploy agents in our curated marketplace"
     },
     {
       icon: FaCoins,

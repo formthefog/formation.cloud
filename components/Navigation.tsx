@@ -5,8 +5,6 @@ import FormationLogo from "./icons/FormationLogo";
 import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import Hamburger from "./icons/Hamburger";
-import Image from "next/image";
-import { useModal } from "@/context/ModalContext";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 

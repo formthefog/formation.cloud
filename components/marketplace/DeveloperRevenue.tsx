@@ -11,7 +11,7 @@ export default function DeveloperRevenue() {
               For Developers
             </div>
             <h2 className="text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-              Be Among the First AI Agent Developers
+              Be Among the First Agent Developers
             </h2>
             <p className="text-gray-600 mb-6">
               Join Formation's marketplace at launch and position yourself as a pioneer in the AI agent economy. Build and monetize your AI agents with our revenue-sharing model.

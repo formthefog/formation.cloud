@@ -67,7 +67,7 @@ export default function MarketplaceHero() {
                         The Future of AI Agents
                       </h1>
                       <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                        Be among the first to access our marketplace of AI agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
+                        Be among the first to access our marketplace of agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
                       </p>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">

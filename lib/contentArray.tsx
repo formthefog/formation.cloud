@@ -2,28 +2,28 @@ export const content = [
   // 1. Agent Marketplace Focus
   {
     hero: {
-      title: ["AI Agent Marketplace", "Powered by Formation"],
+      title: ["Agent Marketplace", "Powered by Formation"],
       subtitle:
-        "Be among the first to join our AI agent marketplace. Connect with early adopters, deploy your agents, and help shape the future of AI automation.",
+        "Be among the first to join our agent marketplace. Connect with early adopters, deploy your agents, and help shape the future of AI automation.",
       buttonText: "Explore Marketplace",
     },
     keyFeatures: {
       tagline: (
         <>
-          Your Gateway to the AI Agent Economy
+          Your Gateway to the Agent Economy
         </>
       ),
       features: [
         {
           title: "Launch Agents",
           description:
-            "Be among the first to experience our carefully curated selection of AI agents designed for real-world applications.",
+            "Be among the first to experience our carefully curated selection of agents designed for real-world applications.",
           icon: "/uptime.jpg",
         },
         {
           title: "Early Access Program",
           description:
-            "Join our exclusive early access program and help shape the future of AI agent monetization.",
+            "Join our exclusive early access program and help shape the future of agent monetization.",
           icon: "/latency.jpg",
         },
         {
@@ -47,7 +47,7 @@ export const content = [
       ],
     },
     useCases: {
-      title: "AI Agents Transforming Industries",
+      title: "Agents Transforming Industries",
       subtitle:
         "Explore how Formation's marketplace is revolutionizing access to AI capabilities across sectors.",
       useCases: [
@@ -55,37 +55,37 @@ export const content = [
           icon: "/ar-game.jpg",
           title: "For Users",
           description:
-            "Access a diverse ecosystem of AI agents to enhance productivity, automate tasks, and unlock new possibilities with Formation credits.",
+            "Access a diverse ecosystem of agents to enhance productivity, automate tasks, and unlock new possibilities with Formation credits.",
         },
         {
           icon: "/financial.jpg",
           title: "For Developers",
           description:
-            "Monetize your AI agents, reach a global audience, and earn Formation credits while focusing on building great solutions.",
+            "Monetize your agents, reach a global audience, and earn Formation credits while focusing on building great solutions.",
         },
         {
           icon: "/smart-city.jpg",
           title: "For Enterprises",
           description:
-            "Deploy custom AI agents across your organization with enterprise-grade security, compliance, and scalability.",
+            "Deploy custom agents across your organization with enterprise-grade security, compliance, and scalability.",
         },
         {
           icon: "/autonomous-vehicle.jpg",
           title: "For Innovators",
           description:
-            "Create specialized AI agents for niche markets and monetize your expertise through our decentralized marketplace.",
+            "Create specialized agents for niche markets and monetize your expertise through our decentralized marketplace.",
         }],
     },
     whyFormation: {
       subtitle: "Why Formation Marketplace",
-      title: "The Future of AI Agent Distribution",
+      title: "The Future of Agent Distribution",
       description:
-        "Formation's marketplace connects AI agent developers with users worldwide, powered by our decentralized inference network. Earn and spend Formation credits in a thriving ecosystem of innovation.",
+        "Formation's marketplace connects agent developers with users worldwide, powered by our decentralized inference network. Earn and spend Formation credits in a thriving ecosystem of innovation.",
     },
     footer: {
       headline: (
         <>
-          Join the AI Agent Revolution
+          Join the Agent Revolution
         </>
       ),
       buttonText: "Launch Your Agent",
