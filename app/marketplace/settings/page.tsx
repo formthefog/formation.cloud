@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -625,7 +626,7 @@ export default function SettingsPage() {
                         <p className="font-medium">Secure Your API Keys</p>
                         <p className="text-sm text-gray-500">
                           Never share your API keys in publicly accessible areas such as GitHub, client-side code, or support tickets. 
-                          Need help? Check out our <a href="#" className="text-blue-600 hover:text-blue-700">security best practices</a>.
+                          Need help? Check out our <Link href="/marketplace/settings/security" className="text-blue-600 hover:text-blue-700">security best practices</Link>.
                         </p>
                       </div>
                     </div>

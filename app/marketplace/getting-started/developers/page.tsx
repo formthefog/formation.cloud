@@ -28,6 +28,7 @@ import {
   Database
 } from 'lucide-react';
 import { PathNavigation } from '../components/PathNavigation';
+import Link from 'next/link';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -328,12 +329,11 @@ async with httpx.AsyncClient() as client:
             Create powerful agents with our simple REST API, reach enterprise customers, and earn revenue with our developer-first platform.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
-            <Button size="lg" className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700">
-              Get API Key <Terminal className="w-4 h-4 ml-2" />
-            </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto">
-              View API Docs
-            </Button>
+            <Link href="/marketplace/settings">
+              <Button size="lg" className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700">
+                Get API Key <Terminal className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <Badge 
@@ -462,7 +462,7 @@ async with httpx.AsyncClient() as client:
         </section>
 
         {/* Developer Resources */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {/* <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-6 md:p-8 text-white">
             <GitBranch className="w-8 h-8 mb-4" />
             <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">API Documentation</h3>
@@ -483,7 +483,7 @@ async with httpx.AsyncClient() as client:
               Join Discord <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
-        </section>
+        </section> */}
 
         {/* CTA Section */}
         <section className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl p-6 md:p-12 text-white text-center">
@@ -492,12 +492,14 @@ async with httpx.AsyncClient() as client:
             Join hundreds of developers already building and monetizing AI agents on Formation.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-white hover:bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors">
-              CREATE ACCOUNT
-            </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto border-white bg-white hover:bg-white/80 text-[#9333EA] transition-colors">
+            <Link href="/marketplace/settings">
+              <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-white hover:bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors">
+                CREATE ACCOUNT
+              </Button>
+            </Link>
+            {/* <Button size="lg" variant="outline" className="w-full sm:w-auto border-white bg-white hover:bg-white/80 text-[#9333EA] transition-colors">
               READ DOCUMENTATION
-            </Button>
+            </Button> */}
           </div>
         </section>
       </motion.div>
