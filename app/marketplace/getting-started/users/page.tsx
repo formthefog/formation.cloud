@@ -360,7 +360,7 @@ async function conductResearch(topic) {
         <div className="text-left md:text-center space-y-4">
           <span className="text-blue-600 text-sm md:text-base font-semibold">WELCOME TO FORMATION</span>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900">
-            Powerful AI Agents <br className="hidden md:block" />
+            Powerful Agents <br className="hidden md:block" />
             One API Call Away
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl md:mx-auto leading-relaxed">
