@@ -15,6 +15,12 @@ import "prismjs/components/prism-bash";
 import "prismjs/components/prism-markdown";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
+import { 
+  useDynamicContext,
+  useIsLoggedIn,
+  useDynamicEvents,
+} from '@dynamic-labs/sdk-react-core';
+import { toast } from 'sonner';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -85,8 +91,15 @@ const tabs: Tab[] = [
   { id: "integrations", label: "Integrations", icon: Server },
   { id: "technical", label: "Technical", icon: Cpu },
   { id: "pricing", label: "Pricing", icon: DollarSign },
-  { id: "deploy", label: "Deploy", icon: Rocket, highlight: true },
+  { id: "hire", label: "Hire", icon: Rocket, highlight: true },
 ];
+
+const generateDisplayId = (realId: string) => {
+  const prefix = 'fmt';
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substring(2, 8);
+  return `${prefix}_${timestamp}_${random}`;
+};
 
 // Add example prompts based on agent type
 const getExamplePrompts = (agentType: string) => {
@@ -135,7 +148,7 @@ export default function AgentDetailPage() {
   
   const [activeTab, setActiveTab] = useState(() => {
     const tab = searchParams.get('tab');
-    if (tab === 'documentation' || tab === 'deploy') {
+    if (tab === 'documentation' || tab === 'hire') {
       return tab;
     }
     return "overview";
@@ -159,6 +172,30 @@ export default function AgentDetailPage() {
     apiKey: ''
   });
 
+  const [hiringStep, setHiringStep] = useState(1);
+  const { 
+    primaryWallet, 
+    setShowAuthFlow,
+    sdkHasLoaded,
+    user
+  } = useDynamicContext();
+  const isLoggedIn = useIsLoggedIn();
+  const [isHiring, setIsHiring] = useState(false);
+  const [hiringStatus, setHiringStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [hiringConfig, setHiringConfig] = useState({
+    name: '',
+    environment: 'production',
+    framework: 'formation-agent',
+    model: 'gpt-4-turbo',
+    memory: false,
+    streaming: true,
+    maxTokens: 4096,
+    instanceType: 'serverless',
+    region: 'us-west-2',
+    replicas: 1,
+    apiKey: ''
+  });
+
   const [agent, setAgent] = useState<Agent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -168,6 +205,23 @@ export default function AgentDetailPage() {
   const [currentMessage, setCurrentMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Add isConnected state near the top with other state declarations
+  const [isConnected, setIsConnected] = useState(false); // This would come from your auth context in reality
+
+  // Subscribe to auth events
+  useDynamicEvents('authInit', () => {
+    toast.success('Successfully connected!');
+  });
+
+  useDynamicEvents('authFailure', () => {
+    toast.error('Connection failed');
+  });
+
+  // First add these state variables near the top where other states are declared:
+  const [copiedId, setCopiedId] = useState(false);
+  const [copiedCurl, setCopiedCurl] = useState(false);
+  const [copiedSdk, setCopiedSdk] = useState(false);
 
   const handleDeploy = async () => {
     console.log('Starting deployment with config:', deploymentConfig);
@@ -242,6 +296,51 @@ export default function AgentDetailPage() {
       });
     }
     console.log('Updated deployment config:', deploymentConfig);
+  };
+
+  const handleHire = async () => {
+    setIsHiring(true);
+    
+    // Simulate API call with timeout
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setHiringStatus('success');
+      toast.success('Agent hired successfully!');
+    } catch (err) {
+      console.error('Error hiring agent:', err);
+      setHiringStatus('error');
+      toast.error('Failed to hire agent');
+    } finally {
+      setIsHiring(false);
+    }
+  };
+
+  const handleHireClick = () => {
+    console.log('Hire button clicked. Current status:', hiringStatus);
+    if (hiringStatus === 'success') {
+      setActiveTab("hire");
+      setHiringStep(3);
+    } else {
+      setActiveTab("hire");
+      setHiringStep(1);
+      setHiringStatus('idle');
+      const defaultName = agent?.name ? `${agent.name.toLowerCase()}-prod` : '';
+      setHiringConfig({
+        name: defaultName,
+        environment: 'production',
+        framework: 'formation-agent',
+        model: 'gpt-4-turbo',
+        memory: false,
+        streaming: true,
+        maxTokens: 4096,
+        instanceType: 'serverless',
+        region: 'us-west-2',
+        replicas: 1,
+        apiKey: ''
+      });
+    }
+    console.log('Updated hiring config:', hiringConfig);
   };
 
   useEffect(() => {
@@ -1163,367 +1262,322 @@ agent.on('retry', (attempt) => {
           </motion.div>
         );
 
-      case "deploy":
+      case "hire":
         return (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="max-w-4xl mx-auto"
+            className="max-w-2xl mx-auto"
           >
-            {/* Progress Steps */}
-            <div className="mb-8 px-4">
-              <div className="relative">
-                {/* Progress Line */}
-                <div className="absolute left-[15%] right-[15%] top-1/2 h-0.5 bg-gray-200 -z-10" />
-                {/* Step Circles */}
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      deploymentStep > 1 ? "bg-blue-600 text-white" : deploymentStep === 1 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"
-                    } font-medium text-base`}>
-                      {deploymentStep > 1 ? <CheckCircle2 className="w-5 h-5" /> : "1"}
-                    </div>
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      deploymentStep > 2 ? "bg-blue-600 text-white" : deploymentStep === 2 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"
-                    } font-medium text-base`}>
-                      {deploymentStep > 2 ? <CheckCircle2 className="w-5 h-5" /> : "2"}
-                    </div>
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      deploymentStep === 3 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"
-                    } font-medium text-base`}>
-                      3
-                    </div>
-                  </div>
+            {!sdkHasLoaded ? (
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="p-6 text-center">
+                  <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
+                  <p className="text-gray-600 mt-4">Loading...</p>
                 </div>
               </div>
-              {/* Step Labels */}
-              <div className="flex justify-between mt-3 px-4">
-                <div className="flex-1 text-center">
-                  <span className="text-sm text-gray-600">Configuration</span>
-                </div>
-                <div className="flex-1 text-center">
-                  <span className="text-sm text-gray-600">Resources</span>
-                </div>
-                <div className="flex-1 text-center">
-                  <span className="text-sm text-gray-600">Review & Deploy</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Content Container */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mx-4">
-              <AnimatePresence mode="wait">
-                {deploymentStep === 3 ? (
-                  <motion.div
-                    key="step3"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="p-4 md:p-6 space-y-6"
+            ) : !isLoggedIn ? (
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="p-8 text-center">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Bot className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">Connect to Hire {agent.name}</h2>
+                  <p className="text-gray-600 mb-6">Sign in with your wallet or email to start using this agent.</p>
+                  <Button 
+                    size="lg"
+                    onClick={() => setShowAuthFlow(true)}
+                    className="bg-[#0A84FF] hover:bg-[#0A84FF]/90"
                   >
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-4">Review & Deploy</h2>
-                      <div className="space-y-4">
-                        {/* Configuration Card */}
-                        <div className="bg-blue-50 rounded-xl p-4 md:p-6">
-                          <h3 className="text-lg font-semibold text-blue-900 mb-4">Configuration</h3>
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <span className="text-blue-700">Name</span>
-                              <span className="text-blue-900 font-medium">
-                                {safeAccess(deploymentConfig, 'name') || `${safeAccess(agent, 'name')?.toLowerCase()}-prod`}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-blue-700">Environment</span>
-                              <span className="text-blue-900 font-medium">{safeAccess(deploymentConfig, 'environment')}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-blue-700">Framework</span>
-                              <span className="text-blue-900 font-medium">{safeAccess(deploymentConfig, 'framework')}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-blue-700">Model</span>
-                              <span className="text-blue-900 font-medium">{safeAccess(deploymentConfig, 'model')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Resources Card */}
-                        <div className="bg-purple-50 rounded-xl p-4 md:p-6">
-                          <h3 className="text-lg font-semibold text-purple-900 mb-4">Resources</h3>
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <span className="text-purple-700">Instance Type</span>
-                              <span className="text-purple-900 font-medium">{safeAccess(deploymentConfig, 'instanceType')}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-purple-700">Region</span>
-                              <span className="text-purple-900 font-medium">{safeAccess(deploymentConfig, 'region')}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-purple-700">Replicas</span>
-                              <span className="text-purple-900 font-medium">{safeAccess(deploymentConfig, 'replicas')}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key={`step${deploymentStep}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="p-4 md:p-6 space-y-6"
-                  >
-                    {/* Form Content */}
-                    {deploymentStep === 1 ? (
-                      <div>
-                        <h2 className="text-lg font-semibold text-gray-900 mb-4">Agent Configuration</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                          <div className="space-y-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Deployment Name
-                              </label>
-                              <input
-                                type="text"
-                                value={safeAccess(deploymentConfig, 'name')}
-                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, name: e.target.value }))}
-                                placeholder={`${safeAccess(agent, 'name')?.toLowerCase()}-prod`}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Environment
-                              </label>
-                              <select
-                                value={safeAccess(deploymentConfig, 'environment')}
-                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, environment: e.target.value }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              >
-                                <option value="production">Production</option>
-                                <option value="staging">Staging</option>
-                                <option value="development">Development</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Framework
-                              </label>
-                              <select
-                                value={safeAccess(deploymentConfig, 'framework')}
-                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, framework: e.target.value }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              >
-                                <option value="formation-agent">Formation Agent</option>
-                                <option value="langchain">LangChain</option>
-                                <option value="autogen">AutoGen</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="space-y-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Model
-                              </label>
-                              <select
-                                value={safeAccess(deploymentConfig, 'model')}
-                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, model: e.target.value }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              >
-                                <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                                <option value="gpt-4">GPT-4</option>
-                                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                                <option value="claude-3-opus">Claude 3 Opus</option>
-                                <option value="claude-3-sonnet">Claude 3 Sonnet</option>
-                                <option value="mixtral-8x7b">Mixtral 8x7B</option>
-                              </select>
-                            </div>
-                            <div className="space-y-2">
-                              <label className="block text-sm font-medium text-gray-700">
-                                Features
-                              </label>
-                              <div className="flex items-center gap-2">
-                                <input
-                                  type="checkbox"
-                                  checked={safeAccess(deploymentConfig, 'memory')}
-                                  onChange={(e) => setDeploymentConfig(prev => ({ ...prev, memory: e.target.checked }))}
-                                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                />
-                                <span className="text-sm text-gray-600">Enable memory</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <input
-                                  type="checkbox"
-                                  checked={safeAccess(deploymentConfig, 'streaming')}
-                                  onChange={(e) => setDeploymentConfig(prev => ({ ...prev, streaming: e.target.checked }))}
-                                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                />
-                                <span className="text-sm text-gray-600">Enable streaming</span>
-                              </div>
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Max Tokens
-                              </label>
-                              <input
-                                type="number"
-                                value={safeAccess(deploymentConfig, 'maxTokens')}
-                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, maxTokens: parseInt(e.target.value) }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <h2 className="text-lg font-semibold text-gray-900 mb-4">Resource Configuration</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Instance Type
-                            </label>
-                            <div className="space-y-3">
-                              {[
-                                { id: 'serverless', label: 'Serverless', icon: Cloud },
-                                { id: 'dedicated', label: 'Dedicated Instance', icon: Server },
-                                { id: 'gpu', label: 'GPU Optimized', icon: Cpu }
-                              ].map((type) => (
-                                <button
-                                  key={type.id}
-                                  onClick={() => setDeploymentConfig(prev => ({ ...prev, instanceType: type.id }))}
-                                  className={`w-full flex items-center gap-3 p-3 rounded-lg border ${
-                                    safeAccess(deploymentConfig, 'instanceType') === type.id
-                                      ? 'border-blue-500 bg-blue-50'
-                                      : 'border-gray-200 hover:border-blue-500 hover:bg-blue-50'
-                                  } transition-all`}
-                                >
-                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                    safeAccess(deploymentConfig, 'instanceType') === type.id
-                                      ? 'bg-blue-100'
-                                      : 'bg-gray-100'
-                                  }`}>
-                                    <type.icon className={`w-4 h-4 ${
-                                      safeAccess(deploymentConfig, 'instanceType') === type.id
-                                        ? 'text-blue-600'
-                                        : 'text-gray-600'
-                                    }`} />
-                                  </div>
-                                  <span className="text-sm font-medium text-gray-900">{type.label}</span>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                          <div className="space-y-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Region
-                              </label>
-                              <select
-                                value={safeAccess(deploymentConfig, 'region')}
-                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, region: e.target.value }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              >
-                                <option value="us-west-2">US West (Oregon)</option>
-                                <option value="us-east-1">US East (N. Virginia)</option>
-                                <option value="eu-west-1">EU (Ireland)</option>
-                                <option value="ap-southeast-1">Asia Pacific (Singapore)</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Number of Replicas
-                              </label>
-                              <input
-                                type="number"
-                                value={safeAccess(deploymentConfig, 'replicas')}
-                                onChange={(e) => setDeploymentConfig(prev => ({ ...prev, replicas: parseInt(e.target.value) }))}
-                                min="1"
-                                max="10"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Navigation */}
-              <div className="flex items-center justify-between p-4 md:px-6 md:py-4 bg-gray-50 border-t border-gray-200">
-                <Button
-                  variant="outline"
-                  onClick={() => setDeploymentStep(prev => Math.max(1, prev - 1))}
-                  disabled={deploymentStep === 1}
-                  className="px-6"
-                >
-                  Previous
-                </Button>
-                <Button
-                  onClick={() => {
-                    if (deploymentStep < 3) {
-                      setDeploymentStep(prev => prev + 1);
-                    } else {
-                      handleDeploy();
-                    }
-                  }}
-                  disabled={isDeploying}
-                  className="bg-blue-600 hover:bg-blue-700 px-6"
-                >
-                  {isDeploying ? (
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Deploying...</span>
+                      <span>Connect Account</span>
+                      <svg 
+                        className="w-4 h-4" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" 
+                        />
+                      </svg>
                     </div>
-                  ) : deploymentStep === 3 ? (
-                    'DEPLOY AGENT'
-                  ) : (
-                    'Next'
-                  )}
-                </Button>
+                  </Button>
+                </div>
               </div>
-            </div>
-
-            {/* Success State */}
-            {safeAccess(deploymentConfig, 'deploymentStatus') === 'success' && (
+            ) : hiringStatus === 'success' ? (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-6 space-y-4 mx-4"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="space-y-6"
               >
-                <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
-                  <div className="flex items-center gap-2 text-green-600">
-                    <CheckCircle2 className="w-5 h-5" />
-                    <span className="font-medium">Deployment successful!</span>
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="p-8 text-center">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle2 className="w-8 h-8 text-green-600" />
+                    </div>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">Successfully Hired!</h2>
+                    <p className="text-gray-600 mb-2">You can now use {agent.name} in your projects.</p>
+                    <p className="text-sm text-gray-500">Connected as {user?.email}</p>
                   </div>
                 </div>
 
-                {/* API Details */}
-                <div className="space-y-4">
-                  <div className="bg-white rounded-xl border border-gray-200">
-                    <div className="px-4 py-3 bg-gray-50 border-b">
-                      <h3 className="font-medium text-gray-700">API Key</h3>
-                    </div>
-                    <div className="p-4">
-                      <code className="block p-3 bg-gray-900 text-amber-400 rounded-lg text-sm font-mono break-all">
-                        {safeAccess(deploymentConfig, 'apiKey')}
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                    <h3 className="text-sm font-medium text-gray-900">Agent ID</h3>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <code className="flex-1 block p-3 bg-gray-50 text-gray-800 rounded-lg text-sm font-mono border border-gray-200">
+                        {generateDisplayId(agent.agent_id)}
                       </code>
+                      <Button 
+                        variant={copiedId ? "default" : "outline"}
+                        size="sm" 
+                        onClick={() => {
+                          navigator.clipboard.writeText(generateDisplayId(agent.agent_id));
+                          setCopiedId(true);
+                          toast.success('Agent ID copied!', {
+                            duration: 2000,
+                            className: 'bg-green-50 text-green-900 border border-green-200',
+                          });
+                          setTimeout(() => setCopiedId(false), 2000);
+                        }}
+                        className={`flex-shrink-0 gap-2 transition-all ${copiedId ? 'bg-green-500 text-white hover:bg-green-600' : ''}`}
+                      >
+                        {copiedId ? (
+                          <>
+                            <Check className="h-4 w-4" />
+                            <span>Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            <span>Copy ID</span>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                    <h3 className="text-sm font-medium text-gray-900">Quick Start</h3>
+                  </div>
+                  <div className="p-6">
+                    <div className="space-y-6">
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-sm font-medium text-gray-700">Using cURL</h4>
+                          <Button 
+                            variant={copiedCurl ? "default" : "ghost"}
+                            size="sm"
+                            onClick={() => {
+                              const curlCommand = `curl -X POST https://network.formation.cloud/agent/${generateDisplayId(agent.agent_id)}/process \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "input": "Your request here"
+  }'`;
+                              navigator.clipboard.writeText(curlCommand);
+                              setCopiedCurl(true);
+                              toast.success('cURL command copied!', {
+                                duration: 2000,
+                                className: 'bg-green-50 text-green-900 border border-green-200',
+                              });
+                              setTimeout(() => setCopiedCurl(false), 2000);
+                            }}
+                            className={`h-8 px-2 transition-all ${
+                              copiedCurl 
+                                ? 'bg-green-500 text-white hover:bg-green-600' 
+                                : 'text-gray-500 hover:text-gray-900'
+                            }`}
+                          >
+                            {copiedCurl ? (
+                              <>
+                                <Check className="h-4 w-4" />
+                                <span className="ml-2">Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                <span className="ml-2">Copy</span>
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                          <pre className="p-4 text-sm overflow-x-auto language-bash">
+                            <code>{`curl -X POST https://network.formation.cloud/agent/${generateDisplayId(agent.agent_id)}/process \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "input": "Your request here"
+  }'`}</code>
+                          </pre>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-sm font-medium text-gray-700">Using SDK</h4>
+                          <Button 
+                            variant={copiedSdk ? "default" : "ghost"}
+                            size="sm"
+                            onClick={() => {
+                              const sdkCode = `import { FormationAgent } from '@formation/sdk';
+
+const agent = new FormationAgent('${generateDisplayId(agent.agent_id)}');
+const response = await agent.process({
+  input: "Your request here"
+});`;
+                              navigator.clipboard.writeText(sdkCode);
+                              setCopiedSdk(true);
+                              toast.success('SDK code copied!', {
+                                duration: 2000,
+                                className: 'bg-green-50 text-green-900 border border-green-200',
+                              });
+                              setTimeout(() => setCopiedSdk(false), 2000);
+                            }}
+                            className={`h-8 px-2 transition-all ${
+                              copiedSdk 
+                                ? 'bg-green-500 text-white hover:bg-green-600' 
+                                : 'text-gray-500 hover:text-gray-900'
+                            }`}
+                          >
+                            {copiedSdk ? (
+                              <>
+                                <Check className="h-4 w-4" />
+                                <span className="ml-2">Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                <span className="ml-2">Copy</span>
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                          <pre className="p-4 text-sm overflow-x-auto language-typescript">
+                            <code>{`import { FormationAgent } from '@formation/sdk';
+
+const agent = new FormationAgent('${generateDisplayId(agent.agent_id)}');
+const response = await agent.process({
+  input: "Your request here"
+});`}</code>
+                          </pre>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex items-start gap-2 text-sm text-gray-600">
+                      <svg className="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p>
+                        Check out the <Link href="#" className="text-blue-600 hover:underline">documentation</Link> for more examples and advanced usage.
+                      </p>
                     </div>
                   </div>
                 </div>
               </motion.div>
+            ) : (
+              <div className="space-y-6">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="p-6">
+                    <div className="flex items-start gap-6">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-4">
+                          <h2 className="text-2xl font-semibold text-gray-900">Hire {agent.name}</h2>
+                          <div className="px-2 py-1 bg-blue-100 text-blue-600 text-xs font-medium rounded-full">
+                            Connected as {user?.email?.split('@')[0]}
+                          </div>
+                        </div>
+                        <p className="text-gray-600 mb-6">{agent.description}</p>
+                        
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          <div className="p-4 bg-gray-50 rounded-lg">
+                            <div className="text-sm text-gray-500 mb-1">Price</div>
+                            <div className="text-lg font-semibold text-[#0A84FF]">
+                              ${agent.price_per_request} per request
+                            </div>
+                          </div>
+                          <div className="p-4 bg-gray-50 rounded-lg">
+                            <div className="text-sm text-gray-500 mb-1">Rating</div>
+                            <div className="text-lg font-semibold text-gray-900">
+                              {agent.average_rating.toFixed(1)}/5.0
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 mb-6">
+                          <h3 className="text-sm font-medium text-gray-900">What you get:</h3>
+                          <ul className="space-y-3">
+                            {agent.capabilities.map((capability, index) => (
+                              <li key={index} className="flex items-center gap-2 text-gray-600">
+                                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                                <span>{capability}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <Button
+                          size="lg"
+                          onClick={handleHire}
+                          disabled={isHiring}
+                          className="w-full bg-[#0A84FF] hover:bg-[#0A84FF]/90"
+                        >
+                          {isHiring ? (
+                            <div className="flex items-center gap-2">
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              <span>Hiring Agent...</span>
+                            </div>
+                          ) : (
+                            'Hire Agent Now'
+                          )}
+                        </Button>
+                      </div>
+
+                      <div className="w-px h-64 bg-gray-200 hidden lg:block" />
+
+                      <div className="hidden lg:block w-72">
+                        <h3 className="text-sm font-medium text-gray-900 mb-3">Usage Stats</h3>
+                        <div className="space-y-3">
+                          <div>
+                            <div className="text-sm text-gray-500">Total Uses</div>
+                            <div className="text-lg font-semibold text-gray-900">
+                              {agent.usage_count.toLocaleString()}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-gray-500">Active Users</div>
+                            <div className="text-lg font-semibold text-gray-900">
+                              {agent.active_users?.toLocaleString() || '1,000+'}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-gray-500">Response Time</div>
+                            <div className="text-lg font-semibold text-gray-900">
+                              {agent.avg_response_time_ms}ms
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </motion.div>
         );
@@ -1532,6 +1586,12 @@ agent.on('retry', (attempt) => {
         return null;
     }
   };
+
+  useEffect(() => {
+    if (hiringStatus === 'success') {
+      Prism.highlightAll();
+    }
+  }, [hiringStatus]);
 
   if (loading) {
     return (
@@ -1654,14 +1714,14 @@ agent.on('retry', (attempt) => {
                   </Button>
                   <Button 
                     size="lg" 
-                    onClick={handleDeployClick}
+                    onClick={handleHireClick}
                     className={`w-full sm:w-auto ${
-                      safeAccess(deploymentConfig, 'deploymentStatus') === 'success' 
+                      hiringStatus === 'success' 
                         ? "bg-green-600 hover:bg-green-700" 
                         : "bg-[#0A84FF] hover:bg-[#0A84FF]/90"
                     }`}
                   >
-                    {safeAccess(deploymentConfig, 'deploymentStatus') === 'success' ? 'VIEW DEPLOYMENT' : 'DEPLOY AGENT'}
+                    {hiringStatus === 'success' ? 'VIEW HIRED AGENT' : 'HIRE AGENT'}
                   </Button>
                 </div>
               </div>
