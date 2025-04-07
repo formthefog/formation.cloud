@@ -186,4 +186,10 @@ export interface AgentConfiguration {
   securitySettings: SecuritySettings;
   monitoringSettings: MonitoringSettings;
   pricingSettings: PricingSettings;
+}
+
+export interface AgentSubmission {
+  repositoryUrl: string;
+  name: string;
+  description: string;
 } 
