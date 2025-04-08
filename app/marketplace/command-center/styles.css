@@ -23,8 +23,15 @@
   }
 
   .stat-card {
-    @apply bg-white dark:bg-gray-800 rounded-lg shadow p-6
-      hover:shadow-lg transition-shadow duration-200;
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow p-4;
+  }
+
+  .stat-card-marketing {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-300;
+  }
+
+  .feature-card {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1;
   }
 
   .view-toggle-btn {
@@ -35,4 +42,68 @@
   .view-toggle-btn.active {
     @apply bg-blue-500 text-white hover:bg-blue-600;
   }
+}
+
+/* Gradient animations */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600;
+  background-size: 200% 200%;
+  animation: gradient 4s ease infinite;
+}
+
+/* Marketing specific styles */
+.marketing-hero {
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 50%, transparent 100%);
+}
+
+.marketing-card {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.marketing-card:hover {
+  @apply shadow-xl border-purple-100 dark:border-purple-900;
+  transform: translateY(-2px);
+}
+
+/* Animations */
+.fade-up {
+  animation: fadeUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode enhancements */
+.dark .marketing-card {
+  background: rgba(17, 24, 39, 0.8);
+}
+
+.dark .stat-card-marketing {
+  background: rgba(17, 24, 39, 0.8);
+}
+
+.dark .feature-card {
+  background: rgba(17, 24, 39, 0.8);
 } 

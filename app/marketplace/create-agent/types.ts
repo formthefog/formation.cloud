@@ -5,6 +5,7 @@ export type IntegrationType = 'github' | 'gitlab' | 'bitbucket' | 'zapier' | 'sl
 export type DeploymentType = 'serverless' | 'dedicated' | 'enterprise';
 export type ModelProvider = 'openai' | 'anthropic' | 'google' | 'custom';
 export type RuntimeEnvironment = 'node18' | 'python39' | 'python310' | 'custom';
+export type DeploymentSource = 'github' | 'docker-registry' | 'docker-compose';
 
 export interface Integration {
   type: IntegrationType;
@@ -189,7 +190,11 @@ export interface AgentConfiguration {
 }
 
 export interface AgentSubmission {
-  repositoryUrl: string;
   name: string;
   description: string;
+  deploymentSource: DeploymentSource;
+  // One of the following must be provided based on deploymentSource
+  repositoryUrl?: string;
+  dockerRegistryUrl?: string;
+  dockerComposeContent?: string;
 } 

@@ -113,7 +113,7 @@ export function AuthButton() {
         md:hidden relative overflow-hidden transition-all duration-300 cursor-pointer
         ${primaryWallet 
           ? 'bg-white hover:bg-gray-50 text-gray-800 border border-gray-200/60 shadow-sm hover:border-gray-300'
-          : 'bg-[#0A84FF] text-white hover:bg-[#0A84FF]/90 shadow-sm'
+          : 'bg-gradient-to-r from-[#0A84FF]/10 to-blue-500/10 hover:from-[#0A84FF]/15 hover:to-blue-500/15 backdrop-blur-md border border-white/20 text-white shadow-lg hover:shadow-[#0A84FF]/20 ring-1 ring-[#0A84FF]/20'
         }
         inline-flex items-center rounded-xl
       `}
@@ -148,9 +148,9 @@ export function AuthButton() {
         </div>
       ) : (
         <div className="px-3 py-2 flex items-center gap-2">
-          <span className="font-medium text-sm">Sign In</span>
+          <span className="font-medium text-sm text-[#0A84FF]">Get Early Access</span>
           <svg 
-            className="w-4 h-4" 
+            className="w-4 h-4 text-[#0A84FF]" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -177,7 +177,17 @@ export function AuthButton() {
         hidden md:inline-flex relative overflow-hidden transition-all duration-300 cursor-pointer
         ${primaryWallet 
           ? 'bg-white hover:bg-gray-50 text-gray-800 border border-gray-200/60 shadow-sm hover:border-gray-300'
-          : 'bg-[#0A84FF] text-white hover:bg-[#0A84FF]/90 shadow-sm'
+          : `
+            bg-gradient-to-r from-[#0A84FF]/10 to-blue-500/10 
+            hover:from-[#0A84FF]/15 hover:to-blue-500/15 
+            backdrop-blur-md border border-white/20 
+            text-[#0A84FF] shadow-lg hover:shadow-[#0A84FF]/20 
+            ring-1 ring-[#0A84FF]/20 group
+            after:absolute after:inset-0 
+            after:bg-gradient-to-r after:from-white/5 after:to-[#0A84FF]/5
+            after:opacity-0 after:transition-opacity after:duration-300
+            hover:after:opacity-100
+          `
         }
         items-center rounded-lg text-sm font-medium
       `}
@@ -187,7 +197,7 @@ export function AuthButton() {
           scale: isRefreshing ? 0.95 : 1,
         }}
         transition={{ duration: 0.2 }}
-        className="flex items-center gap-2.5 px-3.5 py-2.5"
+        className="flex items-center gap-2.5 px-4 py-2.5 z-10"
       >
         {primaryWallet ? (
           <>
@@ -205,20 +215,25 @@ export function AuthButton() {
           </>
         ) : (
           <>
-            <span className="font-medium">Sign In</span>
-            <svg 
-              className="w-4 h-4 ml-1" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
+            <span className="font-medium">Get Early Access</span>
+            <motion.div
+              animate={{ x: isHovered ? 2 : 0 }}
+              transition={{ duration: 0.2 }}
             >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" 
-              />
-            </svg>
+              <svg 
+                className="w-4 h-4 ml-1" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" 
+                />
+              </svg>
+            </motion.div>
           </>
         )}
       </motion.div>
@@ -260,7 +275,11 @@ export function AuthButton() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.2 }}
+        className="relative"
       >
+        <div 
+          className="absolute inset-0 bg-gradient-to-r from-[#0A84FF]/10 to-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" 
+        />
         <MobileButton />
         <DesktopButton />
       </motion.div>
