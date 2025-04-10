@@ -6,7 +6,8 @@ import {
   useDynamicEvents,
   useUserWallets,
   useDynamicModals,
-  useRefreshUser
+  useRefreshUser,
+  getAuthToken
 } from '@dynamic-labs/sdk-react-core';
 import { Button } from './ui/button';
 import { useState, useEffect } from 'react';
@@ -31,13 +32,6 @@ export function AuthButton() {
   const [isHovered, setIsHovered] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isSignOutHovered, setIsSignOutHovered] = useState(false);
-
-  console.log('Dynamic SDK State:', {
-    sdkHasLoaded,
-    primaryWallet,
-    user,
-    isLoggedIn
-  });
 
   // Subscribe to auth events
   useDynamicEvents('logout', () => {

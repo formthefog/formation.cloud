@@ -127,7 +127,7 @@ export default function MarketplaceHero() {
               <div className="mt-12 mb-6">
                 {activeTab === 'business' ? (
                   <>
-                    <Link href="/marketplace/getting-started/users" className="w-full sm:w-auto">
+                    <Link href="/marketplace/getting-started/use" className="w-full sm:w-auto">
                       <Button
                         className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-[#0A84FF] bg-transparent text-[#0A84FF] rounded-full hover:bg-[#0A84FF]/5 transition-all text-[15px] font-medium uppercase tracking-wide"
                       >
@@ -137,7 +137,7 @@ export default function MarketplaceHero() {
                   </>
                 ) : (
                   <>
-                    <Link href="/marketplace/getting-started/developers" className="w-full sm:w-auto">
+                    <Link href="/marketplace/getting-started/create" className="w-full sm:w-auto">
                       <Button
                         className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-[#0A84FF] bg-transparent text-[#0A84FF] rounded-full hover:bg-[#0A84FF]/5 transition-all text-[15px] font-medium uppercase tracking-wide"
                       >

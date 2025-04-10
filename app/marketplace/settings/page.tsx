@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useDynamicContext, useIsLoggedIn } from '@dynamic-labs/sdk-react-core';
+import { useDynamicContext, useIsLoggedIn, getAuthToken } from '@dynamic-labs/sdk-react-core';
 import {
   CreditCardIcon,
   CodeBracketIcon,
@@ -18,7 +18,8 @@ import {
   ShieldCheckIcon,
   ArrowLeftOnRectangleIcon,
   PlusIcon,
-  CheckIcon
+  CheckIcon,
+  CogIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
 import {
@@ -28,10 +29,12 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { loadStripe, Stripe } from '@stripe/stripe-js';
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState('monthly');
+  const [error, setError] = useState<string | null>(null);
   const isLoggedIn = useIsLoggedIn();
   const { setShowAuthFlow, handleLogOut } = useDynamicContext();
 
@@ -61,6 +64,113 @@ export default function SettingsPage() {
       toast.success('Successfully logged out');
     } catch (error) {
       toast.error('Failed to log out');
+    }
+  };
+
+  // --- Stripe Checkout Handler ---
+  const handleCheckout = async (priceId: string) => {
+    setError(null);
+    if (!isLoggedIn) {
+      setError('Please log in to proceed with checkout.');
+      toast.error('Please log in first.');
+      setShowAuthFlow(true);
+      return;
+    }
+    if (!stripePromise || !process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY) {
+        setError('Stripe is not properly configured.');
+        toast.error('Stripe is not properly configured.');
+        return;
+    }
+    setLoading(true);
+
+    try {
+      const token = await getAuthToken();
+      if (!token) {
+        throw new Error('Failed to retrieve authentication token.');
+      }
+
+      const response = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ priceId: priceId }),
+      });
+
+      const { sessionId, error: apiError } = await response.json();
+
+      if (!response.ok || apiError) {
+        throw new Error(apiError || 'Failed to create checkout session.');
+      }
+
+      if (!sessionId) {
+        throw new Error('Missing session ID from server.');
+      }
+
+      const stripe = await stripePromise;
+      if (!stripe) {
+         throw new Error('Stripe.js failed to load.');
+      }
+
+      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+
+      if (stripeError) {
+        console.error('Stripe redirection error:', stripeError);
+        throw new Error(stripeError.message || 'Stripe redirection failed.');
+      }
+
+    } catch (err: any) {
+      console.error('Checkout Error:', err);
+      const errorMessage = err.message || 'An unexpected error occurred during checkout.';
+      setError(errorMessage);
+      toast.error(errorMessage);
+      setLoading(false);
+    }
+  };
+
+  // --- Stripe Billing Portal Handler ---
+  const handleManageSubscription = async () => {
+    setError(null);
+    if (!isLoggedIn) {
+      setError('Please log in to manage your subscription.');
+      toast.error('Please log in first.');
+      setShowAuthFlow(true);
+      return;
+    }
+    setLoading(true);
+
+    try {
+      const token = await getAuthToken();
+      if (!token) {
+        throw new Error('Failed to retrieve authentication token.');
+      }
+
+      const response = await fetch('/api/stripe/create-portal-session', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const { url, error: apiError } = await response.json();
+
+      if (!response.ok || apiError) {
+        throw new Error(apiError || 'Failed to create billing portal session.');
+      }
+
+      if (!url) {
+        throw new Error('Missing portal session URL from server.');
+      }
+
+      window.location.href = url;
+
+    } catch (err: any) {
+      console.error('Portal Error:', err);
+       const errorMessage = err.message || 'An unexpected error occurred while accessing the billing portal.';
+      setError(errorMessage);
+      toast.error(errorMessage);
+      setLoading(false);
     }
   };
 
@@ -144,15 +254,27 @@ export default function SettingsPage() {
         <div className="border-b">
           <div className="container flex h-16 items-center justify-between px-4">
             <h1 className="text-lg font-semibold">Settings</h1>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onLogout}
-              className="text-red-600 hover:text-red-700 hover:bg-red-50"
-            >
-              <ArrowLeftOnRectangleIcon className="w-5 h-5 mr-1.5" />
-              Sign Out
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleManageSubscription}
+                disabled={loading || !isLoggedIn}
+              >
+                <CogIcon className="w-5 h-5 mr-1.5" />
+                Manage Billing
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onLogout}
+                disabled={loading}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <ArrowLeftOnRectangleIcon className="w-5 h-5 mr-1.5" />
+                Sign Out
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -181,7 +303,7 @@ export default function SettingsPage() {
                 <CardContent className="space-y-8">
                   {/* Current Plan Banner */}
                   <div className="rounded-xl bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50 border border-blue-200 p-6">
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-start justify-between flex-wrap gap-4">
                       <div>
                         <div className="flex items-center gap-2">
                           <h3 className="text-xl font-semibold text-blue-900">Pay As You Go</h3>
@@ -189,8 +311,12 @@ export default function SettingsPage() {
                         </div>
                         <p className="text-sm text-blue-700 mt-1">$0.005 per credit • No monthly commitment</p>
                       </div>
-                      <Button className="bg-blue-600 hover:bg-blue-700">
-                        Upgrade Plan
+                      <Button
+                        className="bg-blue-600 hover:bg-blue-700"
+                        onClick={() => handleCheckout(prices[billingPeriod as keyof typeof prices].starter)}
+                        disabled={loading || !isLoggedIn}
+                      >
+                        {loading ? 'Processing...' : 'Manage Plan'}
                       </Button>
                     </div>
                   </div>
@@ -204,9 +330,14 @@ export default function SettingsPage() {
                           <h3 className="text-3xl font-bold text-gray-900 mt-1">24,900</h3>
                           <p className="text-sm text-gray-500">≈ $12,450 USD</p>
                         </div>
-                        <Button variant="outline" className="border-green-200 text-green-700 hover:bg-green-50">
+                        <Button
+                          variant="outline"
+                          className="border-green-200 text-green-700 hover:bg-green-50"
+                          onClick={() => handleCheckout(prices[billingPeriod as keyof typeof prices].starter)}
+                          disabled={loading || !isLoggedIn}
+                        >
                           <PlusIcon className="w-4 h-4 mr-2" />
-                          Add Credits
+                          {loading ? 'Processing...' : 'Add Credits'}
                         </Button>
                       </div>
                       

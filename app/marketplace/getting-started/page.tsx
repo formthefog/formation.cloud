@@ -46,7 +46,7 @@ export default function GettingStarted() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer transition-all duration-200"
-                onClick={() => router.push('/marketplace/getting-started/users')}
+                onClick={() => router.push('/marketplace/getting-started/use')}
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="p-2 bg-blue-50 rounded-lg">
@@ -63,7 +63,7 @@ export default function GettingStarted() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer transition-all duration-200"
-                onClick={() => router.push('/marketplace/getting-started/developers')}
+                onClick={() => router.push('/marketplace/getting-started/create')}
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="p-2 bg-blue-50 rounded-lg">

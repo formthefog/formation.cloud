@@ -56,7 +56,7 @@ export default function DeveloperRevenue() {
 
             <div className="flex items-center gap-4">
               <Link
-                href="/marketplace/getting-started/developers"
+                href="/marketplace/getting-started/create"
                 className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-none text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 Start Building →

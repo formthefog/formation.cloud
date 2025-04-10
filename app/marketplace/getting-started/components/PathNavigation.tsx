@@ -10,14 +10,14 @@ export function PathNavigation() {
 
   const paths = [
     {
-      name: 'Users',
-      path: '/marketplace/getting-started/users',
+      name: 'Use',
+      path: '/marketplace/getting-started/use',
       icon: <Users className="w-5 h-5" />,
       color: 'blue'
     },
     {
-      name: 'Developers',
-      path: '/marketplace/getting-started/developers',
+      name: 'Create',
+      path: '/marketplace/getting-started/create',
       icon: <Code2 className="w-5 h-5" />,
       color: 'purple'
     }
