@@ -486,7 +486,7 @@ ENTRYPOINT ["node", "server.js"]`}
             Build your agent, package it with Docker, and publish it to the Formation Marketplace.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <Link href="/marketplace/agents/new">
+            <Link href="/marketplace/create-agent">
               <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-white hover:bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors">
                 DEPLOY AGENT
               </Button>
