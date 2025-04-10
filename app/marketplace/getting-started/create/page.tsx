@@ -30,7 +30,9 @@ import {
   FileText,
   BracketsIcon,
   BeakerIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  ChartBarIcon,
+  GroupIcon
 } from 'lucide-react';
 import { PathNavigation } from '../components/PathNavigation';
 import Link from 'next/link';
@@ -428,6 +430,52 @@ ENTRYPOINT ["node", "server.js"]`}
           </div>
           <p className="text-center text-sm text-gray-500 mt-4">
             Once your Formfile is ready in your GitHub repository, submit it via our form for manual deployment.
+          </p>
+        </section>
+
+        {/* Step 4: Earn Money */}
+        <section className="space-y-6 md:space-y-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-left md:text-center">Step 4: Earn Money</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="bg-white p-6 md:p-8 rounded-xl shadow-lg"
+            >
+              <div className="p-3 bg-green-100 rounded-lg w-fit mb-4 md:mb-6">
+                <DollarSign className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">Monetize Your Agent</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
+                Once approved, your agent will be live on the marketplace, ready to generate revenue.
+              </p>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="bg-white p-6 md:p-8 rounded-xl shadow-lg"
+            >
+              <div className="p-3 bg-green-100 rounded-lg w-fit mb-4 md:mb-6">
+                <ChartBarIcon className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">Track Performance</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
+                Access detailed analytics to monitor your agent's performance and optimize for success.
+              </p>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="bg-white p-6 md:p-8 rounded-xl shadow-lg"
+            >
+              <div className="p-3 bg-green-100 rounded-lg w-fit mb-4 md:mb-6">
+                <GroupIcon className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">Expand Your Reach</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
+                Engage with enterprise customers and expand your agent's user base.
+              </p>
+            </motion.div>
+          </div>
+          <p className="text-center text-sm text-gray-500 mt-4">
+            Start earning by leveraging the Formation Marketplace's reach and resources.
           </p>
         </section>
 

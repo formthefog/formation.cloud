@@ -31,6 +31,8 @@ import {
 } from '@/components/ui/select';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || '');
+
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState('monthly');
@@ -313,7 +315,6 @@ export default function SettingsPage() {
                       </div>
                       <Button
                         className="bg-blue-600 hover:bg-blue-700"
-                        onClick={() => handleCheckout(prices[billingPeriod as keyof typeof prices].starter)}
                         disabled={loading || !isLoggedIn}
                       >
                         {loading ? 'Processing...' : 'Manage Plan'}
@@ -333,7 +334,6 @@ export default function SettingsPage() {
                         <Button
                           variant="outline"
                           className="border-green-200 text-green-700 hover:bg-green-50"
-                          onClick={() => handleCheckout(prices[billingPeriod as keyof typeof prices].starter)}
                           disabled={loading || !isLoggedIn}
                         >
                           <PlusIcon className="w-4 h-4 mr-2" />
