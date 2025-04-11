@@ -33,10 +33,10 @@ export default function GettingStarted() {
 
           {/* Getting Started */}
           <div className="pt-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl md:text-2xl text-center font-bold text-gray-900 mb-3">
               Choose Your Path
             </h2>
-            <p className="text-sm md:text-base text-gray-600 mb-6">
+            <p className="text-sm md:text-base text-center text-gray-600 mb-6">
               Get started with Formation in the way that best suits your goals.
             </p>
 

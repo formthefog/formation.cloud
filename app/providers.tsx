@@ -19,6 +19,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
             try {
               console.log('Auth success', user, primaryWallet);
               const token = await getAuthToken();
+
+              console.log('Token', token);
               
               if (!token) {
                 throw new Error('No authentication token found');

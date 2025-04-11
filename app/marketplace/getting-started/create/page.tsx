@@ -32,7 +32,9 @@ import {
   BeakerIcon,
   CheckCircleIcon,
   ChartBarIcon,
-  GroupIcon
+  GroupIcon,
+  RocketIcon,
+  UploadCloud
 } from 'lucide-react';
 import { PathNavigation } from '../components/PathNavigation';
 import Link from 'next/link';
@@ -285,111 +287,95 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
           ))}
         </div>
 
-        {/* Code Examples Section - Updated */}
-        <section className="bg-gray-50 rounded-2xl p-4 md:p-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex flex-col items-center gap-4 mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-center">Step 1: Build & Package Your Agent</h2>
-              <p className="text-gray-600 text-center">Use your preferred framework, then package with Docker for deployment.</p>
-            </div>
-            <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
-              <Tab.List className="flex flex-wrap justify-center gap-2 bg-white rounded-lg p-2 mb-4">
-                {frameworkTabs.map((tab) => (
-                   <Tab
-                    key={tab.name}
-                    className={({ selected }) =>
-                      classNames(
-                        'py-2 px-4 text-sm font-medium rounded-md flex-grow sm:flex-grow-0 text-center',
-                        selected ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-                      )
-                    }
-                  >
-                    {tab.name}
-                  </Tab>
-                ))}
-              </Tab.List>
-              <Tab.Panels className="overflow-x-auto">
-                {frameworkTabs.map((tab) => (
-                  <Tab.Panel key={tab.name}>
-                    <CodeBlock
-                      language={tab.language}
-                      code={tab.code}
-                    />
-                  </Tab.Panel>
-                ))}
-              </Tab.Panels>
-            </Tab.Group>
+        {/* Step 1: Build & Package Your Agent */}
+        <section className="space-y-8 md:space-y-12">
+          <div className="text-center">
+            <RocketIcon className="w-16 h-16 text-purple-600 mx-auto mb-4" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Step 1: Build & Package Your Agent</h2>
+            <p className="text-lg md:text-xl text-gray-600 mt-2">
+              Use your preferred framework to build your agent.
+            </p>
           </div>
+          <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
+            <Tab.List className="flex flex-wrap justify-center gap-2 bg-white rounded-lg p-2 mb-4">
+              {frameworkTabs.map((tab) => (
+                 <Tab
+                  key={tab.name}
+                  className={({ selected }) =>
+                    classNames(
+                      'py-2 px-4 text-sm font-medium rounded-md flex-grow sm:flex-grow-0 text-center',
+                      selected ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+                    )
+                  }
+                >
+                  {tab.name}
+                </Tab>
+              ))}
+            </Tab.List>
+            <Tab.Panels className="overflow-x-auto">
+              {frameworkTabs.map((tab) => (
+                <Tab.Panel key={tab.name}>
+                  <CodeBlock
+                    language={tab.language}
+                    code={tab.code}
+                  />
+                </Tab.Panel>
+              ))}
+            </Tab.Panels>
+          </Tab.Group>
         </section>
 
-        {/* New Formfile Section */}
-        <section className="bg-white rounded-2xl p-4 md:p-8 border border-gray-100 shadow-sm">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex flex-col items-center gap-4 mb-6">
-              <div className="p-3 bg-yellow-100 rounded-lg w-fit">
-                 <FileText className="w-8 h-8 text-yellow-600" />
+        {/* Step 2: Configure Your Agent */}
+        <section className="space-y-8 md:space-y-12">
+          <div className="text-center">
+            <Settings className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Step 2: Configure Your Agent</h2>
+            <p className="text-lg md:text-xl text-gray-600 mt-2">
+              Select your preferred agent framework and provide the necessary details to help us create a Formfile for you.
+            </p>
+          </div>
+          <form className="max-w-4xl mx-auto space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Agent Framework*</label>
+                <select className="w-full p-2 border border-gray-300 rounded-md">
+                  <option value="agno">Agno</option>
+                  <option value="langchain">LangChain</option>
+                  <option value="google-adk">Google ADK</option>
+                  <option value="openai-sdk">OpenAI SDK</option>
+                </select>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-center">Step 2: Configure Your Instance (Formfile)</h2>
-              <p className="text-gray-600 text-center max-w-2xl">
-                A `Formfile` defines the virtual machine environment where your agent will run on the Formation Network. It specifies resources, installed software, network settings, and how to start your application (often your Docker container).
-              </p>
-            </div>
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2 text-center">Example `Formfile` (Node.js App)</h3>
-              <CodeBlock
-                language="dockerfile"
-                code={`# Formfile Example for a Node.js Agent
-NAME my-nodejs-agent
-
-# Define user and permissions
-USER username:agentuser passwd:use-secrets-instead sudo:true
-
-# Define VM resources
-VCPU 2
-MEM 2048  # 2GB RAM
-DISK 10   # 10GB Disk
-
-# Install necessary base software
-INSTALL nodejs npm
-
-# Copy your packaged application code
-# Assumes your build process outputs to './dist'
-COPY ./dist /app
-
-# Set working directory
-WORKDIR /app
-
-# Install production dependencies inside the instance
-RUN npm install --only=production
-
-# Set environment variables (use secrets for sensitive data)
-ENV PORT=3000 NODE_ENV=production
-
-# Expose the port your agent listens on
-EXPOSE 3000
-
-# Define the command to start your agent
-ENTRYPOINT ["node", "server.js"]`}
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Agent Name*</label>
+                <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter your agent's name" required />
+              </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-3 text-center">Core Instructions</h3>
-              <div className="flex flex-wrap justify-center gap-2">
-                {[ 'NAME', 'USER', 'VCPU', 'MEM', 'DISK', 'FROM', 'INSTALL', 'COPY', 'WORKDIR', 'RUN', 'ENV', 'EXPOSE', 'ENTRYPOINT'].map(instr => (
-                  <Badge key={instr} variant="outline" className="font-mono text-xs">{instr}</Badge>
-                ))}
-              </div>
-              <p className="text-sm text-gray-500 mt-4 text-center">
-                See the full Formfile reference for detailed options and advanced usage.
-                {/* TODO: Add link to actual Formfile documentation when available */}
-              </p>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Agent Description*</label>
+              <textarea className="w-full p-2 border border-gray-300 rounded-md" placeholder="Briefly describe your agent's functionality" required></textarea>
             </div>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">CPU Requirements*</label>
+                <input type="number" className="w-full p-2 border border-gray-300 rounded-md" placeholder="e.g., 2" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Memory Requirements (MB)*</label>
+                <input type="number" className="w-full p-2 border border-gray-300 rounded-md" placeholder="e.g., 2048" required />
+              </div>
+            </div>
+          </form>
         </section>
 
         {/* Step 3: Submit Your Agent */}
-        <section className="space-y-6 md:space-y-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-left md:text-center">Step 3: Submit Your Agent</h2>
+        <section className="space-y-8 md:space-y-12">
+          <div className="text-center">
+            <UploadCloud className="w-16 h-16 text-green-600 mx-auto mb-4" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Step 3: Submit Your Agent</h2>
+            <p className="text-lg md:text-xl text-gray-600 mt-2">
+              Once your Formfile is ready in your GitHub repository, submit it via our form for manual deployment.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -428,53 +414,56 @@ ENTRYPOINT ["node", "server.js"]`}
               </p>
             </motion.div>
           </div>
-          <p className="text-center text-sm text-gray-500 mt-4">
-            Once your Formfile is ready in your GitHub repository, submit it via our form for manual deployment.
-          </p>
         </section>
 
         {/* Step 4: Earn Money */}
-        <section className="space-y-6 md:space-y-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-left md:text-center">Step 4: Earn Money</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <section className="space-y-8 md:space-y-12 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white py-16 px-8 rounded-xl shadow-lg">
+          <div className="text-center">
+            <DollarSign className="w-20 h-20 text-white mx-auto mb-6 animate-bounce" />
+            <h2 className="text-4xl md:text-5xl font-extrabold">Step 4: Earn Money</h2>
+            <p className="text-xl md:text-2xl mt-4">
+              Celebrate your success by monetizing your agent on the Formation Marketplace.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="bg-white p-6 md:p-8 rounded-xl shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              className="bg-white text-gray-900 p-10 rounded-xl shadow-md"
             >
-              <div className="p-3 bg-green-100 rounded-lg w-fit mb-4 md:mb-6">
-                <DollarSign className="w-8 h-8 text-green-600" />
+              <div className="flex items-center justify-center mb-4">
+                <DollarSign className="w-12 h-12 text-green-500" />
               </div>
-              <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">Monetize Your Agent</h3>
-              <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
+              <h3 className="text-2xl font-bold mb-2">Monetize Your Agent</h3>
+              <p className="text-lg">
                 Once approved, your agent will be live on the marketplace, ready to generate revenue.
               </p>
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="bg-white p-6 md:p-8 rounded-xl shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              className="bg-white text-gray-900 p-10 rounded-xl shadow-md"
             >
-              <div className="p-3 bg-green-100 rounded-lg w-fit mb-4 md:mb-6">
-                <ChartBarIcon className="w-8 h-8 text-green-600" />
+              <div className="flex items-center justify-center mb-4">
+                <ChartBarIcon className="w-12 h-12 text-blue-500" />
               </div>
-              <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">Track Performance</h3>
-              <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
+              <h3 className="text-2xl font-bold mb-2">Track Performance</h3>
+              <p className="text-lg">
                 Access detailed analytics to monitor your agent's performance and optimize for success.
               </p>
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="bg-white p-6 md:p-8 rounded-xl shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              className="bg-white text-gray-900 p-10 rounded-xl shadow-md"
             >
-              <div className="p-3 bg-green-100 rounded-lg w-fit mb-4 md:mb-6">
-                <GroupIcon className="w-8 h-8 text-green-600" />
+              <div className="flex items-center justify-center mb-4">
+                <GroupIcon className="w-12 h-12 text-purple-500" />
               </div>
-              <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">Expand Your Reach</h3>
-              <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
+              <h3 className="text-2xl font-bold mb-2">Expand Your Reach</h3>
+              <p className="text-lg">
                 Engage with enterprise customers and expand your agent's user base.
               </p>
             </motion.div>
           </div>
-          <p className="text-center text-sm text-gray-500 mt-4">
+          <p className="text-center text-lg mt-10">
             Start earning by leveraging the Formation Marketplace's reach and resources.
           </p>
         </section>
