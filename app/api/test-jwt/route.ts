@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { JwksClient } from 'jwks-rsa';
 import jwt from 'jsonwebtoken';
-import { submitWaitlistEntry } from '@/lib/waitlist-service';
 
 
 
@@ -17,32 +16,6 @@ function getKey(header: any, callback: any) {
     callback(null, signingKey);
   });
 }
-
-export async function GET(req: NextRequest, res: NextResponse) {
-  await handleRequest(req, res);
-}
-
-async function handleRequest(req: NextRequest, res: NextResponse) {
-  try {
-    const authHeader = req.headers.get('authorization');
-    const token = authHeader?.split(' ')[1];
-
-  if (!token) {
-    return NextResponse.json({ error: 'Token is required' }, { status: 401 });
-  }
-
-  jwt.verify(token, getKey, { algorithms: ['RS256'] }, (err, decoded) => {
-    if (err) {
-      return NextResponse.json({ error: 'Token is invalid' }, { status: 401 });
-    } else {
-      return NextResponse.json({ message: 'Token is valid', decoded }, { status: 200 });
-    }
-  });
-  } catch (error) {
-    console.error('Error verifying token:', error);
-    return NextResponse.json({ error: 'Failed to verify token' }, { status: 500 });
-  }
-} 
 
 export async function POST(request: NextRequest) {
   try {

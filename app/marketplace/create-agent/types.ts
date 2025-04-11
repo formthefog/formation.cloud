@@ -193,6 +193,7 @@ export interface AgentSubmission {
   name: string;
   description: string;
   deploymentSource: DeploymentSource;
+  framework?: 'agno' | 'langchain' | 'google-adk' | 'openai-sdk';
   // One of the following must be provided based on deploymentSource
   repositoryUrl?: string;
   dockerRegistryUrl?: string;

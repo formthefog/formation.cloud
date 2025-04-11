@@ -165,7 +165,7 @@ services:
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 py-12">
+    <div className="w-full min-h-[calc(100vh-73px)] bg-white py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Form Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
@@ -230,40 +230,82 @@ services:
               {/* Deployment Source Input */}
               {renderDeploymentSourceInput()}
 
-              {/* Name and Description fields */}
+              {/* Framework and Name Selection */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, framework: 'agno' })}
+                  className={`p-4 rounded-lg border-2 text-center transition-all ${
+                    formData.framework === 'agno'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800'
+                  }`}
+                >
+                  <img src="/agno.png" alt="Agno Logo" className="h-8 w-auto mx-auto mb-2" />
+                  <span className="block text-sm font-medium">Agno</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, framework: 'langchain' })}
+                  className={`p-4 rounded-lg border-2 text-center transition-all ${
+                    formData.framework === 'langchain'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800'
+                  }`}
+                >
+                  <img src="/langchain.png" alt="LangChain Logo" className="h-8 w-auto mx-auto mb-2" />
+                  <span className="block text-sm font-medium">LangChain</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, framework: 'google-adk' })}
+                  className={`p-4 rounded-lg border-2 text-center transition-all ${
+                    formData.framework === 'google-adk'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800'
+                  }`}
+                >
+                  <img src="/adk.png" alt="Google ADK Logo" className="h-8 w-8 mx-auto mb-2" />
+                  <span className="block text-sm font-medium">Google ADK</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, framework: 'openai-sdk' })}
+                  className={`p-4 rounded-lg border-2 text-center transition-all ${
+                    formData.framework === 'openai-sdk'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800'
+                  }`}
+                >
+                  <img src="/openai.png" alt="OpenAI SDK Logo" className="h-8 w-auto mx-auto mb-2" />
+                  <span className="block text-sm font-medium">OpenAI SDK</span>
+                </button>
+              </div>
+
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Agent Name*
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Agent Name*</label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="My Awesome Agent"
+                  placeholder="Enter your agent's name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                   className="w-full"
                 />
-                <p className="mt-2 text-sm text-gray-500">
-                  A clear, descriptive name for your agent. This can be changed later.
-                </p>
               </div>
 
+              {/* Description */}
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Description*
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Agent Description*</label>
                 <Textarea
                   id="description"
-                  placeholder="Briefly describe what your agent does..."
+                  placeholder="Briefly describe your agent's functionality"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   required
                   className="w-full h-32"
                 />
-                <p className="mt-2 text-sm text-gray-500">
-                  Help users understand what your agent does and how it can help them.
-                </p>
               </div>
 
               <div className="pt-6">

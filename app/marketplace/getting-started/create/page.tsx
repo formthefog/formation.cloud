@@ -293,13 +293,13 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
             <RocketIcon className="w-16 h-16 text-purple-600 mx-auto mb-4" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Step 1: Build & Package Your Agent</h2>
             <p className="text-lg md:text-xl text-gray-600 mt-2">
-              Use your preferred framework to build your agent.
+              Use your preferred framework to build stateless agents that can be easily deployed.
             </p>
           </div>
           <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
             <Tab.List className="flex flex-wrap justify-center gap-2 bg-white rounded-lg p-2 mb-4">
               {frameworkTabs.map((tab) => (
-                 <Tab
+                <Tab
                   key={tab.name}
                   className={({ selected }) =>
                     classNames(
@@ -317,7 +317,7 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
                 <Tab.Panel key={tab.name}>
                   <CodeBlock
                     language={tab.language}
-                    code={tab.code}
+                    code={tab.code.replace('Your agent logic', 'Your stateless agent logic')}
                   />
                 </Tab.Panel>
               ))}
