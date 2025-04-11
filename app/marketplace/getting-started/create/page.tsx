@@ -291,7 +291,7 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
         <section className="space-y-8 md:space-y-12">
           <div className="text-center">
             <RocketIcon className="w-16 h-16 text-purple-600 mx-auto mb-4" />
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Step 1: Build & Package Your Agent</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Step 1: Build Your Agent</h2>
             <p className="text-lg md:text-xl text-gray-600 mt-2">
               Use your preferred framework to build stateless agents that can be easily deployed.
             </p>

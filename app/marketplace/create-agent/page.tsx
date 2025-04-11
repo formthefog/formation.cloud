@@ -23,6 +23,12 @@ import {
   RocketLaunchIcon,
   GlobeAltIcon,
 } from '@heroicons/react/24/outline';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const steps = [
   {
@@ -59,38 +65,36 @@ export default function CreateAgentPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate based on deployment source
-    let error = '';
-    switch (formData.deploymentSource) {
-      case 'github':
-        if (!formData.repositoryUrl) error = 'Please enter a GitHub repository URL';
-        break;
-      case 'docker-registry':
-        if (!formData.dockerRegistryUrl) error = 'Please enter a Docker registry URL';
-        break;
-      case 'docker-compose':
-        if (!formData.dockerComposeContent) error = 'Please provide Docker Compose content';
-        break;
-    }
-
-    if (error) {
-      toast.error(error);
-      return;
-    }
+    setIsSubmitting(true);
 
     try {
-      setIsSubmitting(true);
-      
-      // Here we would make an API call to submit the agent
-      // For now, we'll just simulate a success
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast.success('Agent submitted successfully! We will review and add it to the network.');
+      // Validate form data
+      if (!formData.name || !formData.description) {
+        throw new Error('Name and description are required');
+      }
+
+      // Submit to Supabase
+      const { error } = await supabase
+        .from('agent_submissions')
+        .insert([
+          {
+            name: formData.name,
+            description: formData.description,
+            deploymentsource: formData.deploymentSource,
+            repositoryurl: formData.repositoryUrl || null,
+            dockerregistryurl: formData.dockerRegistryUrl || null,
+            dockercomposecontent: formData.dockerComposeContent || null,
+            created_at: new Date().toISOString(),
+          },
+        ]);
+
+      if (error) throw error;
+
+      toast.success('Agent submitted successfully!');
       router.push('/marketplace/command-center');
-    } catch (error) {
-      console.error('Error submitting agent:', error);
-      toast.error('Failed to submit agent. Please try again.');
+    } catch (err) {
+      console.error('Error submitting agent:', err);
+      toast.error(err.message || 'Failed to submit agent. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -167,6 +171,31 @@ services:
   return (
     <div className="w-full min-h-[calc(100vh-73px)] bg-white py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Hero Section */}
+        <div className="text-center py-12 bg-white text-gray-900">
+          <h1 className="text-4xl font-bold mb-4">Create & Deploy Your AI Agent</h1>
+          <p className="text-lg">Join the future of AI with our seamless deployment platform.</p>
+        </div>
+
+        {/* Feature Highlights Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+          <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <CodeBracketIcon className="w-10 h-10 text-indigo-600 mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Easy Integration</h3>
+            <p className="text-gray-700">Integrate with your favorite tools and frameworks effortlessly.</p>
+          </div>
+          <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <CloudIcon className="w-10 h-10 text-blue-600 mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Cloud Deployment</h3>
+            <p className="text-gray-700">Deploy your agents in the cloud with just a few clicks.</p>
+          </div>
+          <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <CurrencyDollarIcon className="w-10 h-10 text-green-600 mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Monetize Your Agent</h3>
+            <p className="text-gray-700">Earn revenue by publishing your agent on our marketplace.</p>
+          </div>
+        </div>
+
         {/* Form Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
           <div className="p-8">
@@ -325,6 +354,21 @@ services:
                 </p>
               </div>
             </form>
+          </div>
+        </div>
+
+        {/* Testimonials Section */}
+        <div className="mt-12 bg-white p-10 rounded-lg">
+          <h2 className="text-2xl font-bold text-center mb-8">What Our Users Say</h2>
+          <div className="flex flex-col md:flex-row justify-center gap-8">
+            <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <p className="text-gray-700">"The platform made it incredibly easy to deploy my AI agent. Highly recommend!"</p>
+              <p className="text-sm text-gray-500 mt-4">- Alex, Developer</p>
+            </div>
+            <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <p className="text-gray-700">"A seamless experience from start to finish. The support team was fantastic."</p>
+              <p className="text-sm text-gray-500 mt-4">- Jamie, AI Enthusiast</p>
+            </div>
           </div>
         </div>
       </div>
