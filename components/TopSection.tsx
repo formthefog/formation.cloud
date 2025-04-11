@@ -11,7 +11,7 @@ const MarketplaceHighlight = ({ icon: Icon, title, description }) => {
   return (
     <div 
       className="group relative overflow-hidden flex flex-col items-center p-6 sm:p-8 rounded-none bg-white border border-gray-100 hover:border-formation-blue/20 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg hover:shadow-formation-blue/5"
-      onClick={() => router.push('#marketplace')}
+      onClick={() => router.push('/marketplace')}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-formation-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <div className="relative z-10 w-full">

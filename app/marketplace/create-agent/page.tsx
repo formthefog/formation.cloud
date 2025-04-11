@@ -24,6 +24,8 @@ import {
   GlobeAltIcon,
 } from '@heroicons/react/24/outline';
 import { createClient } from '@supabase/supabase-js';
+import { AuthButton } from '@/components/AuthButton';
+import { useIsLoggedIn, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -55,6 +57,7 @@ const steps = [
 
 export default function CreateAgentPage() {
   const router = useRouter();
+  const { primaryWallet, user } = useDynamicContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<AgentSubmission>({
     name: '',
@@ -62,6 +65,7 @@ export default function CreateAgentPage() {
     deploymentSource: 'github',
     repositoryUrl: '',
   });
+  const isLoggedIn = useIsLoggedIn();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,6 +89,8 @@ export default function CreateAgentPage() {
             dockerregistryurl: formData.dockerRegistryUrl || null,
             dockercomposecontent: formData.dockerComposeContent || null,
             created_at: new Date().toISOString(),
+            primary_wallet: primaryWallet?.address || null,
+            user_data: user || null,
           },
         ]);
 
@@ -197,8 +203,13 @@ services:
         </div>
 
         {/* Form Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
-          <div className="p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden relative">
+          {!isLoggedIn && (
+            <div className="absolute inset-0 bg-white/90 flex items-center justify-center z-10">
+              <AuthButton />
+            </div>
+          )}
+          <div className={`p-8 ${!isLoggedIn ? 'opacity-50 pointer-events-none' : ''}`}>
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Deployment Source Selection */}
               <div>
@@ -337,17 +348,21 @@ services:
                 />
               </div>
 
-              <div className="pt-6">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting || !formData.name || !formData.description}
-                  className="w-full h-12 text-lg relative overflow-hidden group"
-                >
-                  <span className={`absolute inset-0 w-full h-full transition-all duration-300 ease-out transform ${isSubmitting ? 'translate-y-0' : 'translate-y-full'} bg-blue-600 group-hover:translate-y-0`}></span>
-                  <span className="relative group-hover:text-white transition-colors duration-300">
-                    {isSubmitting ? 'Submitting...' : 'Submit Agent for Review'}
-                  </span>
-                </Button>
+              <div className="pt-6 items-center flex flex-col w-full justify-center">
+                {isLoggedIn ? (
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting || !formData.name || !formData.description}
+                    className="w-full h-12 text-lg relative overflow-hidden group"
+                  >
+                    <span className={`absolute inset-0 w-full h-full transition-all duration-300 ease-out transform ${isSubmitting ? 'translate-y-0' : 'translate-y-full'} bg-blue-600 group-hover:translate-y-0`}></span>
+                    <span className="relative group-hover:text-white transition-colors duration-300">
+                      {isSubmitting ? 'Submitting...' : 'Submit Agent for Review'}
+                    </span>
+                  </Button>
+                ) : (
+                  <AuthButton />
+                )}
                 <p className="mt-4 text-sm text-center text-gray-500">
                   <ClockIcon className="inline-block w-4 h-4 mr-1 -mt-1" />
                   Review process typically takes 1-2 business days
@@ -357,20 +372,6 @@ services:
           </div>
         </div>
 
-        {/* Testimonials Section */}
-        <div className="mt-12 bg-white p-10 rounded-lg">
-          <h2 className="text-2xl font-bold text-center mb-8">What Our Users Say</h2>
-          <div className="flex flex-col md:flex-row justify-center gap-8">
-            <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-gray-700">"The platform made it incredibly easy to deploy my AI agent. Highly recommend!"</p>
-              <p className="text-sm text-gray-500 mt-4">- Alex, Developer</p>
-            </div>
-            <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-gray-700">"A seamless experience from start to finish. The support team was fantastic."</p>
-              <p className="text-sm text-gray-500 mt-4">- Jamie, AI Enthusiast</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

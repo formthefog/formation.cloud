@@ -84,7 +84,7 @@ const UseCasesSection = ({ title, subtitle, useCases }) => {
         </div>
 
         {/* Interactive Demo Section */}
-        <div className="mt-16 px-6">
+        {/* <div className="mt-16 px-6">
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="p-8 border-b border-gray-100">
               <h3 className="text-2xl font-hauora font-[500] text-gray-900 mb-2">
@@ -98,7 +98,7 @@ const UseCasesSection = ({ title, subtitle, useCases }) => {
               <AgentPlayground />
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="w-full text-center mt-12">
           <Link href="/marketplace/agents">

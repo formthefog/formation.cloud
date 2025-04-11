@@ -14,8 +14,17 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import clsx from 'clsx';
 
-export function AuthButton() {
+export function AuthButton({
+  className,
+  buttonStyle,
+  textStyle,
+}: {
+  className?: string;
+  buttonStyle?: string;
+  textStyle?: string;
+}) {
   const router = useRouter();
   const { 
     primaryWallet, 
@@ -89,7 +98,7 @@ export function AuthButton() {
       <div className="flex items-center">
         <Button
           variant="outline"
-          className="relative overflow-hidden bg-white/50 backdrop-blur-sm border-gray-200/60"
+          className={clsx(`relative overflow-hidden bg-white/50 backdrop-blur-sm border-gray-200/60`, className)}
           disabled
         >
           <div className="absolute inset-0 bg-[#0A84FF]/10 animate-pulse" />
@@ -109,13 +118,13 @@ export function AuthButton() {
           ? 'bg-white hover:bg-gray-50 text-gray-800 border border-gray-200/60 shadow-sm hover:border-gray-300'
           : 'bg-gradient-to-r from-[#0A84FF]/10 to-blue-500/10 hover:from-[#0A84FF]/15 hover:to-blue-500/15 backdrop-blur-md border border-white/20 text-white shadow-lg hover:shadow-[#0A84FF]/20 ring-1 ring-[#0A84FF]/20'
         }
-        inline-flex items-center rounded-xl
+        inline-flex items-center rounded-xl ${buttonStyle}
       `}
     >
       {primaryWallet ? (
         <div className="flex items-center">
           <div className="px-2 py-2">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-medium text-sm shadow-inner">
+            <div className={`h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-medium text-sm shadow-inner ${textStyle}`}>
               {user?.email?.charAt(0).toUpperCase() || 'A'}
             </div>
           </div>
@@ -142,7 +151,7 @@ export function AuthButton() {
         </div>
       ) : (
         <div className="px-3 py-2 flex items-center gap-2">
-          <span className="font-medium text-sm text-[#0A84FF]">Get Early Access</span>
+          <span className={`font-medium text-sm text-[#0A84FF] ${textStyle}`}>Authenticate</span>
           <svg 
             className="w-4 h-4 text-[#0A84FF]" 
             fill="none" 
@@ -183,7 +192,7 @@ export function AuthButton() {
             hover:after:opacity-100
           `
         }
-        items-center rounded-lg text-sm font-medium
+        items-center rounded-lg text-sm font-medium ${buttonStyle}
       `}
     >
       <motion.div
@@ -191,15 +200,15 @@ export function AuthButton() {
           scale: isRefreshing ? 0.95 : 1,
         }}
         transition={{ duration: 0.2 }}
-        className="flex items-center gap-2.5 px-4 py-2.5 z-10"
+        className={`flex items-center gap-2.5 px-4 py-2.5 z-10 ${textStyle}`}
       >
         {primaryWallet ? (
           <>
-            <div className="h-7 w-7 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-medium text-sm shadow-inner">
+            <div className={`h-7 w-7 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-medium text-sm shadow-inner ${textStyle}`}>
               {user?.email?.charAt(0).toUpperCase() || 'A'}
             </div>
             <div className="flex items-center gap-2.5">
-              <span className="text-sm font-medium">
+              <span className={`text-sm font-medium ${textStyle}`}>
                 {user?.email?.split('@')[0] || 'Account'}
               </span>
               <span className="text-xs bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 px-2 py-0.5 rounded-full font-medium">
@@ -209,7 +218,7 @@ export function AuthButton() {
           </>
         ) : (
           <>
-            <span className="font-medium">Get Early Access</span>
+            <span className={`font-medium ${textStyle}`}>Join / Login</span>
             <motion.div
               animate={{ x: isHovered ? 2 : 0 }}
               transition={{ duration: 0.2 }}

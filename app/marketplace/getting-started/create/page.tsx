@@ -38,6 +38,8 @@ import {
 } from 'lucide-react';
 import { PathNavigation } from '../components/PathNavigation';
 import Link from 'next/link';
+import { useIsLoggedIn } from '@dynamic-labs/sdk-react-core';
+import { AuthButton } from '@/components/AuthButton';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -45,6 +47,7 @@ function classNames(...classes: string[]) {
 
 export default function DevelopersGettingStarted() {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [showAuthFlow, setShowAuthFlow] = useState(false);
 
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -226,6 +229,8 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
     { name: 'OpenAI SDK', language: 'python', code: codeExamples.openai_sdk },
   ];
 
+  const isLoggedIn = useIsLoggedIn();
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
       <motion.div {...fadeIn} className="space-y-8 md:space-y-16">
@@ -242,7 +247,7 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
             Build your agent with Agno, LangChain, Google ADK, OpenAI SDK, or other tools. Package it with Docker and deploy easily to the Formation Network.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
-            <Link href="/marketplace/agents/new">
+            <Link href="/marketplace/create-agent">
               <Button size="lg" className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700">
                 Deploy Your Agent <Rocket className="w-4 h-4 ml-2" />
               </Button>
@@ -475,14 +480,13 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
             Build your agent, package it with Docker, and publish it to the Formation Marketplace.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <Link href="/marketplace/create-agent">
-              <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-white hover:bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors">
-                DEPLOY AGENT
-              </Button>
-            </Link>
-            {/* <Button size="lg" variant="outline" className="w-full sm:w-auto border-white bg-white hover:bg-white/80 text-[#9333EA] transition-colors">
-              READ DEPLOYMENT DOCS
-            </Button> */}
+            { (
+              <Link href="/marketplace/create-agent">
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-white hover:bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors">
+                  DEPLOY AGENT
+                </Button>
+              </Link>
+            ) }
           </div>
         </section>
       </motion.div>

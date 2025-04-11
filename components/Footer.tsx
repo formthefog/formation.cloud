@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import { useModal } from "@/context/ModalContext";
+import Link from "next/link";
 
 const Footer = ({ headline, buttonText }) => {
   const { openWaitlistModal } = useModal();
@@ -28,13 +29,14 @@ const Footer = ({ headline, buttonText }) => {
             </h2>
           </span>
           <div className="mt-8 mb-12">
+            <Link href="/marketplace/create-agent">
             <Button
               size="lg"
               className="button-with-gradient"
-              onClick={openWaitlistModal}
             >
               {buttonText} <RightCaret />
             </Button>
+            </Link>
           </div>
         </div>
       </div>

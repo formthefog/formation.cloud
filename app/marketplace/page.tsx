@@ -120,15 +120,15 @@ export default function Marketplace() {
     setCurrentPage(1);
   }, [selectedCategory, searchQuery, selectedFilters, sortBy]);
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-[#F9FAFB] p-8">
-        <div className="max-w-screen-xl mx-auto text-center text-red-600">
-          Unable to load agents. Please try again later.
-        </div>
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="min-h-screen bg-[#F9FAFB] p-8">
+  //       <div className="max-w-screen-xl mx-auto text-center text-red-600">
+  //         Unable to load agents. Please try again later.
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-[calc(100vh-73px)] py-6 px-4 md:px-8">

@@ -36,6 +36,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useIsLoggedIn } from '@dynamic-labs/sdk-react-core';
 import { AuthButton } from '@/components/AuthButton';
+import clsx from 'clsx';
 
 interface HiredAgent {
   id: string;
@@ -167,21 +168,21 @@ export default function MyAgentsPage() {
                 processes data, and drives efficiency across your workflow.
               </p>
               <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="p-6 rounded-xl bg-gradient-to-r from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
+                <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
                   <CommandLineIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
                   <h3 className="font-semibold mb-2">One-Click Deploy</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Deploy agents instantly with our streamlined setup process.
                   </p>
                 </div>
-                <div className="p-6 rounded-xl bg-gradient-to-r from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
+                <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
                   <ChartBarIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
                   <h3 className="font-semibold mb-2">Real-time Insights</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Monitor performance and costs with detailed analytics.
                   </p>
                 </div>
-                <div className="p-6 rounded-xl bg-gradient-to-r from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
+                <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
                   <BoltIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
                   <h3 className="font-semibold mb-2">Instant Results</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -321,7 +322,7 @@ export default function MyAgentsPage() {
               Be among the first to experience the future of AI operations. 
               Early access spots are limited.
             </p>
-            <AuthButton />
+            <AuthButton className="border-white text-white" buttonStyle="bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors" />
           </motion.div>
         </div>
       )}

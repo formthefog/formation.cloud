@@ -289,21 +289,21 @@ export default function MyPublishedAgentsPage() {
                 Share your expertise with the world by creating and publishing AI agents. Build once, earn continuously.
               </p>
               <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="p-6 rounded-xl bg-gradient-to-r from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
+                <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
                   <CommandLineIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
                   <h3 className="font-semibold mb-2">Easy Development</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Build agents with our intuitive SDK and tools.
                   </p>
                 </div>
-                <div className="p-6 rounded-xl bg-gradient-to-r from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
+                <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
                   <ChartBarIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
                   <h3 className="font-semibold mb-2">Usage Analytics</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Track your agents' performance and adoption.
                   </p>
                 </div>
-                <div className="p-6 rounded-xl bg-gradient-to-r from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
+                <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
                   <CurrencyDollarIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
                   <h3 className="font-semibold mb-2">Revenue Share</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -328,9 +328,9 @@ export default function MyPublishedAgentsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="marketing-hero rounded-3xl p-8"
+              className="marketing-hero space-y-4 rounded-3xl"
             >
-              <div className="inline-block mb-3 px-4 py-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-300 text-sm font-medium">
+              <div className="inline-block  px-4 py-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-300 text-sm font-medium">
                 <span className="flex items-center gap-2">
                   <KeyIcon className="w-4 h-4" />
                   Developer Program Now Open
@@ -342,54 +342,15 @@ export default function MyPublishedAgentsPage() {
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
                 Join our community of AI developers and monetize your expertise by publishing agents on Formation's marketplace.
               </p>
-              <div className="flex items-center justify-center">
-                <AuthButton />
-              </div>
             </motion.div>
           </div>
-
-          {/* Benefits Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
-          >
-            <div className="marketing-card">
-              <div className="text-purple-600 mb-4">
-                <GlobeAltIcon className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Global Reach</h3>
-              <p className="text-gray-600">
-                Access a worldwide audience of businesses seeking AI solutions.
-              </p>
-            </div>
-            <div className="marketing-card">
-              <div className="text-blue-600 mb-4">
-                <BeakerIcon className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Developer Tools</h3>
-              <p className="text-gray-600">
-                Comprehensive SDK and documentation to build powerful agents.
-              </p>
-            </div>
-            <div className="marketing-card">
-              <div className="text-green-600 mb-4">
-                <UserGroupIcon className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Community</h3>
-              <p className="text-gray-600">
-                Join a network of developers shaping the future of AI.
-              </p>
-            </div>
-          </motion.div>
 
           {/* Features Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-2xl shadow-xl p-8 mb-16"
+            className="bg-gradient-to-b from-purple-50 space-y-4 to-white dark:from-gray-900 dark:to-gray-800 rounded-2xl shadow-xl p-8 mb-16"
           >
             <div className="text-center mb-8">
               <div className="inline-block mb-3 px-4 py-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-300 text-sm font-medium">
@@ -461,7 +422,7 @@ export default function MyPublishedAgentsPage() {
             <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
               Join the growing community of AI developers on Formation.
             </p>
-            <AuthButton />
+            <AuthButton className="border-white text-white" buttonStyle="bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors" />
           </motion.div>
         </div>
       )}

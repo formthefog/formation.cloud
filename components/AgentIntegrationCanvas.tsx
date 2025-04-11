@@ -92,10 +92,12 @@ export default function AgentIntegrationCanvas() {
         className="absolute inset-0 opacity-15"
         style={{
           backgroundImage: `
+            radial-gradient(circle, rgba(74, 136, 255, 0.2) 0%, transparent 70%),
             linear-gradient(#4A88FF 1px, transparent 1px),
             linear-gradient(90deg, #4A88FF 1px, transparent 1px)
           `,
-          backgroundSize: '20px 20px'
+          backgroundSize: '20px 20px',
+          animation: 'rotate 20s linear infinite'
         }}
       />
 
@@ -140,12 +142,14 @@ export default function AgentIntegrationCanvas() {
                       <motion.div
                         className="absolute right-0 w-3 h-3 bg-blue-400 rounded-full"
                         style={{
-                          boxShadow: '0 0 15px rgba(67, 97, 238, 0.6)'
+                          boxShadow: '0 0 15px rgba(67, 97, 238, 0.6)',
+                          filter: 'blur(2px)'
                         }}
                         animate={{
                           x: [0, -radius],
                           scale: [1.5, 0.8],
-                          opacity: [1, 0]
+                          opacity: [1, 0],
+                          backgroundColor: ['#4361EE', '#4A90E2', '#4361EE']
                         }}
                         transition={{
                           duration: 2,
@@ -158,12 +162,14 @@ export default function AgentIntegrationCanvas() {
                       <motion.div
                         className="absolute left-0 w-3 h-3 bg-emerald-400 rounded-full"
                         style={{
-                          boxShadow: '0 0 15px rgba(16, 185, 129, 0.6)'
+                          boxShadow: '0 0 15px rgba(16, 185, 129, 0.6)',
+                          filter: 'blur(2px)'
                         }}
                         animate={{
                           x: [0, radius],
                           scale: [0.8, 1.5],
-                          opacity: [0, 1]
+                          opacity: [0, 1],
+                          backgroundColor: ['#10B981', '#34D399', '#10B981']
                         }}
                         transition={{
                           duration: 2,
@@ -220,20 +226,22 @@ export default function AgentIntegrationCanvas() {
           {/* Center Robot */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <motion.div
-              className="w-32 h-32 bg-[#4361EE] rounded-full flex items-center justify-center"
+              className="w-32 h-32 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center"
               style={{
-                boxShadow: '0 0 40px rgba(67, 97, 238, 0.3)'
+                boxShadow: '0 0 60px rgba(67, 97, 238, 0.5)',
+                filter: 'blur(1px)'
               }}
               animate={{ 
-                scale: [1, 1.05, 1],
+                scale: [1, 1.1, 1.05],
                 boxShadow: [
-                  '0 0 40px rgba(67, 97, 238, 0.3)',
-                  '0 0 60px rgba(67, 97, 238, 0.4)',
-                  '0 0 40px rgba(67, 97, 238, 0.3)'
-                ]
+                  '0 0 60px rgba(67, 97, 238, 0.5)',
+                  '0 0 80px rgba(67, 97, 238, 0.6)',
+                  '0 0 60px rgba(67, 97, 238, 0.5)'
+                ],
+                backgroundColor: ['#4361EE', '#4A90E2', '#4361EE']
               }}
               transition={{ 
-                duration: 3,
+                duration: 4,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
@@ -241,11 +249,12 @@ export default function AgentIntegrationCanvas() {
               <motion.div
                 className="text-white w-16 h-16"
                 animate={{ 
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, -5, 0]
+                  scale: [1, 1.2, 1.1],
+                  rotate: [0, 10, -10, 0],
+                  color: ['#FFFFFF', '#E0E0E0', '#FFFFFF']
                 }}
                 transition={{ 
-                  duration: 5,
+                  duration: 6,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
@@ -274,15 +283,16 @@ export default function AgentIntegrationCanvas() {
                   className="w-full h-full rounded-full flex items-center justify-center text-3xl shadow-lg"
                   style={{ 
                     backgroundColor: tool.color,
-                    boxShadow: isActive ? '0 0 30px rgba(67, 97, 238, 0.3)' : 'none'
+                    boxShadow: isActive ? '0 0 30px rgba(67, 97, 238, 0.6)' : 'none'
                   }}
                   animate={{ 
-                    scale: isActive ? 1.15 : 1,
-                    y: isActive ? -4 : 0
+                    scale: isActive ? [1, 1.2, 1.15] : 1,
+                    y: isActive ? [-2, -6, -4] : 0,
+                    rotate: isActive ? [0, 10, -10, 0] : 0
                   }}
                   transition={{ 
-                    duration: 0.4,
-                    ease: "easeOut"
+                    duration: 0.6,
+                    ease: "easeInOut"
                   }}
                 >
                   {tool.icon}
@@ -292,6 +302,18 @@ export default function AgentIntegrationCanvas() {
           })}
         </div>
       </div>
+
+      {/* Add keyframes for rotating background */}
+      <style jsx>{`
+        @keyframes rotate {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
   );
 } 
