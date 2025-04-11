@@ -1,0 +1,217 @@
+# Formation Authentication System
+
+## Overview
+Formation uses Dynamic.xyz for authentication, providing a seamless and secure authentication experience. The system supports multiple authentication methods and wallet connections, with a focus on developer-first experience.
+
+## Core Components
+
+### 1. Authentication Provider
+- Located in `app/providers.tsx`
+- Uses `DynamicContextProvider` from `@dynamic-labs/sdk-react-core`
+- Configured with environment-specific settings
+- Handles all auth state management
+
+### 2. Auth Button Component
+- Located in `components/AuthButton.tsx`
+- Manages login/logout functionality
+- Handles wallet connections
+- Provides visual feedback for auth states
+- Responsive design for mobile/desktop
+
+### 3. Authentication Hooks
+```typescript
+// Core auth hooks from Dynamic SDK
+import { 
+  useDynamicContext,
+  useIsLoggedIn,
+  useDynamicEvents,
+  useUserWallets,
+  useDynamicModals
+} from '@dynamic-labs/sdk-react-core';
+```
+
+## Authentication Flow
+
+### 1. Initial State
+- Check auth status using `useIsLoggedIn()`
+- Access user data via `useDynamicContext()`
+- Handle loading states with `sdkHasLoaded`
+
+### 2. Login Process
+```typescript
+const { setShowAuthFlow } = useDynamicContext();
+// Trigger auth modal
+setShowAuthFlow(true);
+```
+
+### 3. Logout Process
+```typescript
+const { handleLogOut } = useDynamicContext();
+// Handle logout
+await handleLogOut();
+```
+
+### 4. Event Handling
+```typescript
+// Subscribe to auth events
+useDynamicEvents('logout', () => {
+  toast.info('Successfully logged out');
+});
+
+useDynamicEvents('authInit', (method) => {
+  toast.info(`Authenticating with ${method}...`);
+});
+
+useDynamicEvents('authFailure', () => {
+  toast.error('Authentication failed');
+});
+
+useDynamicEvents('walletAdded', () => {
+  toast.success('New wallet connected!');
+});
+```
+
+## Protected Routes
+
+### 1. Settings Page
+- Located in `app/marketplace/settings/page.tsx`
+- Requires authentication
+- Shows onboarding view for non-authenticated users
+- Provides billing and API management for authenticated users
+
+### 2. Auth State Management
+```typescript
+const isLoggedIn = useIsLoggedIn();
+
+if (!isLoggedIn) {
+  // Show onboarding view
+  return <OnboardingView />;
+}
+
+// Show protected content
+return <ProtectedContent />;
+```
+
+## User Data
+
+### 1. Available User Information
+```typescript
+const { user, primaryWallet } = useDynamicContext();
+
+// User data structure
+interface User {
+  email?: string;
+  wallets: Wallet[];
+  // ... other user properties
+}
+```
+
+### 2. Wallet Management
+```typescript
+const userWallets = useUserWallets();
+const { setShowLinkNewWalletModal } = useDynamicModals();
+```
+
+## Best Practices
+
+### 1. Authentication State
+- Always check `isLoggedIn` before showing protected content
+- Use `sdkHasLoaded` to handle loading states
+- Provide clear feedback for auth actions
+
+### 2. Error Handling
+- Handle auth failures gracefully
+- Show user-friendly error messages
+- Provide clear next steps for users
+
+### 3. User Experience
+- Show loading states during auth operations
+- Maintain consistent auth state across the app
+- Handle mobile and desktop views appropriately
+
+## Environment Configuration
+
+### 1. Required Environment Variables
+```env
+NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID=your-environment-id
+```
+
+### 2. Development Setup
+- Use test environment ID for development
+- Enable debug mode for better development experience
+- Use test wallets for development
+
+## Security Considerations
+
+### 1. Protected Routes
+- Implement client and server-side auth checks
+- Handle token expiration gracefully
+- Secure API endpoints
+
+### 2. API Key Management
+- Store API keys securely
+- Implement key rotation
+- Monitor key usage
+
+## Common Patterns
+
+### 1. Protected Component
+```typescript
+function ProtectedComponent() {
+  const isLoggedIn = useIsLoggedIn();
+  const { sdkHasLoaded } = useDynamicContext();
+
+  if (!sdkHasLoaded) {
+    return <LoadingState />;
+  }
+
+  if (!isLoggedIn) {
+    return <AuthPrompt />;
+  }
+
+  return <Component />;
+}
+```
+
+### 2. Auth Event Handling
+```typescript
+function handleAuthEvents() {
+  useDynamicEvents('all', (event) => {
+    switch (event.type) {
+      case 'logout':
+        // Handle logout
+        break;
+      case 'authSuccess':
+        // Handle successful auth
+        break;
+      // ... handle other events
+    }
+  });
+}
+```
+
+## Troubleshooting
+
+### 1. Common Issues
+- SDK not loading
+- Auth modal not showing
+- Wallet connection failures
+- Token expiration
+
+### 2. Debug Tools
+- Check console logs
+- Verify environment variables
+- Monitor network requests
+- Check SDK status
+
+## Additional Resources
+
+### 1. Documentation
+- [Dynamic.xyz Documentation](https://docs.dynamic.xyz)
+- [SDK Reference](https://docs.dynamic.xyz/sdk)
+- Formation Internal Docs
+
+### 2. Support
+- Dynamic.xyz Support
+- Formation Developer Support
+- Community Forums 

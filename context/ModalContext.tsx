@@ -33,13 +33,6 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     >
       {children}
 
-      {/* The global waitlist dialog */}
-      <WaitlistDialog
-        isOpen={isWaitlistModalOpen}
-        onOpenChange={setIsWaitlistModalOpen}
-        buttonText="Join the Waitlist"
-        trigger={<></>} // Empty trigger since we'll control it programmatically
-      />
     </ModalContext.Provider>
   );
 };
