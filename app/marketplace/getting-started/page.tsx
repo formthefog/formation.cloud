@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { Code2, Users } from 'lucide-react';
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { Code2, Users } from "lucide-react";
 
 export default function GettingStarted() {
   const router = useRouter();
@@ -10,12 +10,12 @@ export default function GettingStarted() {
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 }
+    transition: { duration: 0.5 },
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-73px)] bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="w-full min-h-[calc(100vh-73px)] bg-white flex items-start justify-center">
+      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 mt-[10vh]">
         <motion.div {...fadeIn} className="space-y-6 md:space-y-12">
           {/* Hero Section */}
           <div className="text-left space-y-3 md:text-center">
@@ -27,7 +27,9 @@ export default function GettingStarted() {
               AI with <span className="text-blue-600">Formation</span>
             </h1>
             <p className="text-base md:text-lg text-gray-600 max-w-2xl md:mx-auto leading-relaxed">
-              Whether you're a developer, creator, or just getting started with AI, Formation helps you harness the potential of AI agents for your unique needs.
+              Whether you're a developer, creator, or just getting started with
+              AI, Formation helps you harness the potential of AI agents for
+              your unique needs.
             </p>
           </div>
 
@@ -46,16 +48,19 @@ export default function GettingStarted() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer transition-all duration-200"
-                onClick={() => router.push('/marketplace/getting-started/use')}
+                onClick={() => router.push("/marketplace/getting-started/use")}
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <Users className="w-6 h-6 text-blue-600" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Use Agents</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Use Agents
+                  </h3>
                 </div>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Find and deploy AI agents that match your needs. Browse our marketplace and start automating tasks in minutes.
+                  Find and deploy AI agents that match your needs. Browse our
+                  marketplace and start automating tasks in minutes.
                 </p>
               </motion.div>
 
@@ -63,16 +68,21 @@ export default function GettingStarted() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-500 cursor-pointer transition-all duration-200"
-                onClick={() => router.push('/marketplace/getting-started/create')}
+                onClick={() =>
+                  router.push("/marketplace/getting-started/create")
+                }
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <Code2 className="w-6 h-6 text-blue-600" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Create Agents</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Create Agents
+                  </h3>
                 </div>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Build and share your own AI agents. Join our community of creators and help shape the future of AI.
+                  Build and share your own AI agents. Join our community of
+                  creators and help shape the future of AI.
                 </p>
               </motion.div>
             </div>
@@ -81,4 +91,4 @@ export default function GettingStarted() {
       </div>
     </div>
   );
-} 
+}
