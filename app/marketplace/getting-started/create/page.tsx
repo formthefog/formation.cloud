@@ -425,7 +425,7 @@ export default function DevelopersGettingStarted() {
             >
               Step 1:{" "}
               <span className="bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent">
-                Select a Pre-Built Agent
+                Select a Pre-Built Demo Agent
               </span>
             </h2>
             <p className="text-base text-gray-500 font-medium mt-1 max-w-2xl mx-auto">
