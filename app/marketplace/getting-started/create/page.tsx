@@ -2,6 +2,7 @@
 
 "use client";
 
+import { TrendingUp, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { Tab } from "@headlessui/react";
@@ -29,6 +30,7 @@ import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Image from "next/image";
 import { AuthButton } from "@/components/AuthButton";
+import MonetizationBanner from "@/components/MonetizationBanner";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -1041,33 +1043,7 @@ export default function DevelopersGettingStarted() {
         </section>
 
         {/* Monetization Banner - Modern, Compact, Flat */}
-        <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-blue-50 via-green-50 to-white border border-blue-100 rounded-xl p-4 md:p-6 mt-12 mb-8 gap-3 md:gap-0 shadow-sm">
-          <div className="flex items-center md:mr-6 gap-3">
-            <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-green-200/40 to-blue-200/40 backdrop-blur-md">
-              <DollarSign className="w-6 h-6 text-green-500" />
-            </span>
-            <div className="text-left">
-              <span
-                className="block text-lg md:text-xl font-bold text-gray-900 mb-0.5"
-                style={{ fontFamily: "Inter, Space Grotesk, sans-serif" }}
-              >
-                <span className="bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent">
-                  Monetize your expertise.
-                </span>
-              </span>
-              <span className="block text-sm md:text-base text-gray-600">
-                Earn revenue and access advanced analytics by publishing your
-                agent on the Formation Marketplace.
-              </span>
-            </div>
-          </div>
-          <button
-            type="button"
-            className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-400 to-green-400 hover:from-blue-500 hover:to-green-500 text-white font-semibold shadow-none transition-colors duration-200 text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
-          >
-            Learn More
-          </button>
-        </div>
+        <MonetizationBanner />
       </motion.div>
     </div>
   );
