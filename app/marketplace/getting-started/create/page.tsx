@@ -422,7 +422,7 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
         </section>
 
         {/* Step 4: Earn Money */}
-        <section className="space-y-8 md:space-y-12 bg-white text-gray-900 py-16 px-8 rounded-xl mt-16">
+        <section className="space-y-8 md:space-y-12 border border-green-400 bg-green-50 text-gray-900 py-16 px-8 rounded-xl mt-16">
           <div className="text-center">
             <DollarSign className="w-20 h-20 text-green-500 mx-auto mb-6 animate-bounce" />
             <h2 className="text-4xl md:text-5xl font-extrabold">Step 4: Earn Money</h2>
@@ -433,7 +433,7 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="bg-transparent text-gray-900 p-10 rounded-lg border border-gray-300"
+              className="bg-transparent text-gray-900 p-10 rounded-lg border border-gray-300 bg-green-50 border-green-200"
             >
               <div className="flex items-center justify-center mb-4">
                 <DollarSign className="w-12 h-12 text-green-500" />
@@ -445,7 +445,7 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
             </motion.div>
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="bg-transparent text-gray-900 p-10 rounded-lg border border-gray-300"
+              className="bg-transparent text-gray-900 p-10 rounded-lg border border-gray-300 bg-green-50 border-green-200"
             >
               <div className="flex items-center justify-center mb-4">
                 <ChartBarIcon className="w-12 h-12 text-blue-500" />
@@ -457,7 +457,7 @@ print("OpenAI Assistant interaction defined. Package application with Docker for
             </motion.div>
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="bg-transparent text-gray-900 p-10 rounded-lg border border-gray-300"
+              className="bg-transparent text-gray-900 p-10 rounded-lg border border-gray-300 bg-green-50 border-green-200"
             >
               <div className="flex items-center justify-center mb-4">
                 <GroupIcon className="w-12 h-12 text-purple-500" />

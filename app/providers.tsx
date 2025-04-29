@@ -27,13 +27,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
               }
 
               // Make API call to your backend to create/update account
-              const response = await fetch('http://170.250.22.3:3004/account/create', {
+              const response = await fetch('/api/account/create', {
                 method: 'POST',
                 headers: {
                   'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json',
-                  'X-Request-ID': crypto.randomUUID(),
-                  'User-Agent': 'Formation-Web/1.0'
+                  'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                   email: user?.email,
