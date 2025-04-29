@@ -20,6 +20,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
+    // console.log("userData", userData);
+
     // 1. Find the user by sub (Dynamic.xyz user id)
     const { data: user, error: userError } = await supabase
       .from("users")

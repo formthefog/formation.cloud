@@ -17,16 +17,20 @@ export async function POST(request: Request) {
       expires: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 min expiry
     });
 
+    const redirectUrl = String(process.env.NEXT_PUBLIC_GITHUB_CALLBACK_URL);
+
+    console.log("redirectUrl", redirectUrl);
+
     // Build the GitHub OAuth URL
     const params = new URLSearchParams({
       client_id: process.env.GITHUB_CLIENT_ID!,
-      redirect_uri: process.env.NEXT_PUBLIC_GITHUB_CALLBACK_URL!,
+      // redirect_uri: process.env.NEXT_PUBLIC_GITHUB_CALLBACK_URL!,
       scope: "repo,write:repo_hook",
       state,
     });
 
     return NextResponse.json({
-      url: `https://github.com/login/oauth/authorize?${params.toString()}`,
+      url: `https://github.com/apps/formation-deploy/installations/new?${params.toString()}&state=${wallet_address}`,
     });
   } catch (error) {
     console.error("Error generating GitHub auth URL:", error);

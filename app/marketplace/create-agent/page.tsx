@@ -64,7 +64,6 @@ export default function CreateAgentPage() {
     name: "",
     description: "",
     deploymentSource: "github",
-    repositoryUrl: "",
   });
   const isLoggedIn = useIsLoggedIn();
 
@@ -84,7 +83,6 @@ export default function CreateAgentPage() {
           name: formData.name,
           description: formData.description,
           deploymentsource: formData.deploymentSource,
-          repositoryurl: formData.repositoryUrl || null,
           dockerregistryurl: formData.dockerRegistryUrl || null,
           dockercomposecontent: formData.dockerComposeContent || null,
           created_at: new Date().toISOString(),
@@ -111,26 +109,9 @@ export default function CreateAgentPage() {
         return (
           <div>
             <GitHubIntegration />
-            <label
-              htmlFor="repositoryUrl"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              GitHub Repository URL*
-            </label>
-            <Input
-              id="repositoryUrl"
-              type="url"
-              placeholder="https://github.com/username/repository"
-              value={formData.repositoryUrl}
-              onChange={(e) =>
-                setFormData({ ...formData, repositoryUrl: e.target.value })
-              }
-              required
-              className="w-full"
-            />
             <p className="mt-2 text-sm text-gray-500">
-              Please provide the full URL to your GitHub repository. Make sure
-              it's public or you've granted us access.
+              Your agent's code is now accessible to our team via your GitHub
+              integration.
             </p>
           </div>
         );
@@ -201,7 +182,7 @@ services:
         {/* Hero Section */}
         <div className="text-center py-12 bg-white text-gray-900">
           <h1 className="text-4xl font-bold mb-4">
-            Create & Deploy Your AI Agent
+            Create & Deploy Your Agent
           </h1>
           <p className="text-lg">
             Join the future of AI with our seamless deployment platform.
@@ -209,24 +190,24 @@ services:
         </div>
 
         {/* Feature Highlights Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-          <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <CodeBracketIcon className="w-10 h-10 text-indigo-600 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Easy Integration</h3>
+        <div className="grid grid-cols-1 mb-12 md:grid-cols-3 gap-8 mt-12">
+          <div className="bg-gray-50 p-4 rounded-lg text-sm shadow-sm hover:shadow-md transition-shadow">
+            <CodeBracketIcon className="w-10 h-8 text-indigo-600 mb-4" />
+            <h3 className="text-md font-semibold mb-2">Easy Integration</h3>
             <p className="text-gray-700">
               Integrate with your favorite tools and frameworks effortlessly.
             </p>
           </div>
-          <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <CloudIcon className="w-10 h-10 text-blue-600 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Cloud Deployment</h3>
+          <div className="bg-gray-50 p-4 rounded-lg text-sm shadow-sm hover:shadow-md transition-shadow">
+            <CloudIcon className="w-10 h-8 text-blue-600 mb-4" />
+            <h3 className="text-md font-semibold mb-2">Cloud Deployment</h3>
             <p className="text-gray-700">
               Deploy your agents in the cloud with just a few clicks.
             </p>
           </div>
-          <div className="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <CurrencyDollarIcon className="w-10 h-10 text-green-600 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Monetize Your Agent</h3>
+          <div className="bg-gray-50 p-4 rounded-lg text-sm shadow-sm hover:shadow-md transition-shadow">
+            <CurrencyDollarIcon className="w-10 h-8 text-green-600 mb-4" />
+            <h3 className="text-md font-semibold mb-2">Monetize Your Agent</h3>
             <p className="text-gray-700">
               Earn revenue by publishing your agent on our marketplace.
             </p>
