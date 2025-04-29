@@ -42,7 +42,7 @@ export default function MonetizationBanner() {
       <div className="flex flex-col gap-2 w-full md:w-auto">
         <button
           type="button"
-          className="px-6 py-1.5 rounded-full bg-blue-600 hover:bg-green-500 text-white font-semibold shadow-md transition-colors 00 text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="px-6 py-1.5 rounded-sm bg-blue-600 hover:bg-green-500 text-white font-semibold shadow-md transition-colors 00 text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         >
           Join the Waitlist
         </button>

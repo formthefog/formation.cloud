@@ -467,7 +467,10 @@ export default function DevelopersGettingStarted() {
                 className="text-lg font-semibold text-blue-700 mb-1 flex items-center justify-between"
                 style={{ fontFamily: "Inter, Space Grotesk, sans-serif" }}
               >
-                {selectedAgent.name}
+                <span className="text-xl mr-2">
+                  {selectedAgent.emoji} {selectedAgent.name}
+                </span>
+
                 <Button
                   variant={isSelected ? "default" : "outline"}
                   className={`text-sm px-4 py-2 ${isSelected ? "bg-green-500 text-white hover:bg-green-600" : ""}`}
