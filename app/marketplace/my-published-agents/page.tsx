@@ -1,38 +1,29 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { 
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import {
   ChartBarIcon,
   CurrencyDollarIcon,
-  UsersIcon,
-  StarIcon,
-  TrophyIcon,
   RocketLaunchIcon,
-  HeartIcon,
-  GlobeAltIcon,
   SparklesIcon,
-  ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
-  ChatBubbleLeftRightIcon,
-  CheckBadgeIcon,
-  FireIcon,
   KeyIcon,
-  ShieldCheckIcon,
-  BoltIcon,
   CommandLineIcon,
   ArrowRightIcon,
-  UserGroupIcon,
-  BeakerIcon
-} from '@heroicons/react/24/outline';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { useIsLoggedIn } from '@dynamic-labs/sdk-react-core';
-import { AuthButton } from '@/components/AuthButton';
+} from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+import { AuthButton } from "@/components/AuthButton";
 
-type AgentType = 'development' | 'analysis' | 'assistant' | 'research' | 'automation';
-type AgentStatus = 'published' | 'featured' | 'trending' | 'new';
-type TimeRange = '24h' | '7d' | '30d' | '90d' | 'all';
+type AgentType =
+  | "development"
+  | "analysis"
+  | "assistant"
+  | "research"
+  | "automation";
+type AgentStatus = "published" | "featured" | "trending" | "new";
+type TimeRange = "24h" | "7d" | "30d" | "90d" | "all";
 
 interface Review {
   id: number;
@@ -69,11 +60,11 @@ interface PublishedAgent {
 const publishedAgents: PublishedAgent[] = [
   {
     id: 1,
-    name: 'Code Review Pro',
-    status: 'featured',
-    type: 'development',
-    description: 'Advanced AI-powered code review and suggestions',
-    totalEarnings: 12580.50,
+    name: "Code Review Pro",
+    status: "featured",
+    type: "development",
+    description: "Advanced AI-powered code review and suggestions",
+    totalEarnings: 12580.5,
     monthlyEarnings: 2450.75,
     totalUsers: 1250,
     activeUsers: 890,
@@ -82,33 +73,33 @@ const publishedAgents: PublishedAgent[] = [
       {
         id: 1,
         rating: 5,
-        comment: 'Incredible accuracy and helpful suggestions!',
-        user: 'TechLead123',
-        date: '2024-03-27'
+        comment: "Incredible accuracy and helpful suggestions!",
+        user: "TechLead123",
+        date: "2024-03-27",
       },
       // Add more reviews...
     ],
     totalRequests: 45280,
     successRate: 99.2,
     averageResponseTime: 245,
-    publishDate: '2023-12-01',
-    version: '2.1.0',
+    publishDate: "2023-12-01",
+    version: "2.1.0",
     pricePerRequest: 0.02,
     geography: {
-      'North America': 45,
-      'Europe': 30,
-      'Asia': 15,
-      'Others': 10
+      "North America": 45,
+      Europe: 30,
+      Asia: 15,
+      Others: 10,
     },
     trending: true,
-    featured: true
+    featured: true,
   },
   {
     id: 2,
-    name: 'Data Insights Engine',
-    status: 'trending',
-    type: 'analysis',
-    description: 'Enterprise-grade data analysis and visualization',
+    name: "Data Insights Engine",
+    status: "trending",
+    type: "analysis",
+    description: "Enterprise-grade data analysis and visualization",
     totalEarnings: 28950.75,
     monthlyEarnings: 4850.25,
     totalUsers: 780,
@@ -118,34 +109,34 @@ const publishedAgents: PublishedAgent[] = [
       {
         id: 1,
         rating: 5,
-        comment: 'Transformed our data analysis workflow!',
-        user: 'DataScientist42',
-        date: '2024-03-26'
-      }
+        comment: "Transformed our data analysis workflow!",
+        user: "DataScientist42",
+        date: "2024-03-26",
+      },
     ],
     totalRequests: 89750,
     successRate: 99.8,
     averageResponseTime: 180,
-    publishDate: '2023-11-15',
-    version: '3.0.1',
+    publishDate: "2023-11-15",
+    version: "3.0.1",
     pricePerRequest: 0.05,
     geography: {
-      'North America': 40,
-      'Europe': 35,
-      'Asia': 20,
-      'Others': 5
+      "North America": 40,
+      Europe: 35,
+      Asia: 20,
+      Others: 5,
     },
     trending: true,
-    featured: true
+    featured: true,
   },
   {
     id: 3,
-    name: 'Support Genius',
-    status: 'published',
-    type: 'assistant',
-    description: 'AI-powered customer support automation',
+    name: "Support Genius",
+    status: "published",
+    type: "assistant",
+    description: "AI-powered customer support automation",
     totalEarnings: 8750.25,
-    monthlyEarnings: 1250.50,
+    monthlyEarnings: 1250.5,
     totalUsers: 320,
     activeUsers: 280,
     rating: 4.7,
@@ -153,34 +144,34 @@ const publishedAgents: PublishedAgent[] = [
       {
         id: 1,
         rating: 5,
-        comment: 'Reduced our support response time by 70%!',
-        user: 'SupportManager',
-        date: '2024-03-25'
-      }
+        comment: "Reduced our support response time by 70%!",
+        user: "SupportManager",
+        date: "2024-03-25",
+      },
     ],
     totalRequests: 125890,
     successRate: 98.5,
     averageResponseTime: 150,
-    publishDate: '2024-01-10',
-    version: '1.5.0',
+    publishDate: "2024-01-10",
+    version: "1.5.0",
     pricePerRequest: 0.01,
     geography: {
-      'North America': 35,
-      'Europe': 40,
-      'Asia': 20,
-      'Others': 5
+      "North America": 35,
+      Europe: 40,
+      Asia: 20,
+      Others: 5,
     },
     trending: false,
-    featured: false
+    featured: false,
   },
   {
     id: 4,
-    name: 'Research Assistant Pro',
-    status: 'new',
-    type: 'research',
-    description: 'Academic research and paper analysis assistant',
-    totalEarnings: 5280.90,
-    monthlyEarnings: 1890.30,
+    name: "Research Assistant Pro",
+    status: "new",
+    type: "research",
+    description: "Academic research and paper analysis assistant",
+    totalEarnings: 5280.9,
+    monthlyEarnings: 1890.3,
     totalUsers: 150,
     activeUsers: 120,
     rating: 4.9,
@@ -188,47 +179,74 @@ const publishedAgents: PublishedAgent[] = [
       {
         id: 1,
         rating: 5,
-        comment: 'A game-changer for academic research!',
-        user: 'Professor_Smith',
-        date: '2024-03-24'
-      }
+        comment: "A game-changer for academic research!",
+        user: "Professor_Smith",
+        date: "2024-03-24",
+      },
     ],
     totalRequests: 15780,
     successRate: 99.5,
     averageResponseTime: 320,
-    publishDate: '2024-02-20',
-    version: '1.0.2',
+    publishDate: "2024-02-20",
+    version: "1.0.2",
     pricePerRequest: 0.08,
     geography: {
-      'North America': 30,
-      'Europe': 45,
-      'Asia': 20,
-      'Others': 5
+      "North America": 30,
+      Europe: 45,
+      Asia: 20,
+      Others: 5,
     },
     trending: true,
-    featured: false
-  }
+    featured: false,
+  },
 ];
 
 export default function MyPublishedAgentsPage() {
   const isLoggedIn = useIsLoggedIn();
   const [showAuthFlow, setShowAuthFlow] = useState(false);
-  const [timeRange, setTimeRange] = useState<TimeRange>('30d');
-  const [selectedAgent, setSelectedAgent] = useState<PublishedAgent | null>(null);
-  const [selectedMetric, setSelectedMetric] = useState<'earnings' | 'users' | 'performance'>('earnings');
+  const [timeRange, setTimeRange] = useState<TimeRange>("30d");
+  const [selectedAgent, setSelectedAgent] = useState<PublishedAgent | null>(
+    null
+  );
+  const [selectedMetric, setSelectedMetric] = useState<
+    "earnings" | "users" | "performance"
+  >("earnings");
 
-  const timeRanges: TimeRange[] = ['24h', '7d', '30d', '90d', 'all'];
+  const timeRanges: TimeRange[] = ["24h", "7d", "30d", "90d", "all"];
 
-  const stats = useMemo(() => ({
-    totalEarnings: publishedAgents.reduce((sum, agent) => sum + agent.totalEarnings, 0),
-    monthlyEarnings: publishedAgents.reduce((sum, agent) => sum + agent.monthlyEarnings, 0),
-    totalUsers: publishedAgents.reduce((sum, agent) => sum + agent.totalUsers, 0),
-    activeUsers: publishedAgents.reduce((sum, agent) => sum + agent.activeUsers, 0),
-    averageRating: Math.round(publishedAgents.reduce((sum, agent) => sum + agent.rating, 0) / publishedAgents.length * 10) / 10,
-    totalRequests: publishedAgents.reduce((sum, agent) => sum + agent.totalRequests, 0),
-    featuredAgents: publishedAgents.filter(agent => agent.featured).length,
-    trendingAgents: publishedAgents.filter(agent => agent.trending).length,
-  }), []);
+  const stats = useMemo(
+    () => ({
+      totalEarnings: publishedAgents.reduce(
+        (sum, agent) => sum + agent.totalEarnings,
+        0
+      ),
+      monthlyEarnings: publishedAgents.reduce(
+        (sum, agent) => sum + agent.monthlyEarnings,
+        0
+      ),
+      totalUsers: publishedAgents.reduce(
+        (sum, agent) => sum + agent.totalUsers,
+        0
+      ),
+      activeUsers: publishedAgents.reduce(
+        (sum, agent) => sum + agent.activeUsers,
+        0
+      ),
+      averageRating:
+        Math.round(
+          (publishedAgents.reduce((sum, agent) => sum + agent.rating, 0) /
+            publishedAgents.length) *
+            10
+        ) / 10,
+      totalRequests: publishedAgents.reduce(
+        (sum, agent) => sum + agent.totalRequests,
+        0
+      ),
+      featuredAgents: publishedAgents.filter((agent) => agent.featured).length,
+      trendingAgents: publishedAgents.filter((agent) => agent.trending).length,
+    }),
+    []
+  );
 
   // Mock trend data
   const trends = {
@@ -286,7 +304,8 @@ export default function MyPublishedAgentsPage() {
                 Start Building Your AI Agent Portfolio
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
-                Share your expertise with the world by creating and publishing AI agents. Build once, earn continuously.
+                Share your expertise with the world by creating and publishing
+                AI agents. Build once, earn continuously.
               </p>
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
@@ -312,7 +331,10 @@ export default function MyPublishedAgentsPage() {
                 </div>
               </div>
               <Link href="/marketplace/create-agent">
-                <Button size="lg" className="bg-[#0A84FF] hover:bg-[#0A84FF]/90">
+                <Button
+                  size="lg"
+                  className="bg-[#0A84FF] hover:bg-[#0A84FF]/90"
+                >
                   Start Building
                   <ArrowRightIcon className="w-5 h-5 ml-2" />
                 </Button>
@@ -340,7 +362,8 @@ export default function MyPublishedAgentsPage() {
                 Build Once, Earn Continuously
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-                Join our community of AI developers and monetize your expertise by publishing agents on Formation's marketplace.
+                Join our community of AI developers and monetize your expertise
+                by publishing agents on Formation's marketplace.
               </p>
             </motion.div>
           </div>
@@ -416,16 +439,17 @@ export default function MyPublishedAgentsPage() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="text-center bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-xl p-12 text-white"
           >
-            <h2 className="text-3xl font-bold mb-6">
-              Start Building Today
-            </h2>
+            <h2 className="text-3xl font-bold mb-6">Start Building Today</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
               Join the growing community of AI developers on Formation.
             </p>
-            <AuthButton className="border-white text-white" buttonStyle="bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors" />
+            <AuthButton
+              className="border-white text-white"
+              buttonStyle="bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors"
+            />
           </motion.div>
         </div>
       )}
     </div>
   );
-} 
+}

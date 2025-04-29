@@ -1,14 +1,25 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { useDynamicContext, useIsLoggedIn, getAuthToken } from '@dynamic-labs/sdk-react-core';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  useDynamicContext,
+  useIsLoggedIn,
+  getAuthToken,
+} from "@dynamic-labs/sdk-react-core";
 import {
   CreditCardIcon,
   CodeBracketIcon,
@@ -19,41 +30,43 @@ import {
   ArrowLeftOnRectangleIcon,
   PlusIcon,
   CheckIcon,
-  CogIcon
-} from '@heroicons/react/24/outline';
-import { toast } from 'sonner';
+  CogIcon,
+} from "@heroicons/react/24/outline";
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { loadStripe, Stripe } from '@stripe/stripe-js';
+  SelectValue,
+} from "@/components/ui/select";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || '');
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || ""
+);
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
-  const [billingPeriod, setBillingPeriod] = useState('monthly');
+  const [billingPeriod, setBillingPeriod] = useState("monthly");
   const [error, setError] = useState<string | null>(null);
   const isLoggedIn = useIsLoggedIn();
   const { setShowAuthFlow, handleLogOut } = useDynamicContext();
 
   // Calculate prices based on billing period
   const getPriceDisplay = (monthlyPrice: number) => {
-    if (billingPeriod === 'annual') {
+    if (billingPeriod === "annual") {
       const annualPrice = Math.round(monthlyPrice * 12 * 0.8); // 20% discount
       return {
         price: Math.round(annualPrice / 12),
-        period: '/month',
-        subtitle: `billed annually at $${annualPrice.toLocaleString()}`
+        period: "/month",
+        subtitle: `billed annually at $${annualPrice.toLocaleString()}`,
       };
     }
     return {
       price: monthlyPrice,
-      period: '/month',
-      subtitle: 'billed monthly'
+      period: "/month",
+      subtitle: "billed monthly",
     };
   };
 
@@ -63,9 +76,9 @@ export default function SettingsPage() {
   const onLogout = async () => {
     try {
       await handleLogOut();
-      toast.success('Successfully logged out');
+      toast.success("Successfully logged out");
     } catch (error) {
-      toast.error('Failed to log out');
+      toast.error("Failed to log out");
     }
   };
 
@@ -73,29 +86,29 @@ export default function SettingsPage() {
   const handleCheckout = async (priceId: string) => {
     setError(null);
     if (!isLoggedIn) {
-      setError('Please log in to proceed with checkout.');
-      toast.error('Please log in first.');
+      setError("Please log in to proceed with checkout.");
+      toast.error("Please log in first.");
       setShowAuthFlow(true);
       return;
     }
     if (!stripePromise || !process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY) {
-        setError('Stripe is not properly configured.');
-        toast.error('Stripe is not properly configured.');
-        return;
+      setError("Stripe is not properly configured.");
+      toast.error("Stripe is not properly configured.");
+      return;
     }
     setLoading(true);
 
     try {
       const token = await getAuthToken();
       if (!token) {
-        throw new Error('Failed to retrieve authentication token.');
+        throw new Error("Failed to retrieve authentication token.");
       }
 
-      const response = await fetch('/api/stripe/create-checkout-session', {
-        method: 'POST',
+      const response = await fetch("/api/stripe/create-checkout-session", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ priceId: priceId }),
       });
@@ -103,28 +116,30 @@ export default function SettingsPage() {
       const { sessionId, error: apiError } = await response.json();
 
       if (!response.ok || apiError) {
-        throw new Error(apiError || 'Failed to create checkout session.');
+        throw new Error(apiError || "Failed to create checkout session.");
       }
 
       if (!sessionId) {
-        throw new Error('Missing session ID from server.');
+        throw new Error("Missing session ID from server.");
       }
 
       const stripe = await stripePromise;
       if (!stripe) {
-         throw new Error('Stripe.js failed to load.');
+        throw new Error("Stripe.js failed to load.");
       }
 
-      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+      const { error: stripeError } = await stripe.redirectToCheckout({
+        sessionId,
+      });
 
       if (stripeError) {
-        console.error('Stripe redirection error:', stripeError);
-        throw new Error(stripeError.message || 'Stripe redirection failed.');
+        console.error("Stripe redirection error:", stripeError);
+        throw new Error(stripeError.message || "Stripe redirection failed.");
       }
-
     } catch (err: any) {
-      console.error('Checkout Error:', err);
-      const errorMessage = err.message || 'An unexpected error occurred during checkout.';
+      console.error("Checkout Error:", err);
+      const errorMessage =
+        err.message || "An unexpected error occurred during checkout.";
       setError(errorMessage);
       toast.error(errorMessage);
       setLoading(false);
@@ -135,8 +150,8 @@ export default function SettingsPage() {
   const handleManageSubscription = async () => {
     setError(null);
     if (!isLoggedIn) {
-      setError('Please log in to manage your subscription.');
-      toast.error('Please log in first.');
+      setError("Please log in to manage your subscription.");
+      toast.error("Please log in first.");
       setShowAuthFlow(true);
       return;
     }
@@ -145,31 +160,32 @@ export default function SettingsPage() {
     try {
       const token = await getAuthToken();
       if (!token) {
-        throw new Error('Failed to retrieve authentication token.');
+        throw new Error("Failed to retrieve authentication token.");
       }
 
-      const response = await fetch('/api/stripe/create-portal-session', {
-        method: 'POST',
+      const response = await fetch("/api/stripe/create-portal-session", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
       const { url, error: apiError } = await response.json();
 
       if (!response.ok || apiError) {
-        throw new Error(apiError || 'Failed to create billing portal session.');
+        throw new Error(apiError || "Failed to create billing portal session.");
       }
 
       if (!url) {
-        throw new Error('Missing portal session URL from server.');
+        throw new Error("Missing portal session URL from server.");
       }
 
       window.location.href = url;
-
     } catch (err: any) {
-      console.error('Portal Error:', err);
-       const errorMessage = err.message || 'An unexpected error occurred while accessing the billing portal.';
+      console.error("Portal Error:", err);
+      const errorMessage =
+        err.message ||
+        "An unexpected error occurred while accessing the billing portal.";
       setError(errorMessage);
       toast.error(errorMessage);
       setLoading(false);
@@ -196,7 +212,8 @@ export default function SettingsPage() {
                     Welcome to Formation
                   </CardTitle>
                   <CardDescription className="text-base">
-                    Sign in to access your API keys, manage billing, and deploy AI agents.
+                    Sign in to access your API keys, manage billing, and deploy
+                    AI agents.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="relative space-y-6">
@@ -205,35 +222,47 @@ export default function SettingsPage() {
                       <RocketLaunchIcon className="w-6 h-6 text-blue-500 flex-shrink-0" />
                       <div>
                         <h3 className="font-medium">Quick Deployment</h3>
-                        <p className="text-sm text-muted-foreground">Deploy AI agents in under 60 seconds with our streamlined process.</p>
+                        <p className="text-sm text-muted-foreground">
+                          Deploy AI agents in under 60 seconds with our
+                          streamlined process.
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 p-4 rounded-lg bg-white/50 border border-blue-100">
                       <CodeBracketIcon className="w-6 h-6 text-blue-500 flex-shrink-0" />
                       <div>
                         <h3 className="font-medium">API Access</h3>
-                        <p className="text-sm text-muted-foreground">Get instant access to our API and start integrating AI capabilities.</p>
+                        <p className="text-sm text-muted-foreground">
+                          Get instant access to our API and start integrating AI
+                          capabilities.
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 p-4 rounded-lg bg-white/50 border border-blue-100">
                       <CreditCardIcon className="w-6 h-6 text-blue-500 flex-shrink-0" />
                       <div>
                         <h3 className="font-medium">Simple Billing</h3>
-                        <p className="text-sm text-muted-foreground">Pay-per-use pricing with no hidden fees or long-term commitments.</p>
+                        <p className="text-sm text-muted-foreground">
+                          Pay-per-use pricing with no hidden fees or long-term
+                          commitments.
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 p-4 rounded-lg bg-white/50 border border-blue-100">
                       <ShieldCheckIcon className="w-6 h-6 text-blue-500 flex-shrink-0" />
                       <div>
                         <h3 className="font-medium">Enterprise Ready</h3>
-                        <p className="text-sm text-muted-foreground">SOC 2 compliant with advanced security features built-in.</p>
+                        <p className="text-sm text-muted-foreground">
+                          SOC 2 compliant with advanced security features
+                          built-in.
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   <div className="pt-4">
-                    <Button 
-                      size="lg" 
+                    <Button
+                      size="lg"
                       className="w-full md:w-auto"
                       onClick={() => setShowAuthFlow(true)}
                     >
@@ -283,11 +312,17 @@ export default function SettingsPage() {
         <div className="container p-4 md:p-8 mx-auto max-w-5xl space-y-8">
           <Tabs defaultValue="billing" className="space-y-8">
             <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground relative w-full space-x-1">
-              <TabsTrigger value="billing" className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow">
+              <TabsTrigger
+                value="billing"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+              >
                 <CreditCardIcon className="mr-2 h-4 w-4" />
                 Billing
               </TabsTrigger>
-              <TabsTrigger value="api" className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow">
+              <TabsTrigger
+                value="api"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
+              >
                 <CodeBracketIcon className="mr-2 h-4 w-4" />
                 API
               </TabsTrigger>
@@ -299,7 +334,8 @@ export default function SettingsPage() {
                 <CardHeader>
                   <CardTitle>Billing Information</CardTitle>
                   <CardDescription>
-                    Manage your billing information, credits, and subscription tier.
+                    Manage your billing information, credits, and subscription
+                    tier.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8">
@@ -308,16 +344,22 @@ export default function SettingsPage() {
                     <div className="flex items-start justify-between flex-wrap gap-4">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="text-xl font-semibold text-blue-900">Pay As You Go</h3>
-                          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Current Plan</span>
+                          <h3 className="text-xl font-semibold text-blue-900">
+                            Pay As You Go
+                          </h3>
+                          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                            Current Plan
+                          </span>
                         </div>
-                        <p className="text-sm text-blue-700 mt-1">$0.005 per credit • No monthly commitment</p>
+                        <p className="text-sm text-blue-700 mt-1">
+                          $0.005 per credit • No monthly commitment
+                        </p>
                       </div>
                       <Button
                         className="bg-blue-600 hover:bg-blue-700"
                         disabled={loading || !isLoggedIn}
                       >
-                        {loading ? 'Processing...' : 'Manage Plan'}
+                        {loading ? "Processing..." : "Manage Plan"}
                       </Button>
                     </div>
                   </div>
@@ -327,8 +369,12 @@ export default function SettingsPage() {
                     <div className="rounded-xl border bg-gradient-to-br from-white to-gray-50 p-6">
                       <div className="flex items-start justify-between">
                         <div>
-                          <p className="text-sm font-medium text-gray-600">Available Credits</p>
-                          <h3 className="text-3xl font-bold text-gray-900 mt-1">24,900</h3>
+                          <p className="text-sm font-medium text-gray-600">
+                            Available Credits
+                          </p>
+                          <h3 className="text-3xl font-bold text-gray-900 mt-1">
+                            24,900
+                          </h3>
                           <p className="text-sm text-gray-500">≈ $12,450 USD</p>
                         </div>
                         <Button
@@ -337,28 +383,42 @@ export default function SettingsPage() {
                           disabled={loading || !isLoggedIn}
                         >
                           <PlusIcon className="w-4 h-4 mr-2" />
-                          {loading ? 'Processing...' : 'Add Credits'}
+                          {loading ? "Processing..." : "Add Credits"}
                         </Button>
                       </div>
-                      
+
                       <Separator className="my-4" />
-                      
+
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <p className="text-sm font-medium text-gray-600">Usage Rate</p>
-                          <p className="text-lg font-semibold text-gray-900">1,240/day</p>
-                          <p className="text-xs text-gray-500">↑ 12% from last week</p>
+                          <p className="text-sm font-medium text-gray-600">
+                            Usage Rate
+                          </p>
+                          <p className="text-lg font-semibold text-gray-900">
+                            1,240/day
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            ↑ 12% from last week
+                          </p>
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-600">Est. Remaining</p>
-                          <p className="text-lg font-semibold text-gray-900">20 days</p>
-                          <p className="text-xs text-red-500">Low balance warning</p>
+                          <p className="text-sm font-medium text-gray-600">
+                            Est. Remaining
+                          </p>
+                          <p className="text-lg font-semibold text-gray-900">
+                            20 days
+                          </p>
+                          <p className="text-xs text-red-500">
+                            Low balance warning
+                          </p>
                         </div>
                       </div>
                     </div>
 
                     <div className="rounded-xl border bg-gradient-to-br from-white to-gray-50 p-6">
-                      <p className="text-sm font-medium text-gray-600">Usage Trends</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Usage Trends
+                      </p>
                       <div className="h-[120px] mt-2">
                         {/* Add your chart component here */}
                         <div className="w-full h-full bg-gradient-to-t from-blue-50 to-transparent rounded" />
@@ -366,15 +426,21 @@ export default function SettingsPage() {
                       <div className="grid grid-cols-3 gap-4 mt-4">
                         <div>
                           <p className="text-xs text-gray-500">This Week</p>
-                          <p className="text-sm font-semibold text-gray-900">8,680 credits</p>
+                          <p className="text-sm font-semibold text-gray-900">
+                            8,680 credits
+                          </p>
                         </div>
                         <div>
                           <p className="text-xs text-gray-500">This Month</p>
-                          <p className="text-sm font-semibold text-gray-900">34,720 credits</p>
+                          <p className="text-sm font-semibold text-gray-900">
+                            34,720 credits
+                          </p>
                         </div>
                         <div>
                           <p className="text-xs text-gray-500">Avg. Cost/Day</p>
-                          <p className="text-sm font-semibold text-gray-900">$6.20 USD</p>
+                          <p className="text-sm font-semibold text-gray-900">
+                            $6.20 USD
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -384,16 +450,20 @@ export default function SettingsPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">Available Plans</h3>
-                      <Select 
-                        defaultValue="monthly" 
+                      <Select
+                        defaultValue="monthly"
                         onValueChange={(value) => setBillingPeriod(value)}
                       >
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Billing Period" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="monthly">Monthly Billing</SelectItem>
-                          <SelectItem value="annual">Annual Billing (20% off)</SelectItem>
+                          <SelectItem value="monthly">
+                            Monthly Billing
+                          </SelectItem>
+                          <SelectItem value="annual">
+                            Annual Billing (20% off)
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -402,8 +472,12 @@ export default function SettingsPage() {
                       {/* Basic Tier */}
                       <div className="rounded-xl border p-6 bg-white hover:border-blue-200 hover:shadow-lg transition-all flex flex-col min-h-[480px]">
                         <div className="flex-1">
-                          <h4 className="text-lg font-semibold">Pay As You Go</h4>
-                          <p className="text-sm text-gray-500 mt-1">Perfect for testing and small projects</p>
+                          <h4 className="text-lg font-semibold">
+                            Pay As You Go
+                          </h4>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Perfect for testing and small projects
+                          </p>
                           <div className="mt-5">
                             <span className="text-3xl font-bold">$0.005</span>
                             <span className="text-gray-500">/credit</span>
@@ -423,8 +497,8 @@ export default function SettingsPage() {
                             </li>
                           </ul>
                         </div>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           className="w-full h-11 mt-6 rounded-full font-medium"
                         >
                           Current Plan
@@ -435,13 +509,23 @@ export default function SettingsPage() {
                       <div className="rounded-xl border p-6 bg-white hover:border-blue-200 hover:shadow-lg transition-all flex flex-col min-h-[480px]">
                         <div className="flex-1">
                           <h4 className="text-lg font-semibold">Starter</h4>
-                          <p className="text-sm text-gray-500 mt-1">For individuals and small teams</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            For individuals and small teams
+                          </p>
                           <div className="mt-5">
-                            <span className="text-3xl font-bold">${starterPrice.price}</span>
-                            <span className="text-gray-500">{starterPrice.period}</span>
+                            <span className="text-3xl font-bold">
+                              ${starterPrice.price}
+                            </span>
+                            <span className="text-gray-500">
+                              {starterPrice.period}
+                            </span>
                           </div>
-                          <p className="text-sm text-gray-500 mt-1">{starterPrice.subtitle}</p>
-                          <p className="text-sm text-gray-500 mt-1">Includes 12,000 credits</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {starterPrice.subtitle}
+                          </p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Includes 12,000 credits
+                          </p>
                           <ul className="mt-5 space-y-2.5">
                             <li className="flex items-center text-sm text-gray-600">
                               <CheckIcon className="w-4 h-4 text-green-500 mr-2" />
@@ -457,8 +541,16 @@ export default function SettingsPage() {
                             </li>
                           </ul>
                         </div>
-                        <Button 
+                        <Button
                           className="w-full h-11 mt-6 rounded-full font-medium bg-blue-600 hover:bg-blue-700"
+                          onClick={() =>
+                            handleCheckout(
+                              billingPeriod === "annual"
+                                ? "price_starter_annual"
+                                : "price_starter_monthly"
+                            )
+                          }
+                          disabled={loading}
                         >
                           Upgrade to Starter
                         </Button>
@@ -471,13 +563,23 @@ export default function SettingsPage() {
                         </div>
                         <div className="flex-1">
                           <h4 className="text-lg font-semibold">Pro</h4>
-                          <p className="text-sm text-gray-500 mt-1">For growing teams and applications</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            For growing teams and applications
+                          </p>
                           <div className="mt-5">
-                            <span className="text-3xl font-bold">${proPrice.price}</span>
-                            <span className="text-gray-500">{proPrice.period}</span>
+                            <span className="text-3xl font-bold">
+                              ${proPrice.price}
+                            </span>
+                            <span className="text-gray-500">
+                              {proPrice.period}
+                            </span>
                           </div>
-                          <p className="text-sm text-gray-500 mt-1">{proPrice.subtitle}</p>
-                          <p className="text-sm text-gray-500 mt-1">Includes 250,000 credits</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {proPrice.subtitle}
+                          </p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Includes 250,000 credits
+                          </p>
                           <ul className="mt-5 space-y-2.5">
                             <li className="flex items-center text-sm text-gray-600">
                               <CheckIcon className="w-4 h-4 text-green-500 mr-2" />
@@ -493,8 +595,16 @@ export default function SettingsPage() {
                             </li>
                           </ul>
                         </div>
-                        <Button 
+                        <Button
                           className="w-full h-11 mt-6 rounded-full font-medium bg-blue-600 hover:bg-blue-700"
+                          onClick={() =>
+                            handleCheckout(
+                              billingPeriod === "annual"
+                                ? "price_pro_annual"
+                                : "price_pro_monthly"
+                            )
+                          }
+                          disabled={loading}
                         >
                           Upgrade to Pro
                         </Button>
@@ -504,11 +614,15 @@ export default function SettingsPage() {
                       <div className="rounded-xl border p-6 bg-gradient-to-b from-purple-50 to-white hover:shadow-lg transition-all flex flex-col min-h-[480px]">
                         <div className="flex-1">
                           <h4 className="text-lg font-semibold">Enterprise</h4>
-                          <p className="text-sm text-gray-500 mt-1">For large-scale deployments</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            For large-scale deployments
+                          </p>
                           <div className="mt-5">
                             <span className="text-3xl font-bold">Custom</span>
                           </div>
-                          <p className="text-sm text-gray-500 mt-1">Volume-based pricing</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Volume-based pricing
+                          </p>
                           <ul className="mt-5 space-y-2.5">
                             <li className="flex items-center text-sm text-gray-600">
                               <CheckIcon className="w-4 h-4 text-green-500 mr-2" />
@@ -524,8 +638,8 @@ export default function SettingsPage() {
                             </li>
                           </ul>
                         </div>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           className="w-full h-11 mt-6 rounded-full font-medium"
                         >
                           Contact Sales
@@ -537,7 +651,9 @@ export default function SettingsPage() {
                   {/* Payment Methods */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <Label className="text-lg font-semibold">Payment Methods</Label>
+                      <Label className="text-lg font-semibold">
+                        Payment Methods
+                      </Label>
                       <Button variant="outline" size="sm">
                         <PlusIcon className="w-4 h-4 mr-2" />
                         Add New
@@ -545,14 +661,18 @@ export default function SettingsPage() {
                     </div>
                     <div className="rounded-xl border p-6 bg-gray-50">
                       <p className="text-sm text-gray-500">
-                        No payment methods added yet. Add a payment method to enable automatic credit top-ups and prevent service interruptions.
+                        No payment methods added yet. Add a payment method to
+                        enable automatic credit top-ups and prevent service
+                        interruptions.
                       </p>
                     </div>
                   </div>
 
                   {/* Billing History */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold">Recent Transactions</h3>
+                    <h3 className="text-lg font-semibold">
+                      Recent Transactions
+                    </h3>
                     <div className="rounded-xl border">
                       <div className="p-4 border-b bg-gray-50">
                         <div className="grid grid-cols-4 text-sm font-medium text-gray-500">
@@ -600,7 +720,8 @@ export default function SettingsPage() {
                 <CardHeader>
                   <CardTitle>API Keys</CardTitle>
                   <CardDescription>
-                    Securely manage your API keys for accessing Formation services.
+                    Securely manage your API keys for accessing Formation
+                    services.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -609,21 +730,22 @@ export default function SettingsPage() {
                     <div className="p-6 space-y-4">
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                          <Label className="text-base font-medium">Production API Key</Label>
-                          <p className="text-sm text-gray-500">Use this key for your production environment</p>
+                          <Label className="text-base font-medium">
+                            Production API Key
+                          </Label>
+                          <p className="text-sm text-gray-500">
+                            Use this key for your production environment
+                          </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             className="text-red-600 hover:text-red-700 hover:bg-red-50"
                           >
                             Revoke
                           </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                          >
+                          <Button variant="outline" size="sm">
                             Regenerate
                           </Button>
                         </div>
@@ -642,8 +764,8 @@ export default function SettingsPage() {
                             </span>
                           </div>
                         </div>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           className="flex-shrink-0 w-24 font-medium"
                         >
@@ -668,11 +790,15 @@ export default function SettingsPage() {
                         </div>
                         <div className="flex-1 space-y-1">
                           <p className="text-sm font-medium">Quick Start</p>
-                          <p className="text-sm text-gray-500">Make your first API call using cURL:</p>
+                          <p className="text-sm text-gray-500">
+                            Make your first API call using cURL:
+                          </p>
                           <div className="mt-2 relative rounded-lg bg-gray-900 p-4">
                             <code className="text-sm font-mono text-gray-200">
-                              curl https://network.formation.cloud/v1/agents \<br/>
-                              &nbsp;&nbsp;-H "Authorization: Bearer $YOUR_API_KEY" \<br/>
+                              curl https://network.formation.cloud/v1/agents \
+                              <br />
+                              &nbsp;&nbsp;-H "Authorization: Bearer
+                              $YOUR_API_KEY" \<br />
                               &nbsp;&nbsp;-H "Content-Type: application/json"
                             </code>
                             <Button
@@ -693,21 +819,22 @@ export default function SettingsPage() {
                     <div className="p-6 space-y-4">
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                          <Label className="text-base font-medium">Test API Key</Label>
-                          <p className="text-sm text-gray-500">Use this key for testing and development</p>
+                          <Label className="text-base font-medium">
+                            Test API Key
+                          </Label>
+                          <p className="text-sm text-gray-500">
+                            Use this key for testing and development
+                          </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             className="text-red-600 hover:text-red-700 hover:bg-red-50"
                           >
                             Revoke
                           </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                          >
+                          <Button variant="outline" size="sm">
                             Regenerate
                           </Button>
                         </div>
@@ -726,8 +853,8 @@ export default function SettingsPage() {
                             </span>
                           </div>
                         </div>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           className="flex-shrink-0 w-24 font-medium"
                         >
@@ -756,8 +883,16 @@ export default function SettingsPage() {
                       <div className="space-y-1">
                         <p className="font-medium">Secure Your API Keys</p>
                         <p className="text-sm text-gray-500">
-                          Never share your API keys in publicly accessible areas such as GitHub, client-side code, or support tickets. 
-                          Need help? Check out our <Link href="/marketplace/settings/security" className="text-blue-600 hover:text-blue-700">security best practices</Link>.
+                          Never share your API keys in publicly accessible areas
+                          such as GitHub, client-side code, or support tickets.
+                          Need help? Check out our{" "}
+                          <Link
+                            href="/marketplace/settings/security"
+                            className="text-blue-600 hover:text-blue-700"
+                          >
+                            security best practices
+                          </Link>
+                          .
                         </p>
                       </div>
                     </div>
@@ -770,4 +905,4 @@ export default function SettingsPage() {
       </div>
     </div>
   );
-} 
+}

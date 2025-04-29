@@ -1,63 +1,46 @@
-import { Agent } from '@/types/agent';
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { Agent } from "@/types/agent";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import supabase from "@/lib/supabase";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ agentId: string }> }
 ) {
   const { agentId } = await params;
-  
+
   try {
-    // Fetch from the list endpoint instead
-    const response = await fetch('http://170.250.22.3:3004/agent/list', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      cache: 'no-store',
-      next: { revalidate: 0 },
-    });
+    // Try to fetch by agent_id first
+    let { data: agents, error } = await supabase
+      .from("agents")
+      .select("*")
+      .or(`agent_id.eq.${agentId},name.eq.${agentId.replace(/-/g, " ")}`);
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch agents: ${response.status} ${response.statusText}`);
+    if (error) {
+      throw new Error(error.message);
     }
 
-    const text = await response.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-      console.log('API Response:', data); // Debug log
-    } catch (e) {
-      console.error('Failed to parse JSON response:', text);
-      throw new Error('Invalid JSON response from server');
-    }
-
-    // Handle the nested List structure
-    const agents = data?.Success?.List || [];
-
-    if (!Array.isArray(agents)) {
-      console.error('Unexpected response structure:', data);
-      throw new Error('Invalid response structure from server');
-    }
-
-    // Find the specific agent by ID
-    const agent = agents.find((a: Agent) => 
-      String(a.agent_id) === String(agentId) || 
-      a.name?.toLowerCase().replace(/\s+/g, '-') === agentId.toLowerCase()
+    // Fallback: try to match by kebab-case name if not found by agent_id
+    let agent = (agents as Agent[] | null)?.find(
+      (a) =>
+        String(a.agent_id) === String(agentId) ||
+        a.name?.toLowerCase().replace(/\s+/g, "-") === agentId.toLowerCase()
     );
-    
+
     if (!agent) {
-      return NextResponse.json(
-        { error: 'Agent not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
     }
 
     return NextResponse.json({ Success: agent });
   } catch (error) {
-    console.error('Error fetching agent details:', error);
+    console.error("Error fetching agent details from Supabase:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch agent details' },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch agent details",
+      },
       { status: 500 }
     );
   }

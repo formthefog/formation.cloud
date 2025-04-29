@@ -7,12 +7,14 @@ import { Button } from "../ui/button";
 import RightCaret from "../icons/RightCaret";
 
 export default function MarketplaceHero() {
-  const [activeTab, setActiveTab] = useState<'business' | 'developer'>('business');
+  const [activeTab, setActiveTab] = useState<"business" | "developer">(
+    "business"
+  );
 
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 }
+    transition: { duration: 0.5 },
   };
 
   return (
@@ -23,21 +25,21 @@ export default function MarketplaceHero() {
         <div className="border-b border-gray-200">
           <div className="flex">
             <button
-              onClick={() => setActiveTab('business')}
+              onClick={() => setActiveTab("business")}
               className={`flex-1 py-4 px-6 text-center font-medium ${
-                activeTab === 'business'
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-500 hover:text-gray-700'
+                activeTab === "business"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               For Businesses
             </button>
             <button
-              onClick={() => setActiveTab('developer')}
+              onClick={() => setActiveTab("developer")}
               className={`flex-1 py-4 px-6 text-center font-medium ${
-                activeTab === 'developer'
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-500 hover:text-gray-700'
+                activeTab === "developer"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               For Developers
@@ -57,7 +59,7 @@ export default function MarketplaceHero() {
               className="flex flex-col h-full"
             >
               <div className="flex-1">
-                {activeTab === 'business' ? (
+                {activeTab === "business" ? (
                   <>
                     <div>
                       <div className="inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-50 text-blue-600 mb-4">
@@ -67,24 +69,42 @@ export default function MarketplaceHero() {
                         The Future of AI Agents
                       </h1>
                       <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                        Be among the first to access our marketplace of agents. Use Formation credits to deploy agents that enhance your productivity and unlock new possibilities.
+                        Be among the first to access our marketplace of agents.
+                        Use Formation credits to deploy agents that enhance your
+                        productivity and unlock new possibilities.
                       </p>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                          <div className="text-3xl font-bold text-blue-600">60%</div>
-                          <div className="text-sm text-gray-600">Potential Cost Reduction</div>
+                          <div className="text-3xl font-bold text-blue-600">
+                            60%
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Potential Cost Reduction
+                          </div>
                         </div>
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                          <div className="text-3xl font-bold text-blue-600">24/7</div>
-                          <div className="text-sm text-gray-600">Continuous Operation</div>
+                          <div className="text-3xl font-bold text-blue-600">
+                            24/7
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Continuous Operation
+                          </div>
                         </div>
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                          <div className="text-3xl font-bold text-blue-600">&lt;60s</div>
-                          <div className="text-sm text-gray-600">Deployment Time</div>
+                          <div className="text-3xl font-bold text-blue-600">
+                            &lt;60s
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Deployment Time
+                          </div>
                         </div>
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                          <div className="text-3xl font-bold text-blue-600">99.9%</div>
-                          <div className="text-sm text-gray-600">Target Uptime</div>
+                          <div className="text-3xl font-bold text-blue-600">
+                            99.9%
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Target Uptime
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -99,24 +119,43 @@ export default function MarketplaceHero() {
                         Build the Future of AI
                       </h1>
                       <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                        Join our early access program and help shape the future of AI agents. List your agents on our marketplace and earn Formation credits while building innovative solutions.
+                        Join our early access program and help shape the future
+                        of AI agents. List your agents on our marketplace and
+                        earn Formation credits while building innovative
+                        solutions.
                       </p>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                          <div className="text-3xl font-bold text-indigo-600">80%</div>
-                          <div className="text-sm text-gray-600">Revenue Share</div>
+                          <div className="text-3xl font-bold text-indigo-600">
+                            80%
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Revenue Share
+                          </div>
                         </div>
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                          <div className="text-3xl font-bold text-indigo-600">0%</div>
-                          <div className="text-sm text-gray-600">Platform Fee at Launch</div>
+                          <div className="text-3xl font-bold text-indigo-600">
+                            0%
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Platform Fee at Launch
+                          </div>
                         </div>
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                          <div className="text-3xl font-bold text-indigo-600">24/7</div>
-                          <div className="text-sm text-gray-600">Developer Support</div>
+                          <div className="text-3xl font-bold text-indigo-600">
+                            24/7
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Developer Support
+                          </div>
                         </div>
                         <div className="bg-white p-4 border border-gray-100 shadow-sm rounded-lg">
-                          <div className="text-3xl font-bold text-indigo-600">$1.3T</div>
-                          <div className="text-sm text-gray-600">AI Market by 2030</div>
+                          <div className="text-3xl font-bold text-indigo-600">
+                            $1.3T
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            AI Market by 2030
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -125,22 +164,24 @@ export default function MarketplaceHero() {
               </div>
 
               <div className="mt-12 mb-6">
-                {activeTab === 'business' ? (
+                {activeTab === "business" ? (
                   <>
-                    <Link href="/marketplace/getting-started/use" className="w-full sm:w-auto">
-                      <Button
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-[#0A84FF] bg-transparent text-[#0A84FF] rounded-full hover:bg-[#0A84FF]/5 transition-all text-[15px] font-medium uppercase tracking-wide"
-                      >
+                    <Link
+                      href="/marketplace/getting-started/use"
+                      className="w-full sm:w-auto"
+                    >
+                      <Button className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-[#0A84FF] bg-transparent text-[#0A84FF] rounded-full hover:bg-[#0A84FF]/5 transition-all text-[15px] font-medium uppercase tracking-wide">
                         GET STARTED <RightCaret className="ml-2 w-4 h-4" />
                       </Button>
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link href="/marketplace/getting-started/create" className="w-full sm:w-auto">
-                      <Button
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-[#0A84FF] bg-transparent text-[#0A84FF] rounded-full hover:bg-[#0A84FF]/5 transition-all text-[15px] font-medium uppercase tracking-wide"
-                      >
+                    <Link
+                      href="/marketplace/getting-started/create"
+                      className="w-full sm:w-auto"
+                    >
+                      <Button className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-[#0A84FF] bg-transparent text-[#0A84FF] rounded-full hover:bg-[#0A84FF]/5 transition-all text-[15px] font-medium uppercase tracking-wide">
                         GET STARTED <RightCaret className="ml-2 w-4 h-4" />
                       </Button>
                     </Link>
@@ -152,7 +193,7 @@ export default function MarketplaceHero() {
 
           {/* Right Column - Integration Canvas */}
           <div className="bg-gray-50 border-l border-gray-200 min-h-[600px]">
-            {activeTab === 'business' ? (
+            {activeTab === "business" ? (
               <AgentIntegrationCanvas />
             ) : (
               <DeveloperEarningsCanvas />
@@ -162,7 +203,7 @@ export default function MarketplaceHero() {
       </div>
 
       {/* Quick Value Props */}
-      <div className="bg-white shadow-sm border border-gray-200 p-4 mt-4">
+      {/* <div className="bg-white shadow-sm border border-gray-200 p-4 mt-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {activeTab === 'business' ? (
             <>
@@ -238,7 +279,7 @@ export default function MarketplaceHero() {
             </>
           )}
         </div>
-      </div>
+      </div> */}
     </>
   );
-} 
+}

@@ -12,16 +12,10 @@ import {
   ClockIcon,
   CheckCircleIcon,
   ArrowPathIcon,
-  ChatBubbleBottomCenterTextIcon,
   CodeBracketIcon,
   CloudIcon,
   ServerIcon,
   CurrencyDollarIcon,
-  ChartBarIcon,
-  UserGroupIcon,
-  SparklesIcon,
-  RocketLaunchIcon,
-  GlobeAltIcon,
 } from "@heroicons/react/24/outline";
 import { createClient } from "@supabase/supabase-js";
 import { AuthButton } from "@/components/AuthButton";
