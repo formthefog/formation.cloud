@@ -798,7 +798,7 @@ export default function DevelopersGettingStarted() {
                 Launch Your Agent
               </span>
             </h2>
-            <p className="text-base md:text-lg text-gray-500 mt-1 max-w-xl mx-auto">
+            <p className="text-base text-gray-500 font-medium mt-1 max-w-2xl mx-auto">
               Deploy your agent to the Formation Network and start using it
               right away.
             </p>
@@ -1030,9 +1030,11 @@ export default function DevelopersGettingStarted() {
                         configurations.
                       </p>
                       <div className="flex gap-2">
-                        <button className="text-sm px-3 py-1 bg-white border border-gray-200 text-gray-700 rounded hover:bg-gray-50 transition-colors">
-                          View Dashboard
-                        </button>
+                        <Link href="/marketplace/command-center">
+                          <button className="text-sm px-3 py-1 bg-white border border-gray-200 text-gray-700 rounded hover:bg-gray-50 transition-colors">
+                            View Dashboard
+                          </button>
+                        </Link>
                         <button className="text-sm px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
                           Test Agent
                         </button>
