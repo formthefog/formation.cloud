@@ -339,7 +339,7 @@ export default function DevelopersGettingStarted() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
-      <motion.div {...fadeIn} className="space-y-8 md:space-y-16">
+      <motion.div {...fadeIn} className="space-y-8 md:space-y-24">
         <PathNavigation />
 
         {/* Hero Section */}
@@ -780,7 +780,7 @@ export default function DevelopersGettingStarted() {
         {/* Step 3: Deploy */}
         <section
           ref={step3Ref}
-          className={`space-y-8 md:space-y-12 w-full flex flex-col items-center transition-opacity duration-300 ${currentStep === 3 ? "opacity-100" : "opacity-70"}`}
+          className={`space-y-8 md:space-y-12 py-4 md:py-6 w-full flex flex-col items-center transition-opacity duration-300 ${currentStep === 3 ? "opacity-100" : "opacity-70"}`}
         >
           <div className="text-center">
             <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/20 to-green-400/20 backdrop-blur-md shadow-lg mx-auto mb-3">
