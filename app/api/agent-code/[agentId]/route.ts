@@ -19,10 +19,7 @@ const AGENT_MAP: Record<string, string> = {
   // Add more mappings as needed
 };
 
-export async function GET(
-  _req: Request,
-  { params }: { params: { agentId: string } }
-) {
+export async function GET(_req: Request, { params }: any) {
   const filename = AGENT_MAP[params.agentId];
   if (!filename) {
     return NextResponse.json({ error: "Agent not found" }, { status: 404 });
