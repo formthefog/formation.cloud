@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import './styles.css';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChartBarIcon, 
+import "./styles.css";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ChartBarIcon,
   CogIcon,
   BoltIcon,
   DocumentTextIcon,
@@ -30,21 +30,29 @@ import {
   CurrencyDollarIcon,
   UserGroupIcon,
   KeyIcon,
-  StarIcon
-} from '@heroicons/react/24/outline';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { useIsLoggedIn } from '@dynamic-labs/sdk-react-core';
-import { AuthButton } from '@/components/AuthButton';
-import clsx from 'clsx';
+  StarIcon,
+} from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+import { AuthButton } from "@/components/AuthButton";
+import clsx from "clsx";
 
 interface HiredAgent {
   id: string;
   name: string;
   description: string;
   endpoint: string;
-  type: 'code' | 'research' | 'assistant' | 'analysis' | 'security' | 'data' | 'cloud' | 'nlp';
-  status: 'active' | 'idle' | 'busy';
+  type:
+    | "code"
+    | "research"
+    | "assistant"
+    | "analysis"
+    | "security"
+    | "data"
+    | "cloud"
+    | "nlp";
+  status: "active" | "idle" | "busy";
   requests: number;
   successRate: number;
   lastActive: string;
@@ -57,8 +65,10 @@ interface HiredAgent {
 
 export default function MyAgentsPage() {
   const isLoggedIn = useIsLoggedIn();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState<HiredAgent['type'] | 'all'>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedType, setSelectedType] = useState<HiredAgent["type"] | "all">(
+    "all"
+  );
   const [showAuthFlow, setShowAuthFlow] = useState(false);
 
   // Empty array for agents - removing fake data
@@ -71,58 +81,67 @@ export default function MyAgentsPage() {
     avgSuccessRate: 0,
     totalCost: 0,
     busyAgents: 0,
-    avgLoad: 0
+    avgLoad: 0,
   };
 
-  const getAgentIcon = (type: HiredAgent['type']) => {
+  const getAgentIcon = (type: HiredAgent["type"]) => {
     switch (type) {
-      case 'code':
+      case "code":
         return <CommandLineIcon className="w-6 h-6" />;
-      case 'research':
+      case "research":
         return <DocumentMagnifyingGlassIcon className="w-6 h-6" />;
-      case 'assistant':
+      case "assistant":
         return <ChatBubbleLeftRightIcon className="w-6 h-6" />;
-      case 'analysis':
+      case "analysis":
         return <PresentationChartLineIcon className="w-6 h-6" />;
-      case 'security':
+      case "security":
         return <ShieldCheckIcon className="w-6 h-6" />;
-      case 'data':
+      case "data":
         return <CircleStackIcon className="w-6 h-6" />;
-      case 'cloud':
+      case "cloud":
         return <CloudIcon className="w-6 h-6" />;
-      case 'nlp':
+      case "nlp":
         return <DocumentDuplicateIcon className="w-6 h-6" />;
       default:
         return <CogIcon className="w-6 h-6" />;
     }
   };
 
-  const getStatusColor = (status: HiredAgent['status']) => {
+  const getStatusColor = (status: HiredAgent["status"]) => {
     switch (status) {
-      case 'active':
-        return 'bg-green-500';
-      case 'busy':
-        return 'bg-yellow-500';
-      case 'idle':
-        return 'bg-gray-400';
+      case "active":
+        return "bg-green-500";
+      case "busy":
+        return "bg-yellow-500";
+      case "idle":
+        return "bg-gray-400";
       default:
-        return 'bg-gray-400';
+        return "bg-gray-400";
     }
   };
 
   const getLoadColor = (load: number) => {
-    if (load >= 90) return 'text-red-500';
-    if (load >= 70) return 'text-yellow-500';
-    return 'text-green-500';
+    if (load >= 90) return "text-red-500";
+    if (load >= 70) return "text-yellow-500";
+    return "text-green-500";
   };
 
-  const filteredAgents = hiredAgents.filter(agent =>
-    (selectedType === 'all' || agent.type === selectedType) &&
-    (agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    agent.description.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredAgents = hiredAgents.filter(
+    (agent) =>
+      (selectedType === "all" || agent.type === selectedType) &&
+      (agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        agent.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const agentTypes: HiredAgent['type'][] = ['code', 'research', 'analysis', 'security', 'data', 'cloud', 'nlp'];
+  const agentTypes: HiredAgent["type"][] = [
+    "code",
+    "research",
+    "analysis",
+    "security",
+    "data",
+    "cloud",
+    "nlp",
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -138,10 +157,11 @@ export default function MyAgentsPage() {
                 </span>
               </h1>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Your AI agent command center awaits. Deploy your first agent to get started.
+                Your AI agent command center awaits. Deploy your first agent to
+                get started.
               </p>
             </div>
-            <Link href="/marketplace/browse">
+            <Link href="/marketplace/getting-started/create">
               <Button className="bg-[#0A84FF] hover:bg-[#0A84FF]/90 flex items-center gap-2">
                 <RocketLaunchIcon className="w-5 h-5" />
                 Deploy Your First Agent
@@ -164,8 +184,9 @@ export default function MyAgentsPage() {
                 Begin Your AI Journey
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
-                Transform your operations with AI agents. Deploy your first agent and watch as it automates tasks, 
-                processes data, and drives efficiency across your workflow.
+                Transform your operations with AI agents. Deploy your first
+                agent and watch as it automates tasks, processes data, and
+                drives efficiency across your workflow.
               </p>
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
@@ -191,7 +212,10 @@ export default function MyAgentsPage() {
                 </div>
               </div>
               <Link href="/marketplace">
-                <Button size="lg" className="bg-[#0A84FF] hover:bg-[#0A84FF]/90">
+                <Button
+                  size="lg"
+                  className="bg-[#0A84FF] hover:bg-[#0A84FF]/90"
+                >
                   Explore Available Agents
                   <ArrowRightIcon className="w-5 h-5 ml-2" />
                 </Button>
@@ -219,8 +243,9 @@ export default function MyAgentsPage() {
                 The Future of AI Management
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-                Join an exclusive group of innovative companies shaping the future of AI operations. 
-                Formation's AI Command Center is now accepting early access partners.
+                Join an exclusive group of innovative companies shaping the
+                future of AI operations. Formation's AI Command Center is now
+                accepting early access partners.
               </p>
               <div className="flex items-center justify-center">
                 <AuthButton />
@@ -239,9 +264,12 @@ export default function MyAgentsPage() {
               <div className="text-purple-600 mb-4">
                 <StarIcon className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Early Partner Benefits</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                Early Partner Benefits
+              </h3>
               <p className="text-gray-600">
-                Exclusive pricing, priority support, and direct input into our product roadmap.
+                Exclusive pricing, priority support, and direct input into our
+                product roadmap.
               </p>
             </div>
             <div className="marketing-card">
@@ -250,7 +278,8 @@ export default function MyAgentsPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Enterprise Ready</h3>
               <p className="text-gray-600">
-                SOC 2 compliant with dedicated support and custom deployment options.
+                SOC 2 compliant with dedicated support and custom deployment
+                options.
               </p>
             </div>
             <div className="marketing-card">
@@ -259,7 +288,8 @@ export default function MyAgentsPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Instant Setup</h3>
               <p className="text-gray-600">
-                Deploy your first AI agent in under 60 seconds. No complex configuration needed.
+                Deploy your first AI agent in under 60 seconds. No complex
+                configuration needed.
               </p>
             </div>
           </motion.div>
@@ -278,11 +308,10 @@ export default function MyAgentsPage() {
                   Sneak Peek
                 </span>
               </div>
-              <h2 className="text-3xl font-bold mb-4">
-                Your AI Fleet Awaits
-              </h2>
+              <h2 className="text-3xl font-bold mb-4">Your AI Fleet Awaits</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                Get early access to our growing marketplace of specialized AI agents.
+                Get early access to our growing marketplace of specialized AI
+                agents.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -315,17 +344,18 @@ export default function MyAgentsPage() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="text-center bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-xl p-12 text-white"
           >
-            <h2 className="text-3xl font-bold mb-6">
-              Join the AI Revolution
-            </h2>
+            <h2 className="text-3xl font-bold mb-6">Join the AI Revolution</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-              Be among the first to experience the future of AI operations. 
+              Be among the first to experience the future of AI operations.
               Early access spots are limited.
             </p>
-            <AuthButton className="border-white text-white" buttonStyle="bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors" />
+            <AuthButton
+              className="border-white text-white"
+              buttonStyle="bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors"
+            />
           </motion.div>
         </div>
       )}
     </div>
   );
-} 
+}
