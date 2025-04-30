@@ -88,32 +88,54 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Trigger GitHub Action
-    // const res = await fetch(
-    //   `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW_FILE}/dispatches`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       Authorization: `Bearer ${GITHUB_TOKEN}`,
-    //       "Content-Type": "application/json",
-    //       Accept: "application/vnd.github+json",
-    //     },
-    //     body: JSON.stringify({
-    //       ref: "main", // or the branch you want to deploy from
-    //       inputs: {
-    //         deployment_id: data.id, // from your DB
-    //         agent_id: data.agent_id,
-    //         docker_tag: data.commit_sha || data.id, // e.g. commit SHA or deploymentId
-    //         // deployment_spec_path: "deployment-spec.yaml" // optional
-    //       },
-    //     }),
-    //   }
-    // );
+    // Try to trigger GitHub Action
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW_FILE}/dispatches`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${GITHUB_TOKEN}`,
+            "Content-Type": "application/json",
+            Accept: "application/vnd.github+json",
+          },
+          body: JSON.stringify({
+            ref: "main", // or the branch you want to deploy from
+            inputs: {
+              deployment_id: data.id, // from your DB
+              agent_id: data.agent_id,
+              docker_tag: `${data.name}:latest`, // e.g. commit SHA or deploymentId
+              // deployment_spec_path: "deployment-spec.yaml" // optional
+            },
+          }),
+        }
+      );
 
-    // if (!res.ok) {
-    //   const error = await res.json();
-    //   throw new Error(`Failed to trigger GitHub Action: ${error.message}`);
-    // }
+      if (!res.ok) {
+        const ghError = await res.json();
+        // Update deployment status to failed
+        await supabase
+          .from("deployments")
+          .update({
+            status: "failed",
+            updated_at: new Date().toISOString(),
+            logs: `GitHub Action error: ${ghError.message}`,
+          })
+          .eq("id", data.id);
+        throw new Error(`Failed to trigger GitHub Action: ${ghError.message}`);
+      }
+    } catch (ghError: any) {
+      console.error("Error triggering GitHub Action:", ghError);
+      // Already handled above, just return error
+      return NextResponse.json(
+        {
+          error: "Failed to trigger GitHub Action",
+          details: ghError.message || ghError,
+          deployment: data,
+        },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ deployment: data }, { status: 201 });
   } catch (error) {
@@ -121,6 +143,91 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Failed to create deployment",
+        details: (error as Error).message,
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// Endpoint to retry failed GitHub Action triggers for a deployment
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { deploymentId } = body;
+    if (!deploymentId) {
+      return NextResponse.json(
+        { error: "deploymentId is required" },
+        { status: 400 }
+      );
+    }
+
+    // Fetch the deployment
+    const { data, error } = await supabase
+      .from("deployments")
+      .select("*")
+      .eq("id", deploymentId)
+      .single();
+    if (error || !data) {
+      return NextResponse.json(
+        { error: "Deployment not found" },
+        { status: 404 }
+      );
+    }
+
+    // Try to trigger GitHub Action again
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW_FILE}/dispatches`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${GITHUB_TOKEN}`,
+            "Content-Type": "application/json",
+            Accept: "application/vnd.github+json",
+          },
+          body: JSON.stringify({
+            ref: "main",
+            inputs: {
+              deployment_id: data.id,
+              agent_id: data.agent_id,
+              docker_tag: data.commit_sha || data.id,
+            },
+          }),
+        }
+      );
+      if (!res.ok) {
+        const ghError = await res.json();
+        // Update deployment status to failed
+        await supabase
+          .from("deployments")
+          .update({
+            status: "failed",
+            updated_at: new Date().toISOString(),
+            logs: `GitHub Action error: ${ghError.message}`,
+          })
+          .eq("id", data.id);
+        throw new Error(`Failed to trigger GitHub Action: ${ghError.message}`);
+      }
+      // If successful, update status to pending (or running, as appropriate)
+      await supabase
+        .from("deployments")
+        .update({ status: "pending", updated_at: new Date().toISOString() })
+        .eq("id", data.id);
+      return NextResponse.json({ success: true, deploymentId: data.id });
+    } catch (ghError: any) {
+      return NextResponse.json(
+        {
+          error: "Failed to re-trigger GitHub Action",
+          details: ghError.message || ghError,
+        },
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Failed to retry GitHub Action trigger",
         details: (error as Error).message,
       },
       { status: 500 }

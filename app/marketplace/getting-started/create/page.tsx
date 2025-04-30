@@ -239,6 +239,7 @@ export default function DevelopersGettingStarted() {
   const [memory, setMemory] = useState(2048);
   const [deploying, setDeploying] = useState(false);
   const [deploySuccess, setDeploySuccess] = useState(false);
+  const [deployError, setDeployError] = useState("");
   const isLoggedIn = useIsLoggedIn();
   const { accounts } = useAuth();
 
@@ -378,6 +379,7 @@ export default function DevelopersGettingStarted() {
   const handleDeploy = async () => {
     setDeploying(true);
     setDeploySuccess(false);
+    setDeployError(""); // Clear previous error
     try {
       // TODO: Replace with real account_id and agent_id from user context/auth
       const accountId = accounts[0].id;
@@ -409,13 +411,15 @@ export default function DevelopersGettingStarted() {
 
       if (!response.ok) {
         const error = await response.json();
+        setDeployError(error.error || "Failed to create deployment");
         throw new Error(error.error || "Failed to create deployment");
       }
 
       setDeploySuccess(true);
     } catch (error) {
+      setDeployError(error.message || "Deployment failed");
       // Optionally show error to user
-      alert(error.message || "Deployment failed");
+      // alert(error.message || "Deployment failed");
     } finally {
       setDeploying(false);
     }
@@ -479,47 +483,6 @@ export default function DevelopersGettingStarted() {
               </Button>
             </Link>
           </div> */}
-        </div>
-
-        {/* Progress Indicator */}
-        <div className="relative max-w-3xl mx-auto">
-          <div className="flex justify-between items-center mb-2">
-            {[1, 2, 3].map((step) => (
-              <div
-                key={step}
-                className={`flex flex-col items-center relative z-10 transition-all ${
-                  currentStep >= step ? "opacity-100" : "opacity-50"
-                }`}
-              >
-                <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    currentStep === step
-                      ? "bg-gradient-to-br from-blue-500 to-green-400 text-white"
-                      : currentStep > step
-                        ? "bg-gradient-to-br from-blue-100 to-green-100 text-blue-500"
-                        : "bg-gray-100 text-gray-400"
-                  }`}
-                >
-                  {step === 1 && <RocketIcon className="w-6 h-6" />}
-                  {step === 2 && <Settings className="w-6 h-6" />}
-                  {step === 3 && <UploadCloud className="w-6 h-6" />}
-                </div>
-                <span
-                  className={`text-sm font-medium mt-2 ${
-                    currentStep === step ? "text-blue-600" : "text-gray-500"
-                  }`}
-                >
-                  Step {step}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="absolute top-6 left-0 right-0 h-1 bg-gray-200 -z-0">
-            <div
-              className="h-full bg-gradient-to-r from-blue-500 to-green-400 transition-all duration-300"
-              style={{ width: `${(currentStep - 1) * 50}%` }}
-            ></div>
-          </div>
         </div>
 
         {/* Step 1: Select Pre-Built Agent */}
@@ -1090,6 +1053,37 @@ export default function DevelopersGettingStarted() {
                       <Button variant="outline" onClick={handleUpgrade}>
                         Upgrade Now
                       </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Error message for deployment failure */}
+                {deployError && (
+                  <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                    <svg
+                      className="w-5 h-5 text-red-600 mt-0.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M18.364 5.636l-1.414-1.414A9 9 0 105.636 18.364l1.414 1.414A9 9 0 1018.364 5.636z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 8v4m0 4h.01"
+                      />
+                    </svg>
+                    <div>
+                      <h5 className="font-medium text-red-800 mb-1">
+                        Deployment Failed
+                      </h5>
+                      <p className="text-red-700 text-sm">{deployError}</p>
                     </div>
                   </div>
                 )}
