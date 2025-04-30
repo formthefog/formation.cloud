@@ -46,3 +46,32 @@ export async function PATCH(request: NextRequest, { params }: any) {
     );
   }
 }
+
+export async function GET(request: NextRequest, { params }: any) {
+  try {
+    const { deploymentId } = await params;
+    const { data, error } = await supabase
+      .from("deployments")
+      .select("*, agent:agents(*)")
+      .eq("id", deploymentId)
+      .single();
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+    if (!data) {
+      return NextResponse.json(
+        { error: "Deployment not found" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json({ deployment: data }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Failed to fetch deployment",
+        details: (error as Error).message,
+      },
+      { status: 500 }
+    );
+  }
+}
