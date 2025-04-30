@@ -4,6 +4,7 @@ import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { toast } from "sonner";
 import { getAuthToken } from "@dynamic-labs/sdk-react-core";
+import { AuthProvider } from "@/components/auth-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -37,7 +38,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                   user_id: user.userId,
                   email: user?.email,
                   address: primaryWallet?.address,
-                  name: "Example User",
+                  name: user.firstName || user.lastName || "--",
                   provider_account_id: user.userId,
                   access_token: token,
                   refresh_token: token,
@@ -60,30 +61,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         },
       }}
     >
-      {children}
+      <AuthProvider>{children}</AuthProvider>
     </DynamicContextProvider>
   );
-}
-
-function extractAccountDataFromJWT(jwt: any) {
-  const userId = jwt.sub;
-  const email = jwt.email;
-  const blockchainCred = jwt.verified_credentials.find(
-    (c: any) => c.format === "blockchain"
-  );
-  const emailCred = jwt.verified_credentials.find(
-    (c: any) => c.format === "email"
-  );
-  const oauthCred = jwt.verified_credentials.find(
-    (c: any) => c.format === "oauth"
-  );
-
-  return {
-    user_id: userId,
-    email: emailCred?.email || email,
-    primary_address: blockchainCred?.address,
-    name: oauthCred?.oauth_display_name || oauthCred?.oauth_username,
-    profile_image: oauthCred?.oauth_account_photos?.[0] || null,
-    // add other fields as needed
-  };
 }

@@ -31,6 +31,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Image from "next/image";
 import { AuthButton } from "@/components/AuthButton";
 import MonetizationBanner from "@/components/MonetizationBanner";
+import { useAuth } from "@/components/auth-provider";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -103,6 +104,8 @@ export default function DevelopersGettingStarted() {
   const step2Ref = useRef(null);
   const step3Ref = useRef(null);
   const [avatar, setAvatar] = useState(null);
+  const configPanelRef = useRef(null);
+  const [existingDeployment, setExistingDeployment] = useState(null);
 
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -137,67 +140,85 @@ export default function DevelopersGettingStarted() {
   // 1. Define pre-built agents (from screenshot and code examples)
   const prebuiltAgents = [
     {
-      id: "blog-post-generator",
-      name: "Blog Post Generator",
-      description: "Generate high-quality blog posts on any topic with AI.",
-      emoji: "📝",
-    },
-    {
-      id: "books-recommender",
-      name: "Books Recommender",
-      description:
-        "Get personalized book recommendations based on your interests.",
-      emoji: "📚",
-    },
-    {
-      id: "discussion-team",
-      name: "Discussion Team",
-      description: "Facilitate and summarize team discussions with AI.",
-      emoji: "💬",
-    },
-    {
-      id: "finance-agent",
+      id: "1af9cf0e-de4f-4bed-9659-ca314de68790",
       name: "Finance Agent",
       description: "Automate financial analysis and reporting tasks.",
       emoji: "💹",
     },
     {
-      id: "investment-report-generator",
-      name: "Investment Report Generator",
-      description: "Create detailed investment reports and summaries.",
-      emoji: "📈",
-    },
-    {
-      id: "movie-recommender",
-      name: "Movie Recommender",
-      description: "Find movies you'll love with AI-powered recommendations.",
-      emoji: "🎬",
-    },
-    {
-      id: "research-agent",
-      name: "Research Agent",
-      description: "Automate research and information gathering tasks.",
-      emoji: "🔎",
-    },
-    {
-      id: "start-up-idea-validator",
-      name: "Startup Idea Validator",
-      description:
-        "Validate startup ideas with market and competitor analysis.",
-      emoji: "🚀",
-    },
-    {
-      id: "teaching-assistant",
+      id: "2ff31a7d-3fa2-41e0-865b-80dbf734b059",
       name: "Teaching Assistant",
       description:
         "Support educators with lesson planning and student feedback.",
       emoji: "🧑‍🏫",
     },
     {
-      id: "travel-agent",
+      id: "35128668-6491-4ac2-a6c3-9571be815b3b",
+      name: "News Agency Team",
+      description: "A professional news team powered by AI.",
+      emoji: "📰",
+    },
+    {
+      id: "398b3a6d-5eab-49c1-953b-be093a52146a",
       name: "Travel Agent",
       description: "Plan trips and itineraries with AI-powered travel advice.",
       emoji: "🌍",
+    },
+    {
+      id: "4b042214-dd04-4d4d-981f-53237b4c7915",
+      name: "Investment Report Generator",
+      description: "Create detailed investment reports and summaries.",
+      emoji: "📈",
+    },
+    {
+      id: "5fdd1cf1-ae5b-4f84-99a3-721fedb293e8",
+      name: "Recipe Creator",
+      description: "A creative AI for generating recipes.",
+      emoji: "👩‍🍳",
+    },
+    {
+      id: "79d43c33-9d60-4d2a-afab-e6c0114cdfb7",
+      name: "Discussion Team",
+      description: "Facilitate and summarize team discussions with AI.",
+      emoji: "💬",
+    },
+    {
+      id: "8b8d2f23-872e-4fc7-8311-d426ad10848a",
+      name: "Startup Idea Validator",
+      description:
+        "Validate startup ideas with market and competitor analysis.",
+      emoji: "🚀",
+    },
+    {
+      id: "917036af-d23b-4f85-8c4a-157a08537125",
+      name: "GitHub Repo Analyzer",
+      description: "An AI agent for analyzing GitHub repositories.",
+      emoji: "🐙",
+    },
+    {
+      id: "9d43c611-612d-4a8d-945e-2a9420f59d9f",
+      name: "YouTube Agent",
+      description: "An expert agent for YouTube content analysis.",
+      emoji: "📺",
+    },
+    {
+      id: "ccffd95f-d27f-48d7-9b9b-449c43926159",
+      name: "Books Recommender",
+      description:
+        "Get personalized book recommendations based on your interests.",
+      emoji: "📚",
+    },
+    {
+      id: "eb89a0a3-6c6a-4392-8965-1de5edf51561",
+      name: "Research Agent",
+      description: "Automate research and information gathering tasks.",
+      emoji: "🔎",
+    },
+    {
+      id: "ee8b6b8a-6943-40ad-9a0f-dbd116411eb2",
+      name: "Movie Recommender",
+      description: "Find movies you'll love with AI-powered recommendations.",
+      emoji: "🎬",
     },
   ];
 
@@ -219,6 +240,7 @@ export default function DevelopersGettingStarted() {
   const [deploying, setDeploying] = useState(false);
   const [deploySuccess, setDeploySuccess] = useState(false);
   const isLoggedIn = useIsLoggedIn();
+  const { accounts } = useAuth();
 
   // Configuration templates
   const configTemplates = [
@@ -272,6 +294,14 @@ export default function DevelopersGettingStarted() {
       setCpu(template.config.cpu);
       setMemory(template.config.memory);
     }
+    // Smooth scroll to config panel after user selects a template
+    setTimeout(() => {
+      configPanelRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      configPanelRef.current?.focus?.();
+    }, 100);
   };
 
   // Restore selection from localStorage on mount
@@ -302,15 +332,93 @@ export default function DevelopersGettingStarted() {
       .finally(() => setLoadingCode(false));
   }, [selectedAgentIndex]);
 
+  // Fetch deployments after authentication
+  useEffect(() => {
+    const fetchDeployments = async () => {
+      if (!isLoggedIn || !accounts || !accounts[0]?.id) return;
+      try {
+        const response = await fetch(
+          `/api/deployments?account_id=${accounts[0].id}`
+        );
+        if (response.ok) {
+          const { deployments } = await response.json();
+          if (deployments && deployments.length > 0) {
+            const deployment = deployments[0]; // Only allow 1 for starter tier
+            setExistingDeployment(deployment);
+            // Pre-fill form fields from deployment config
+            if (deployment.config) {
+              setAgentName(deployment.config.name || "");
+              setAgentDescription(deployment.config.description || "");
+              setAgentModel(deployment.config.model || "gpt-4");
+              setAgentTemperature(deployment.config.temperature ?? 0.7);
+              setCpu(deployment.config.cpu ?? 2);
+              setMemory(deployment.config.memory ?? 2048);
+              setAvatar(deployment.config.avatar || null);
+            }
+            setDeploySuccess(true);
+            setCurrentStep(3);
+          }
+        }
+      } catch (err) {
+        // Ignore errors, user just has no deployments
+      }
+    };
+    fetchDeployments();
+    // Only run when logged in and accounts are available
+  }, [isLoggedIn, accounts]);
+
+  // Scroll to step 3 if a deployment exists
+  useEffect(() => {
+    if (existingDeployment && step3Ref.current) {
+      step3Ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [existingDeployment]);
+
   // 4. Deploy handler (mock API call)
   const handleDeploy = async () => {
     setDeploying(true);
     setDeploySuccess(false);
-    // Simulate API call
-    setTimeout(() => {
-      setDeploying(false);
+    try {
+      // TODO: Replace with real account_id and agent_id from user context/auth
+      const accountId = accounts[0].id;
+      const agentId = selectedAgent.id;
+
+      // Compose config object from state
+      const config = {
+        name: agentName,
+        description: agentDescription,
+        model: agentModel,
+        temperature: agentTemperature,
+        cpu,
+        memory,
+        avatar,
+        // Add more config fields as needed
+      };
+
+      const response = await fetch("/api/deployments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          agent_id: agentId,
+          account_id: accountId,
+          config,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create deployment");
+      }
+
       setDeploySuccess(true);
-    }, 1200);
+    } catch (error) {
+      // Optionally show error to user
+      alert(error.message || "Deployment failed");
+    } finally {
+      setDeploying(false);
+    }
   };
 
   // Handle select and scroll
@@ -336,6 +444,11 @@ export default function DevelopersGettingStarted() {
       ? localStorage.getItem("selectedAgentId")
       : null;
   const isSelected = savedAgentId === selectedAgent.id;
+
+  // Add this helper for upgrade (replace with your actual upgrade URL or logic)
+  const handleUpgrade = () => {
+    window.location.href = "/marketplace/upgrade"; // Or open a modal, etc.
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
@@ -447,6 +560,7 @@ export default function DevelopersGettingStarted() {
                       }
                     `}
                     onClick={() => setSelectedAgentIndex(idx)}
+                    disabled={!!existingDeployment}
                   >
                     <span className="text-xl mr-2">{agent.emoji}</span>
                     <span className="flex flex-col text-left">
@@ -472,13 +586,13 @@ export default function DevelopersGettingStarted() {
                 </span>
 
                 <Button
-                  variant={isSelected ? "default" : "outline"}
-                  className={`text-sm px-4 py-2 ${isSelected ? "bg-green-500 text-white hover:bg-green-600" : ""}`}
-                  disabled={isSelected}
-                  aria-pressed={isSelected}
+                  variant="default"
+                  className="text-sm px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                   onClick={handleSelectAgent}
+                  aria-label="Continue to Step 2"
+                  disabled={!!existingDeployment}
                 >
-                  {isSelected ? "✓ Selected" : "Select"}
+                  Continue
                 </Button>
               </div>
               <div className="text-gray-500 mb-2 text-sm font-medium">
@@ -630,7 +744,12 @@ export default function DevelopersGettingStarted() {
             </div>
 
             {/* Configuration Panel - Right Side */}
-            <div className="flex-1 min-w-0 space-y-4">
+            <div
+              ref={configPanelRef}
+              tabIndex={-1}
+              aria-label="Agent Configuration Panel"
+              className="flex-1 min-w-0 space-y-4"
+            >
               <div
                 className="text-lg font-semibold text-blue-700 mb-1 flex items-center justify-between"
                 style={{ fontFamily: "Inter, Space Grotesk, sans-serif" }}
@@ -941,9 +1060,43 @@ export default function DevelopersGettingStarted() {
                   </div>
                 </div>
 
+                {existingDeployment && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 flex items-center gap-4 shadow-sm">
+                    <svg
+                      className="w-8 h-8 text-yellow-400 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"
+                      />
+                    </svg>
+                    <div className="flex-row items-center flex w-full">
+                      <div className="flex-1">
+                        <div className="font-semibold text-yellow-800 mb-1">
+                          Starter Tier Limit
+                        </div>
+                        <div className="text-yellow-700 text-sm mb-2">
+                          You can only deploy <b>one agent</b> on the Starter
+                          plan.
+                          <br />
+                          To deploy more agents, upgrade to a higher tier.
+                        </div>
+                      </div>
+                      <Button variant="outline" onClick={handleUpgrade}>
+                        Upgrade Now
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
                 <button
                   onClick={handleDeploy}
-                  disabled={deploying || deploySuccess}
+                  disabled={!!existingDeployment || deploying || deploySuccess}
                   className={`w-full py-3 rounded-lg font-medium text-white flex items-center justify-center gap-2 transition-all duration-300 ${
                     deploySuccess
                       ? "bg-green-500"
@@ -1030,14 +1183,17 @@ export default function DevelopersGettingStarted() {
                         configurations.
                       </p>
                       <div className="flex gap-2">
-                        <Link href="/marketplace/command-center">
-                          <button className="text-sm px-3 py-1 bg-white border border-gray-200 text-gray-700 rounded hover:bg-gray-50 transition-colors">
-                            View Dashboard
-                          </button>
+                        <Link
+                          href="/marketplace/command-center"
+                          className="w-full"
+                        >
+                          <Button className="text-sm px-3 w-full py-1 bg-white border border-gray-200 text-gray-700 rounded hover:bg-gray-50 transition-colors">
+                            View Command Center
+                          </Button>
                         </Link>
-                        <button className="text-sm px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
-                          Test Agent
-                        </button>
+                        <Button className="text-sm w-full px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                          Chat With {agentName}
+                        </Button>
                       </div>
                     </div>
                   </div>

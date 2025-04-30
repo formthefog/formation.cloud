@@ -1,0 +1,91 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Command Center Specification: Agent Command HQ
+
+## Core Interface Components
+
+### 1. Dashboard Overview
+- **Agent Fleet Summary**: Visual cards showing total active agents, agents requiring attention, and system health status
+- **Activity Timeline**: Real-time feed of agent activities across the system
+- **Resource Utilization**: Dynamic graphs showing CPU, memory, and storage usage
+- **Key Performance Metrics**: Custom KPIs for agent response times, task completion rates, etc.
+
+### 2. Agent Directory
+- **Grid/List View Toggle**: Modern, sortable view of all agents with status indicators
+- **Quick-Filter System**: Instantly filter agents by status, type, last activity, etc.
+- **Search with Natural Language**: "Show me all agents that processed more than 1000 requests yesterday"
+- **Batch Operations**: Select multiple agents for mass updates or configuration changes
+
+### 3. Agent Detail View
+- **Command Console**: Direct interface to communicate with the agent
+- **Vitals Dashboard**: Performance metrics specific to this agent
+- **Conversation History**: Searchable log of all interactions
+- **Prompt Engineering Interface**: Code editor for modifying initialization prompts with syntax highlighting
+- **Container Management**: Resource allocation controls, restart/pause options
+- **Storage Integration Hub**: One-click connections to AWS S3, Google Cloud Storage, Azure Blob, etc.
+
+## Technical Architecture
+
+### Frontend
+- **Framework**: React with TypeScript for type safety
+- **State Management**: Redux for complex state management across components
+- **Styling**: Tailwind CSS for rapid, consistent styling
+- **Component Library**: Shadcn/UI for elegant, accessible components
+- **Visualizations**: Recharts for performance graphs, D3.js for complex visualizations
+
+### Backend
+- **API Architecture**: GraphQL for flexible data fetching
+- **Subscription Model**: WebSockets for real-time updates
+- **Authentication**: OAuth 2.0 with MFA support
+- **Container Orchestration**: Kubernetes integration for agent scaling
+- **Logging**: ELK stack (Elasticsearch, Logstash, Kibana) for comprehensive logging
+
+## Key User Flows
+
+### Agent Creation
+1. User selects "New Agent" from dashboard
+2. Guided wizard with templates for common agent types
+3. Advanced mode for custom configuration
+4. One-click deployment with status tracking
+
+### Agent Conversation
+1. Select agent from directory or dashboard
+2. Enter chat interface with context panel showing agent details
+3. Option to adjust model parameters on-the-fly
+4. Ability to save conversation snippets as reusable templates
+
+### Prompt Engineering
+1. Access agent configuration through detail view
+2. Edit prompt in specialized editor with version control
+3. Test changes in sandbox environment before deployment
+4. View prompt performance metrics after implementation
+
+### Storage Integration
+1. From agent detail view, select "Add Storage"
+2. Choose from pre-configured providers with OAuth authentication
+3. Set access policies and retention rules
+4. Monitor storage utilization from agent dashboard
+
+## UX Enhancements
+
+### Visual Design
+- **Color Theme**: Dark mode default with light mode option
+- **Typography**: System font stack with monospace for code/console elements
+- **Animations**: Subtle micro-interactions for state changes
+- **Layout**: Responsive design with collapsible panels for focus modes
+
+### User Assistance
+- **Contextual Help**: AI-powered assistant that understands the command center
+- **Keyboard Shortcuts**: Comprehensive shortcuts for power users
+- **Command Palette**: Spotlight-style search for quick navigation (Cmd/Ctrl+K)
+- **Onboarding**: Interactive tutorials for new users
+
+## Implementation Priority
+
+1. **Phase 1**: Core dashboard, agent directory, and basic conversation interface
+2. **Phase 2**: Advanced agent management, prompt engineering tools
+3. **Phase 3**: Storage integrations, advanced analytics
+4. **Phase 4**: Automation, batch operations, and API access

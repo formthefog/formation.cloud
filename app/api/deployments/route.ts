@@ -6,6 +6,48 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // Needs workflow scope
+const REPO_OWNER = "hathbanger";
+const REPO_NAME = "formation-agents";
+const WORKFLOW_FILE = "deploy-agent.yml"; // or .github/workflows/deploy-agent.yml
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const accountId = searchParams.get("account_id");
+    if (!accountId) {
+      return NextResponse.json(
+        { error: "account_id is required" },
+        { status: 400 }
+      );
+    }
+    const { data, error } = await supabase
+      .from("deployments")
+      .select("*, agent:agents(*)")
+      .eq("account_id", accountId);
+    if (error) {
+      console.error("Error fetching deployments:", error);
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+    if (!data || data.length === 0) {
+      return NextResponse.json(
+        { error: "No deployments found" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json({ deployments: data }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching deployments:", error);
+    return NextResponse.json(
+      {
+        error: "Failed to fetch deployments",
+        details: (error as Error).message,
+      },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -42,11 +84,40 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
+      console.error("Error inserting deployment:", error);
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
+    // Trigger GitHub Action
+    // const res = await fetch(
+    //   `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW_FILE}/dispatches`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       Authorization: `Bearer ${GITHUB_TOKEN}`,
+    //       "Content-Type": "application/json",
+    //       Accept: "application/vnd.github+json",
+    //     },
+    //     body: JSON.stringify({
+    //       ref: "main", // or the branch you want to deploy from
+    //       inputs: {
+    //         deployment_id: data.id, // from your DB
+    //         agent_id: data.agent_id,
+    //         docker_tag: data.commit_sha || data.id, // e.g. commit SHA or deploymentId
+    //         // deployment_spec_path: "deployment-spec.yaml" // optional
+    //       },
+    //     }),
+    //   }
+    // );
+
+    // if (!res.ok) {
+    //   const error = await res.json();
+    //   throw new Error(`Failed to trigger GitHub Action: ${error.message}`);
+    // }
+
     return NextResponse.json({ deployment: data }, { status: 201 });
   } catch (error) {
+    console.error("Error creating deployment:", error);
     return NextResponse.json(
       {
         error: "Failed to create deployment",

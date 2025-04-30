@@ -6,12 +6,9 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { deploymentId: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: any) {
   try {
-    const { deploymentId } = params;
+    const { deploymentId } = await params;
     const body = await request.json();
 
     // Only allow updating certain fields
