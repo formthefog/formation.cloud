@@ -511,11 +511,11 @@ export default function DevelopersGettingStarted() {
           <div className="flex flex-col md:flex-row gap-6 items-start justify-center max-w-5xl mx-auto w-full mt-2">
             {/* Agent Selection Cards - Compact & Flat */}
             <div className="flex flex-col gap-1.5 w-56 flex-shrink-0 flex-grow-0 items-center">
-              <div className="flex flex-col gap-1.5 w-full">
+              <div className="flex border border-gray-200 rounded-lg p-3 max-h-[800px] overflow-y-auto flex-col gap-1.5 w-full">
                 {prebuiltAgents.map((agent, idx) => (
                   <button
                     key={agent.id}
-                    className={`group flex flex-row items-center gap-3 px-2 py-2 rounded-lg border min-h-[44px] w-full bg-white/80 hover:bg-blue-50 transition-colors duration-150
+                    className={`group flex flex-row items-center gap-3 px-2 py-2 rounded-lg border  w-full bg-white/80 hover:bg-blue-50 transition-colors duration-150
                       ${
                         idx === selectedAgentIndex
                           ? "border-blue-500 border-l-4 pl-2 bg-blue-50"
