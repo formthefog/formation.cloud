@@ -64,7 +64,7 @@ export default function MarketplaceLayout({
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
-      <div className="flex max-h-[calc(100vh-85px)] overflow-hidden">
+      <div className="flex">
         <Sidebar
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}

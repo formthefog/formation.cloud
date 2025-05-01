@@ -39,43 +39,6 @@ export default function EnhancedChatMessages({
     sendMessage(promptText);
   };
 
-  // Example prompts with icons
-  const examplePrompts = [
-    {
-      text: "Plan a 7-day itinerary for a family trip to Japan in spring",
-      icon: <Map size={20} />,
-      color: "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300",
-    },
-    {
-      text: "Suggest a romantic weekend getaway in Europe",
-      icon: <Heart size={20} />,
-      color: "bg-pink-100 dark:bg-pink-900 text-pink-600 dark:text-pink-300",
-    },
-    {
-      text: "Create a packing list for a hiking trip in Patagonia",
-      icon: <Backpack size={20} />,
-      color:
-        "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300",
-    },
-    {
-      text: "Recommend budget-friendly destinations for solo travelers",
-      icon: <Wallet size={20} />,
-      color:
-        "bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300",
-    },
-    {
-      text: "Plan a food-focused tour of Italy",
-      icon: <Utensils size={20} />,
-      color:
-        "bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300",
-    },
-    {
-      text: "Share travel safety tips for visiting Southeast Asia",
-      icon: <Shield size={20} />,
-      color: "bg-teal-100 dark:bg-teal-900 text-teal-600 dark:text-teal-300",
-    },
-  ];
-
   const isConversationEmpty =
     !conversations[selectedDeployment.id] ||
     conversations[selectedDeployment.id].length === 0;
@@ -89,7 +52,7 @@ export default function EnhancedChatMessages({
             <div className="py-8 ">
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-semibold mb-2 text-gray-800 dark:text-gray-200">
-                  Your Travel Assistant
+                  Your {selectedDeployment.agent.name.replace(/-/g, " ")}
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400">
                   Select a suggestion or ask your own travel question
@@ -97,24 +60,21 @@ export default function EnhancedChatMessages({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {examplePrompts.map((prompt, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleExampleClick(prompt.text)}
-                    className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 text-left hover:bg-gray-50 dark:hover:bg-gray-750 transition-all duration-200 shadow-sm hover:shadow group"
-                  >
-                    <div className="flex items-start">
-                      <div
-                        className={`h-10 w-10 rounded-full ${prompt.color} flex items-center justify-center mr-4 group-hover:scale-110 transition-transform`}
-                      >
-                        {prompt.icon}
+                {selectedDeployment.agent.metadata.example_prompts.map(
+                  (prompt, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleExampleClick(prompt)}
+                      className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 text-left hover:bg-gray-50 dark:hover:bg-gray-750 transition-all duration-200 shadow-sm hover:shadow group"
+                    >
+                      <div className="flex items-start">
+                        <p className="text-gray-700 dark:text-gray-300 mt-1">
+                          {prompt}
+                        </p>
                       </div>
-                      <p className="text-gray-700 dark:text-gray-300 mt-1">
-                        {prompt.text}
-                      </p>
-                    </div>
-                  </button>
-                ))}
+                    </button>
+                  )
+                )}
               </div>
             </div>
           )}

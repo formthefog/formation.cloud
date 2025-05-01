@@ -51,6 +51,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { AgentDeployment } from "@/types/agent";
@@ -58,7 +59,7 @@ import { Agent } from "http";
 import AgentChatHeader from "./components/AgentChatHeader";
 import AgentChatMessages from "./components/AgentChatMessages";
 import AgentChatInput from "./components/AgentChatInput";
-import { ArrowRightIcon, KeyIcon, Link } from "lucide-react";
+import { ArrowRightIcon, KeyIcon } from "lucide-react";
 import AgentChatList from "./components/AgentChatList";
 import AgentSidebar from "./components/AgentSidebar";
 
@@ -382,7 +383,7 @@ export default function AgentChatPage() {
                   to get started.
                 </p>
               </div>
-              <Link href="/marketplace/browse">
+              <Link href="/marketplace/getting-started/create">
                 <Button className="bg-[#0A84FF] hover:bg-[#0A84FF]/90 flex items-center gap-2">
                   <RocketLaunchIcon className="w-5 h-5" />
                   Deploy Your First Agent
@@ -433,7 +434,7 @@ export default function AgentChatPage() {
                     </p>
                   </div>
                 </div>
-                <Link href="/marketplace">
+                <Link href="/marketplace/getting-started/create">
                   <Button
                     size="lg"
                     className="bg-[#0A84FF] hover:bg-[#0A84FF]/90"
@@ -688,13 +689,12 @@ export default function AgentChatPage() {
                   Choose an agent from the sidebar or create a new one to begin
                   a conversation.
                 </p>
-                <Button
-                  onClick={() => setIsNewChatDialogOpen(true)}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <PlusIcon className="h-5 w-5 mr-2" />
-                  Create New Agent
-                </Button>
+                <Link href="/marketplace/getting-started/create">
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    <PlusIcon className="h-5 w-5 mr-2" />
+                    Create New Agent
+                  </Button>
+                </Link>
               </div>
             </div>
           )}

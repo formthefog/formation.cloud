@@ -185,15 +185,6 @@ export default function AgentChatList({
               ? "Try adjusting your search query"
               : "Deploy your first agent to start chatting"}
           </p>
-          {!searchQuery && (
-            <Button
-              className="mt-4 bg-blue-600 hover:bg-blue-700"
-              onClick={() => setIsNewChatDialogOpen(true)}
-            >
-              <PlusIcon className="h-5 w-5 mr-2" />
-              Add New Agent
-            </Button>
-          )}
         </div>
       )}
     </div>
