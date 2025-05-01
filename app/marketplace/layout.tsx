@@ -14,7 +14,7 @@ export default function MarketplaceLayout({
   const [categoryCount, setCategoryCount] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [deployedAgents, setDeployedAgents] = useState([]);
-  
+
   // Close sidebar by default on mobile
   useEffect(() => {
     const handleResize = () => {
@@ -28,16 +28,32 @@ export default function MarketplaceLayout({
     // Set initial state
     handleResize();
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Default metrics - these could be fetched from an API in a real implementation
   const metrics = [
-    { label: "Active Agents", value: "50,000+", description: "AI agents deployed globally" },
-    { label: "Processing Power", value: "1M+", description: "Requests processed daily" },
-    { label: "Customer Satisfaction", value: "98%", description: "Average satisfaction rate" },
-    { label: "Cost Savings", value: "$2M+", description: "Average yearly savings per enterprise customer" }
+    {
+      label: "Active Agents",
+      value: "50,000+",
+      description: "AI agents deployed globally",
+    },
+    {
+      label: "Processing Power",
+      value: "1M+",
+      description: "Requests processed daily",
+    },
+    {
+      label: "Customer Satisfaction",
+      value: "98%",
+      description: "Average satisfaction rate",
+    },
+    {
+      label: "Cost Savings",
+      value: "$2M+",
+      description: "Average yearly savings per enterprise customer",
+    },
   ];
 
   return (
@@ -48,7 +64,7 @@ export default function MarketplaceLayout({
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
-      <div className="flex">
+      <div className="flex max-h-[calc(100vh-85px)] overflow-hidden">
         <Sidebar
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
@@ -67,10 +83,8 @@ export default function MarketplaceLayout({
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
-        <main className="flex-1 w-full">
-          {children}
-        </main>
+        <main className="flex-1 w-full">{children}</main>
       </div>
     </div>
   );
-} 
+}

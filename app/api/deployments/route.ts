@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     const { data: agentData, error: agentError } = await supabase
       .from("agents")
       .select("*")
-      .eq("id", data.agent_id)
+      .eq("agent_id", data.agent_id)
       .single();
 
     if (agentError) {
@@ -114,10 +114,10 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify({
             ref: "main", // or the branch you want to deploy from
             inputs: {
+              app_id: agentData.name.toLowerCase().replace(/ /g, "-"),
               deployment_id: data.id, // from your DB
               agent_id: data.agent_id,
-              docker_tag: `${agentData.name}:latest`, // e.g. commit SHA or deploymentId
-              // deployment_spec_path: "deployment-spec.yaml" // optional
+              docker_tag: `${agentData.name.toLowerCase().replace(/ /g, "-")}:latest`,
             },
           }),
         }
@@ -187,6 +187,17 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    const { data: agentData, error: agentError } = await supabase
+      .from("agents")
+      .select("*")
+      .eq("agent_id", data.agent_id)
+      .single();
+
+    if (agentError) {
+      console.error("Error fetching agent:", agentError);
+      return NextResponse.json({ error: agentError.message }, { status: 400 });
+    }
+
     // Try to trigger GitHub Action again
     try {
       const res = await fetch(
@@ -201,9 +212,10 @@ export async function PUT(request: NextRequest) {
           body: JSON.stringify({
             ref: "main",
             inputs: {
+              app_id: agentData.name.toLowerCase().replace(/ /g, "-"),
               deployment_id: data.id,
               agent_id: data.agent_id,
-              docker_tag: data.commit_sha || data.id,
+              docker_tag: `${agentData.name.toLowerCase().replace(/ /g, "-")}:latest`,
             },
           }),
         }

@@ -46,3 +46,27 @@ export interface Agent {
   monthly_cost: number;
   active_deployments: number;
 }
+
+export interface AgentDeployment {
+  id: string;
+  integration_id: string | null;
+  commit_sha: string | null;
+  status: "pending" | "running" | "stopped" | "failed" | "success";
+  deployment_url: string | null;
+  logs: string | null;
+  created_at: string;
+  updated_at: string;
+  agent_id: string;
+  account_id: string;
+  do_id: string | null;
+  config: {
+    cpu: number;
+    name: string;
+    model: string;
+    avatar: string | null;
+    memory: number;
+    description: string;
+    temperature: number;
+  };
+  agent: Agent;
+}

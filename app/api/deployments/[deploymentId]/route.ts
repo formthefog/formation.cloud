@@ -75,3 +75,78 @@ export async function GET(request: NextRequest, { params }: any) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest, { params }: any) {
+  try {
+    const { deploymentId } = await params;
+
+    // First, fetch the deployment to get the DO ID
+    const { data: deployment, error: fetchError } = await supabase
+      .from("deployments")
+      .select("*")
+      .eq("id", deploymentId)
+      .single();
+
+    if (fetchError) {
+      return NextResponse.json(
+        { error: "Failed to fetch deployment" },
+        { status: 404 }
+      );
+    }
+
+    // If there's a Digital Ocean ID, delete the resource from DO first
+    if (deployment.do_id) {
+      try {
+        const doResponse = await fetch(
+          `https://api.digitalocean.com/v2/apps/${deployment.do_id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${process.env.DO_API_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!doResponse.ok) {
+          console.error(
+            "Failed to delete DO resource:",
+            await doResponse.text()
+          );
+          // We'll continue with the Supabase deletion even if DO deletion fails
+          // but we'll include a warning in the response
+        }
+      } catch (doError) {
+        console.error("Error deleting DO resource:", doError);
+        // Continue with Supabase deletion but include error in response
+      }
+    }
+
+    // Delete the deployment record from Supabase
+    const { error: deleteError } = await supabase
+      .from("deployments")
+      .delete()
+      .eq("id", deploymentId);
+
+    if (deleteError) {
+      return NextResponse.json(
+        { error: "Failed to delete deployment record" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Deployment deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting deployment:", error);
+    return NextResponse.json(
+      {
+        error: "Failed to delete deployment",
+        details: (error as Error).message,
+      },
+      { status: 500 }
+    );
+  }
+}
