@@ -1,8 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { Octokit, App } from "octokit";
-import { createAppAuth } from "@octokit/auth-app";
 
 // Initialize Supabase client
 const supabase = createClient(
