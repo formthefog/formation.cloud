@@ -83,10 +83,10 @@ export default function EnhancedChatMessages({
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto p-4">
-        <div className="max-w-3xl mx-auto space-y-8">
+        <div className="max-w-3xl mx-auto space-y-8 mt-24">
           {/* Show example prompts only when conversation is empty */}
           {isConversationEmpty && (
-            <div className="py-8 mt-24">
+            <div className="py-8 ">
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-semibold mb-2 text-gray-800 dark:text-gray-200">
                   Your Travel Assistant
