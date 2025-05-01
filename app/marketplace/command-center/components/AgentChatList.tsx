@@ -61,9 +61,7 @@ export default function AgentChatList({
                 ? "bg-yellow-500"
                 : deployment.status === "failed"
                   ? "bg-red-500"
-                  : deployment.status === "success"
-                    ? "bg-blue-500"
-                    : "bg-gray-400";
+                  : "bg-gray-400";
           return (
             <div
               key={deployment.id}
