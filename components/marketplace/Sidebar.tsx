@@ -39,7 +39,7 @@ const navigationItems = [
         />
       </svg>
     ),
-    href: "/marketplace/getting-started",
+    href: "/marketplace/getting-started/create",
     section: "top",
   },
   {

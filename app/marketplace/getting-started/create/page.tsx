@@ -457,7 +457,7 @@ export default function DevelopersGettingStarted() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
       <motion.div {...fadeIn} className="space-y-8 md:space-y-24">
-        <PathNavigation />
+        {/* <PathNavigation /> */}
 
         {/* Hero Section */}
         <div className="text-left md:text-center space-y-4">
