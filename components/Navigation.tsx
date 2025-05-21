@@ -127,7 +127,7 @@ const Navigation = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          <Link href="/marketplace/getting-started">
+          <Link href="/marketplace/getting-started/create">
             <Button variant="outline" size="sm">
               <span className="block sm:hidden">ACCESS</span>
               <span className="hidden sm:block lg:hidden">
@@ -244,7 +244,7 @@ const Navigation = () => {
                 Quick Access
               </h3>
               <Link
-                href="/marketplace/getting-started"
+                href="/marketplace/getting-started/create"
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-600 font-medium"
               >
                 <svg
