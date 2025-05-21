@@ -14,15 +14,19 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   className,
 }) => {
   return (
-    <div className={`p-4 ${className}`}>
+    <div
+      className={`overflow-x-auto w-full ${className || ""}`}
+      style={{ WebkitOverflowScrolling: "touch" }}
+    >
       <SyntaxHighlighter
         language={language}
         style={atomDark}
         customStyle={{
           margin: 0,
           borderRadius: "0.375rem",
-          fontSize: "0.875rem",
+          fontSize: "0.75rem", // 12px for mobile
           width: "100%",
+          maxWidth: "100%",
         }}
       >
         {code}

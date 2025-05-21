@@ -147,8 +147,8 @@ export function AuthButton({
         </div>
       ) : (
         <div className="px-3 py-2 flex items-center gap-2">
-          <span className={`font-medium text-sm text-[#0A84FF] ${textStyle}`}>
-            Authenticate
+          <span className={`font-medium text-xs text-[#0A84FF] ${textStyle}`}>
+            JOIN / LOGIN
           </span>
           <svg
             className="w-4 h-4 text-[#0A84FF]"
@@ -281,7 +281,7 @@ export function AuthButton({
         transition={{ duration: 0.2 }}
         className="relative"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A84FF]/10 to-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 max-w-[100vw] bg-gradient-to-r from-[#0A84FF]/10 to-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <MobileButton />
         <DesktopButton />
       </motion.div>

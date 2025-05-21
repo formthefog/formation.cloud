@@ -1,41 +1,28 @@
-// Modified component with improved Step 2 section and state management
-
 "use client";
 
-import { TrendingUp, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { Tab } from "@headlessui/react";
-import { CodeBlock } from "@/components/CodeBlock";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
-  Rocket,
   DollarSign,
   GitBranch,
   BarChart,
   Settings,
   Database,
   Box,
-  RocketIcon,
-  UploadCloud,
   Camera,
   Upload,
   Layers,
   Code,
+  UploadCloud,
+  Rocket,
 } from "lucide-react";
-import { PathNavigation } from "../components/PathNavigation";
 import Link from "next/link";
 import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import Image from "next/image";
 import { AuthButton } from "@/components/AuthButton";
 import MonetizationBanner from "@/components/MonetizationBanner";
 import { useAuth } from "@/components/auth-provider";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import AgentSelection from "@/components/getting-started/AgentSelection";
 
 // Avatar Upload Component
 const AvatarUpload = ({ avatar, setAvatar }) => {
@@ -53,10 +40,10 @@ const AvatarUpload = ({ avatar, setAvatar }) => {
   };
 
   return (
-    <div className="flex flex-col items-center mb-6">
+    <div className="flex flex-col items-center mb-4 md:mb-6">
       <div className="relative">
         <div
-          className={`w-24 h-24 rounded-full flex items-center justify-center overflow-hidden border-2 border-blue-200 ${
+          className={`w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center overflow-hidden border-2 border-blue-200 ${
             avatar
               ? "bg-white"
               : "bg-gradient-to-br from-blue-500/10 to-green-400/10"
@@ -70,15 +57,15 @@ const AvatarUpload = ({ avatar, setAvatar }) => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <Camera className="w-8 h-8 text-blue-400" />
+            <Camera className="w-6 h-6 md:w-8 md:h-8 text-blue-400" />
           )}
         </div>
         <button
           type="button"
           onClick={() => fileInputRef.current.click()}
-          className="absolute bottom-0 right-0 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1.5 shadow-md transition-all"
+          className="absolute bottom-0 right-0 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1 md:p-1.5 shadow-md transition-all"
         >
-          <Upload className="w-4 h-4" />
+          <Upload className="w-3 h-3 md:w-4 md:h-4" />
         </button>
       </div>
       <input
@@ -113,31 +100,6 @@ export default function DevelopersGettingStarted() {
     transition: { duration: 0.5 },
   };
 
-  const features = [
-    {
-      title: "Framework Flexibility",
-      description:
-        "Build with Agno, LangChain, Google ADK, OpenAI SDK, or your preferred tools.",
-      icon: <GitBranch className="w-6 h-6" />,
-      color: "blue",
-    },
-    {
-      title: "Docker Deployment",
-      description:
-        "Package your agent using Docker for easy deployment onto the Formation Network.",
-      icon: <Box className="w-6 h-6" />,
-      color: "purple",
-    },
-    {
-      title: "Monetize & Scale",
-      description:
-        "Publish to our marketplace, reach enterprise users, and earn revenue.",
-      icon: <DollarSign className="w-6 h-6" />,
-      color: "green",
-    },
-  ];
-
-  // 1. Define pre-built agents (from screenshot and code examples)
   const prebuiltAgents = [
     {
       id: "1af9cf0e-de4f-4bed-9659-ca314de68790",
@@ -225,8 +187,6 @@ export default function DevelopersGettingStarted() {
   // 2. State for selected agent, form fields, deploy status
   const [selectedAgentIndex, setSelectedAgentIndex] = useState(0);
   const selectedAgent = prebuiltAgents[selectedAgentIndex];
-  const [agentCode, setAgentCode] = useState("");
-  const [loadingCode, setLoadingCode] = useState(false);
   const [agentName, setAgentName] = useState(selectedAgent.name);
   const [agentDescription, setAgentDescription] = useState(
     selectedAgent.description
@@ -324,16 +284,6 @@ export default function DevelopersGettingStarted() {
     setAgentDescription(selectedAgent.description);
   }, [selectedAgentIndex]);
 
-  useEffect(() => {
-    setAgentCode("");
-    setLoadingCode(true);
-    fetch(`/api/agent-code/${selectedAgent.id}`)
-      .then((res) => res.json())
-      .then((data) => setAgentCode(data.code || "# Code not found"))
-      .catch(() => setAgentCode("# Error loading code"))
-      .finally(() => setLoadingCode(false));
-  }, [selectedAgentIndex]);
-
   // Fetch deployments after authentication
   useEffect(() => {
     const fetchDeployments = async () => {
@@ -428,15 +378,6 @@ export default function DevelopersGettingStarted() {
     }
   };
 
-  // Handle select and scroll
-  const handleSelectAgent = () => {
-    localStorage.setItem("selectedAgentId", selectedAgent.id);
-    setCurrentStep(2);
-    if (step2Ref.current) {
-      step2Ref.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   // Handle continue to deploy
   const handleContinueToDeploy = () => {
     setCurrentStep(3);
@@ -458,210 +399,56 @@ export default function DevelopersGettingStarted() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
-      <motion.div {...fadeIn} className="space-y-8 md:space-y-24">
+    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 md:py-8 lg:py-12">
+      <motion.div
+        {...fadeIn}
+        className="space-y-8 md:space-y-16 lg:space-y-24 w-full"
+      >
         {/* <PathNavigation /> */}
 
         {/* Hero Section */}
-        <div className="text-left md:text-center space-y-4">
+        <div className="text-left md:text-center space-y-3 md:space-y-4">
           <span className="text-purple-600 text-sm md:text-base font-semibold">
             BUILD & DEPLOY
           </span>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900">
-            Create & Deploy AI Agents <br className="hidden md:block" />
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
+            Create & Deploy AI Agents{" "}
+            <span className="hidden md:inline">
+              <br />
+            </span>
             using <span className="text-purple-600">Standard Frameworks</span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl md:mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl md:mx-auto leading-relaxed">
             Build your agent with Agno, LangChain, Google ADK, OpenAI SDK, or
             other tools. Package it with Docker and deploy easily to the
             Formation Network.
           </p>
-          {/* <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
-            <Link href="/marketplace/create-agent">
-              <Button
-                size="lg"
-                className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700"
-              >
-                Deploy Your Agent <Rocket className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-          </div> */}
         </div>
 
         {/* Step 1: Select Pre-Built Agent */}
-        <section
-          className={`py-4 md:py-6 transition-opacity duration-300 ${currentStep === 1 ? "opacity-100" : "opacity-70"}`}
-        >
-          <div className="text-center flex flex-col gap-2">
-            <div className="mx-auto mb-2 flex items-center justify-center">
-              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-500/30 to-green-400/30 backdrop-blur-md shadow-xl">
-                <RocketIcon className="w-7 h-7 text-blue-500 drop-shadow-glow" />
-              </span>
-            </div>
-            <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-1"
-              style={{ fontFamily: "Inter, Space Grotesk, sans-serif" }}
-            >
-              Step 1:{" "}
-              <span className="bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent">
-                Select a Pre-Built Demo Agent
-              </span>
-            </h2>
-            <p className="text-base text-gray-500 font-medium mt-1 max-w-2xl mx-auto">
-              Choose an agent from the list below.
-            </p>
-          </div>
-          <div className="flex flex-col md:flex-row gap-6 items-start justify-center max-w-5xl mx-auto w-full mt-2">
-            {/* Agent Selection Cards - Compact & Flat */}
-            <div className="flex flex-col gap-1.5 w-56 flex-shrink-0 flex-grow-0 items-center">
-              <div className="flex border border-gray-200 rounded-lg p-3 max-h-[800px] overflow-y-auto flex-col gap-1.5 w-full">
-                {prebuiltAgents.map((agent, idx) => (
-                  <button
-                    key={agent.id}
-                    className={`group flex flex-row items-center gap-3 px-2 py-2 rounded-lg border  w-full bg-white/80 hover:bg-blue-50 transition-colors duration-150
-                      ${
-                        idx === selectedAgentIndex
-                          ? "border-blue-500 border-l-4 pl-2 bg-blue-50"
-                          : "border-gray-200"
-                      }
-                    `}
-                    onClick={() => setSelectedAgentIndex(idx)}
-                    disabled={!!existingDeployment}
-                  >
-                    <span className="text-xl mr-2">{agent.emoji}</span>
-                    <span className="flex flex-col text-left">
-                      <span className="text-sm font-semibold text-gray-900 leading-tight">
-                        {agent.name}
-                      </span>
-                      <span className="text-xs text-gray-500 leading-snug">
-                        {agent.description}
-                      </span>
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            {/* Code Example with Framework Tabs - Futuristic Panel */}
-            <div className="flex-1 min-w-0 space-y-4">
-              <div
-                className="text-lg font-semibold text-blue-700 mb-1 flex items-center justify-between"
-                style={{ fontFamily: "Inter, Space Grotesk, sans-serif" }}
-              >
-                <span className="text-xl mr-2">
-                  {selectedAgent.emoji} {selectedAgent.name}
-                </span>
-
-                <Button
-                  variant="default"
-                  className="text-sm px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                  onClick={handleSelectAgent}
-                  aria-label="Continue to Step 2"
-                  disabled={!!existingDeployment}
-                >
-                  Continue
-                </Button>
-              </div>
-              <div className="text-gray-500 mb-2 text-sm font-medium">
-                {selectedAgent.description}
-              </div>
-
-              <div className="rounded-2xl bg-gradient-to-br from-blue-900/90 to-green-900/90 border-2 border-blue-400/60 shadow-2xl p-3 overflow-hidden relative">
-                <Tabs defaultValue="agno" className="w-full">
-                  <TabsList className="mb-0 flex gap-2 bg-gradient-to-r from-blue-100/60 to-green-100/60 p-1.5 rounded-t-2xl shadow-inner backdrop-blur-md">
-                    <TabsTrigger
-                      value="agno"
-                      className="flex items-center gap-2 px-4 py-1.5 text-blue-700 data-[state=active]:bg-blue-200/60 data-[state=active]:text-blue-900 rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
-                    >
-                      <Image
-                        src="/agno.png"
-                        alt="Agno"
-                        width={20}
-                        height={20}
-                        className="rounded"
-                      />
-                      <span>Agno</span>
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="langchain"
-                      className="flex items-center gap-2 px-4 py-1.5 text-blue-700 data-[state=active]:bg-blue-200/60 data-[state=active]:text-blue-900 rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
-                    >
-                      <Image
-                        src="/langchain.png"
-                        alt="LangChain"
-                        width={20}
-                        height={20}
-                        className="rounded"
-                      />
-                      <span>LangChain</span>
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="adk"
-                      className="flex items-center gap-2 px-4 py-1.5 text-blue-700 data-[state=active]:bg-blue-200/60 data-[state=active]:text-blue-900 rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
-                    >
-                      <Image
-                        src="/adk.png"
-                        alt="Google ADK"
-                        width={20}
-                        height={20}
-                        className="rounded"
-                      />
-                      <span>Google ADK</span>
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="openai"
-                      className="flex items-center gap-2 px-4 py-1.5 text-blue-700 data-[state=active]:bg-blue-200/60 data-[state=active]:text-blue-900 rounded-full font-semibold transition-all duration-200 shadow-sm text-sm"
-                    >
-                      <Image
-                        src="/openai.png"
-                        alt="OpenAI SDK"
-                        width={20}
-                        height={20}
-                        className="rounded"
-                      />
-                      <span>OpenAI SDK</span>
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="agno">
-                    <CodeBlock
-                      language="python"
-                      code={loadingCode ? "# Loading code..." : agentCode}
-                      className="h-[620px] overflow-y-auto overflow-x-hidden w-full max-w-5xl bg-transparent text-green-100 font-mono text-sm rounded-b-2xl p-3"
-                    />
-                  </TabsContent>
-                  <TabsContent value="langchain">
-                    <div className="h-[320px] flex items-center justify-center bg-transparent rounded-b-2xl text-green-100 text-center text-sm font-mono">
-                      LangChain example coming soon.
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="adk">
-                    <div className="h-[320px] flex items-center justify-center bg-transparent rounded-b-2xl text-green-100 text-center text-sm font-mono">
-                      Google ADK example coming soon.
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="openai">
-                    <div className="h-[320px] flex items-center justify-center bg-transparent rounded-b-2xl text-green-100 text-center text-sm font-mono">
-                      OpenAI SDK example coming soon.
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </div>
-            </div>
-          </div>
-        </section>
+        <AgentSelection
+          existingDeployment={existingDeployment}
+          currentStep={currentStep}
+          setCurrentStep={setCurrentStep}
+          prebuiltAgents={prebuiltAgents}
+          selectedAgentIndex={selectedAgentIndex}
+          selectedAgent={selectedAgent}
+          setSelectedAgentIndex={setSelectedAgentIndex}
+        />
 
         {/* Step 2: Configure Your Agent - Redesigned to match Step 1's style */}
         <section
           ref={step2Ref}
           className={`py-4 md:py-6 transition-opacity duration-300 ${currentStep === 2 ? "opacity-100" : "opacity-70"}`}
         >
-          <div className="text-center flex flex-col gap-2">
+          <div className="text-center flex flex-col gap-2 px-3 sm:px-4">
             <div className="mx-auto mb-2 flex items-center justify-center">
-              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-500/30 to-green-400/30 backdrop-blur-md shadow-xl">
-                <Settings className="w-7 h-7 text-blue-500 drop-shadow-glow" />
+              <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-blue-500/30 to-green-400/30 backdrop-blur-md shadow-xl">
+                <Settings className="w-6 h-6 md:w-7 md:h-7 text-blue-500 drop-shadow-glow" />
               </span>
             </div>
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-1"
+              className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-1"
               style={{ fontFamily: "Inter, Space Grotesk, sans-serif" }}
             >
               Step 2:{" "}
@@ -669,22 +456,22 @@ export default function DevelopersGettingStarted() {
                 Configure Your Agent
               </span>
             </h2>
-            <p className="text-base text-gray-500 font-medium mt-1 max-w-2xl mx-auto">
+            <p className="text-sm md:text-base text-gray-500 font-medium mt-1 max-w-2xl mx-auto">
               Customize your agent's settings and resources.
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-6 items-start justify-center max-w-5xl mx-auto w-full mt-2">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-start justify-center max-w-5xl mx-auto w-full mt-2 px-3 sm:px-4">
             {/* Configuration Templates - Left Panel */}
-            <div className="flex flex-col gap-1.5 w-56 flex-shrink-0 flex-grow-0 items-center">
+            <div className="w-full md:w-56 flex-shrink-0 flex-grow-0">
               <p className="text-sm font-semibold text-gray-700 w-full mb-2">
                 Configuration Templates
               </p>
-              <div className="flex flex-col gap-1.5 w-full">
+              <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto pb-2 md:pb-0 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
                 {configTemplates.map((template) => (
                   <button
                     key={template.id}
-                    className={`group flex flex-row items-center gap-3 px-3 py-2.5 rounded-lg border w-full bg-white/80 hover:bg-blue-50 transition-colors duration-150
+                    className={`group flex flex-row items-center gap-2 px-3 py-2 rounded-lg border min-w-[180px] md:min-w-0 md:w-full bg-white/80 hover:bg-blue-50 transition-colors duration-150
                       ${
                         selectedConfigTemplate === template.id
                           ? "border-blue-500 border-l-4 pl-2 bg-blue-50"
@@ -696,16 +483,27 @@ export default function DevelopersGettingStarted() {
                     <span className="text-blue-500 flex-shrink-0">
                       {template.icon}
                     </span>
-                    <span className="flex flex-col text-left">
-                      <span className="text-sm font-semibold text-gray-900 leading-tight">
+                    <span className="flex flex-col text-left overflow-hidden">
+                      <span className="text-sm font-semibold text-gray-900 leading-tight truncate">
                         {template.name}
                       </span>
-                      <span className="text-xs text-gray-500 leading-snug">
+                      <span className="text-xs text-gray-500 leading-snug truncate">
                         {template.description}
                       </span>
                     </span>
                   </button>
                 ))}
+              </div>
+
+              {/* Continue button on mobile */}
+              <div className="hidden mt-3">
+                <Button
+                  variant="outline"
+                  className="w-full text-sm px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
+                  onClick={handleContinueToDeploy}
+                >
+                  Continue
+                </Button>
               </div>
             </div>
 
@@ -714,53 +512,53 @@ export default function DevelopersGettingStarted() {
               ref={configPanelRef}
               tabIndex={-1}
               aria-label="Agent Configuration Panel"
-              className="flex-1 min-w-0 space-y-4"
+              className="flex-1 min-w-0 space-y-3 md:space-y-4 m-auto"
             >
               <div
-                className="text-lg font-semibold text-blue-700 mb-1 flex items-center justify-between"
+                className="text-base md:text-lg font-semibold text-blue-700 mb-1 flex items-center justify-between"
                 style={{ fontFamily: "Inter, Space Grotesk, sans-serif" }}
               >
-                Agent Configuration
+                <span className="truncate">Agent Configuration</span>
                 <Button
                   variant="outline"
-                  className="text-sm px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
+                  className="hidden md:inline-block text-sm px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
                   onClick={handleContinueToDeploy}
                 >
                   Continue
                 </Button>
               </div>
-              <div className="text-gray-500 mb-2 text-sm font-medium">
+              <div className="text-gray-500 mb-2 text-xs sm:text-sm font-medium">
                 Customize your agent's settings for optimal performance.
               </div>
 
-              <div className="rounded-2xl bg-white border-2 border-blue-100 shadow-xl p-6 overflow-hidden relative">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="rounded-2xl bg-white border-2 border-blue-100 shadow-xl p-3 sm:p-4 md:p-6 overflow-hidden relative">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   {/* Left Column */}
-                  <div className="space-y-6">
+                  <div className="space-y-4 md:space-y-6">
                     {/* Avatar Upload */}
                     <AvatarUpload avatar={avatar} setAvatar={setAvatar} />
 
                     {/* Basic Info */}
-                    <div className="space-y-4">
-                      <div className="flex flex-col gap-1.5">
+                    <div className="space-y-3 md:space-y-4">
+                      <div className="flex flex-col gap-1 md:gap-1.5">
                         <label className="text-sm font-semibold text-gray-700">
                           Agent Name*
                         </label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                          className="w-full px-2 py-1.5 md:px-3 md:py-2 text-sm border border-gray-200 rounded-lg bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                           value={agentName}
                           onChange={(e) => setAgentName(e.target.value)}
                           placeholder="Enter your agent's name"
                           required
                         />
                       </div>
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex flex-col gap-1 md:gap-1.5">
                         <label className="text-sm font-semibold text-gray-700">
                           Agent Description*
                         </label>
                         <textarea
-                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all min-h-[80px]"
+                          className="w-full px-2 py-1.5 md:px-3 md:py-2 text-sm border border-gray-200 rounded-lg bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all min-h-[60px] md:min-h-[80px]"
                           value={agentDescription}
                           onChange={(e) => setAgentDescription(e.target.value)}
                           placeholder="Describe what your agent does"
@@ -771,19 +569,19 @@ export default function DevelopersGettingStarted() {
                   </div>
 
                   {/* Right Column */}
-                  <div className="space-y-6">
+                  <div className="space-y-4 md:space-y-6">
                     {/* Model Settings */}
-                    <div className="space-y-4">
+                    <div className="space-y-3 md:space-y-4">
                       <h3 className="text-sm font-semibold text-gray-700">
                         Model Settings
                       </h3>
 
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex flex-col gap-1 md:gap-1.5">
                         <label className="text-sm font-medium text-gray-600">
                           Language Model
                         </label>
                         <select
-                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                          className="w-full px-2 py-1.5 md:px-3 md:py-2 text-sm border border-gray-200 rounded-lg bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                           value={agentModel}
                           onChange={(e) => setAgentModel(e.target.value)}
                         >
@@ -795,7 +593,7 @@ export default function DevelopersGettingStarted() {
                         </select>
                       </div>
 
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex flex-col gap-1 md:gap-1.5">
                         <label className="text-sm font-medium text-gray-600 flex justify-between">
                           <span>Temperature</span>
                           <span className="text-blue-600">
@@ -821,12 +619,12 @@ export default function DevelopersGettingStarted() {
                     </div>
 
                     {/* Resource Allocation */}
-                    <div className="space-y-4">
+                    <div className="space-y-3 md:space-y-4">
                       <h3 className="text-sm font-semibold text-gray-700">
                         Resource Allocation
                       </h3>
 
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex flex-col gap-1 md:gap-1.5">
                         <label className="text-sm font-medium text-gray-600 flex justify-between">
                           <span>CPU Cores</span>
                           <span className="text-blue-600">{cpu}</span>
@@ -842,7 +640,7 @@ export default function DevelopersGettingStarted() {
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex flex-col gap-1 md:gap-1.5">
                         <label className="text-sm font-medium text-gray-600 flex justify-between">
                           <span>Memory (MB)</span>
                           <span className="text-blue-600">{memory}</span>
@@ -862,20 +660,29 @@ export default function DevelopersGettingStarted() {
                 </div>
               </div>
             </div>
+            <div className="block md:hidden mt-3 w-full">
+              <Button
+                variant="outline"
+                className="w-full text-sm px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
+                onClick={handleContinueToDeploy}
+              >
+                Continue
+              </Button>
+            </div>
           </div>
         </section>
 
         {/* Step 3: Deploy */}
         <section
           ref={step3Ref}
-          className={`space-y-8 md:space-y-12 py-4 md:py-6 w-full flex flex-col items-center transition-opacity duration-300 ${currentStep === 3 ? "opacity-100" : "opacity-70"}`}
+          className={`space-y-4 md:space-y-8 lg:space-y-12 py-4 md:py-6 w-full flex flex-col items-center transition-opacity duration-300 ${currentStep === 3 ? "opacity-100" : "opacity-70"}`}
         >
-          <div className="text-center">
-            <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/20 to-green-400/20 backdrop-blur-md shadow-lg mx-auto mb-3">
-              <UploadCloud className="w-7 h-7 text-blue-500" />
+          <div className="text-center px-3 sm:px-4">
+            <span className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-500/20 to-green-400/20 backdrop-blur-md shadow-lg mx-auto mb-2 md:mb-3">
+              <UploadCloud className="w-5 h-5 md:w-7 md:h-7 text-blue-500" />
             </span>
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-1"
+              className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-1"
               style={{ fontFamily: "Inter, Space Grotesk, sans-serif" }}
             >
               Step 3:{" "}
@@ -883,29 +690,29 @@ export default function DevelopersGettingStarted() {
                 Launch Your Agent
               </span>
             </h2>
-            <p className="text-base text-gray-500 font-medium mt-1 max-w-2xl mx-auto">
+            <p className="text-sm md:text-base text-gray-500 font-medium mt-1 max-w-2xl mx-auto">
               Deploy your agent to the Formation Network and start using it
               right away.
             </p>
           </div>
 
-          <div className="max-w-2xl w-full mx-auto">
+          <div className="max-w-2xl w-full mx-auto px-3 sm:px-4">
             {!isLoggedIn ? (
-              <div className="bg-gradient-to-br from-blue-50 to-green-50 border border-blue-100 rounded-xl p-6 md:p-8 shadow-md overflow-hidden relative">
-                <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center justify-between">
+              <div className="bg-gradient-to-br from-blue-50 to-green-50 border border-blue-100 rounded-xl p-4 sm:p-6 md:p-8 shadow-md overflow-hidden relative">
+                <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-center justify-between">
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-2 text-blue-700">
+                    <h3 className="text-lg sm:text-xl font-bold mb-2 text-blue-700">
                       One Step Away From Launch
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-sm md:text-base text-gray-600 mb-3 md:mb-4">
                       Your agent is ready to take flight! Sign in to deploy
                       directly to the Formation Network and access:
                     </p>
-                    <ul className="space-y-2 mb-6">
+                    <ul className="space-y-2 mb-4 md:mb-6 text-sm md:text-base">
                       <li className="flex items-center gap-2 text-gray-700">
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex-shrink-0">
+                        <span className="inline-flex items-center justify-center w-4 h-4 md:w-5 md:h-5 rounded-full bg-blue-100 text-blue-600 flex-shrink-0">
                           <svg
-                            className="w-3 h-3"
+                            className="w-2 h-2 md:w-3 md:h-3"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -922,9 +729,9 @@ export default function DevelopersGettingStarted() {
                         <span>Managed infrastructure & scaling</span>
                       </li>
                       <li className="flex items-center gap-2 text-gray-700">
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex-shrink-0">
+                        <span className="inline-flex items-center justify-center w-4 h-4 md:w-5 md:h-5 rounded-full bg-blue-100 text-blue-600 flex-shrink-0">
                           <svg
-                            className="w-3 h-3"
+                            className="w-2 h-2 md:w-3 md:h-3"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -941,9 +748,9 @@ export default function DevelopersGettingStarted() {
                         <span>Usage analytics & performance metrics</span>
                       </li>
                       <li className="flex items-center gap-2 text-gray-700">
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex-shrink-0">
+                        <span className="inline-flex items-center justify-center w-4 h-4 md:w-5 md:h-5 rounded-full bg-blue-100 text-blue-600 flex-shrink-0">
                           <svg
-                            className="w-3 h-3"
+                            className="w-2 h-2 md:w-3 md:h-3"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -963,9 +770,9 @@ export default function DevelopersGettingStarted() {
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <div className="relative group cursor-pointer mb-4">
+                    <div className="relative group cursor-pointer mb-2 md:mb-4">
                       <AuthButton
-                        buttonStyle="px-8 py-3 text-base font-medium rounded-full shadow-md"
+                        buttonStyle="px-4 sm:px-6 md:px-8 py-2 md:py-3 text-sm md:text-base font-medium rounded-full shadow-md"
                         textStyle="text-gray-800"
                       />
                     </div>
@@ -980,26 +787,28 @@ export default function DevelopersGettingStarted() {
                 <div className="absolute w-32 h-32 rounded-full bg-gradient-to-br from-blue-400/10 to-green-400/10 -top-16 -left-16 blur-xl"></div>
               </div>
             ) : (
-              <div className="bg-white/90 border border-blue-100 rounded-xl p-6 md:p-8 shadow-md">
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold mb-2 text-blue-700">
+              <div className="bg-white/90 border border-blue-100 rounded-xl p-4 sm:p-6 md:p-8 shadow-md">
+                <div className="text-center mb-4 md:mb-6">
+                  <h3 className="text-lg sm:text-xl font-bold mb-1 md:mb-2 text-blue-700">
                     Ready for Launch
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-sm md:text-base text-gray-600">
                     Your agent is configured and ready to be deployed to the
                     Formation Network.
                   </p>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
-                  <h4 className="font-medium text-blue-800 mb-2 flex items-center gap-2">
-                    <Database className="w-4 h-4" />
+                <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 md:p-4 mb-4 md:mb-6">
+                  <h4 className="font-medium text-blue-800 mb-2 flex items-center gap-2 text-sm md:text-base">
+                    <Database className="w-3.5 h-3.5 md:w-4 md:h-4" />
                     Deployment Summary
                   </h4>
-                  <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="grid grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm">
                     <div>
                       <p className="text-gray-500">Agent Name</p>
-                      <p className="font-medium text-gray-800">{agentName}</p>
+                      <p className="font-medium text-gray-800 truncate">
+                        {agentName}
+                      </p>
                     </div>
                     <div>
                       <p className="text-gray-500">Resources</p>
@@ -1019,7 +828,7 @@ export default function DevelopersGettingStarted() {
                     </div>
                     <div className="col-span-2">
                       <p className="text-gray-500">Description</p>
-                      <p className="font-medium text-gray-800">
+                      <p className="font-medium text-gray-800 line-clamp-2">
                         {agentDescription}
                       </p>
                     </div>
@@ -1027,44 +836,48 @@ export default function DevelopersGettingStarted() {
                 </div>
 
                 {existingDeployment && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 flex items-center gap-4 shadow-sm">
-                    <svg
-                      className="w-8 h-8 text-yellow-400 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"
-                      />
-                    </svg>
-                    <div className="flex-row items-center flex w-full">
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 md:p-4 mb-4 md:mb-6 shadow-sm">
+                    <div className="flex items-start gap-3 md:gap-4">
+                      <svg
+                        className="w-6 h-6 md:w-8 md:h-8 text-yellow-400 flex-shrink-0 mt-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"
+                        />
+                      </svg>
                       <div className="flex-1">
-                        <div className="font-semibold text-yellow-800 mb-1">
+                        <div className="font-semibold text-yellow-800 mb-1 text-sm md:text-base">
                           Starter Tier Limit
                         </div>
-                        <div className="text-yellow-700 text-sm mb-2">
+                        <div className="text-yellow-700 text-xs md:text-sm mb-2">
                           You can only deploy <b>one agent</b> on the Starter
                           plan.
-                          <br />
+                          <br className="hidden md:block" />
                           To deploy more agents, upgrade to a higher tier.
                         </div>
+                        <Button
+                          variant="outline"
+                          onClick={handleUpgrade}
+                          className="text-xs md:text-sm py-1 px-3 md:py-2 md:px-4 mt-1"
+                        >
+                          Upgrade Now
+                        </Button>
                       </div>
-                      <Button variant="outline" onClick={handleUpgrade}>
-                        Upgrade Now
-                      </Button>
                     </div>
                   </div>
                 )}
 
                 {/* Error message for deployment failure */}
                 {deployError && (
-                  <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                  <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 md:p-4 flex items-start gap-3">
                     <svg
-                      className="w-5 h-5 text-red-600 mt-0.5"
+                      className="w-4 h-4 md:w-5 md:h-5 text-red-600 mt-0.5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -1083,19 +896,21 @@ export default function DevelopersGettingStarted() {
                       />
                     </svg>
                     <div>
-                      <h5 className="font-medium text-red-800 mb-1">
+                      <h5 className="font-medium text-red-800 mb-1 text-sm md:text-base">
                         Deployment Failed
                       </h5>
-                      <p className="text-red-700 text-sm">{deployError}</p>
+                      <p className="text-red-700 text-xs md:text-sm">
+                        {deployError}
+                      </p>
                     </div>
                   </div>
                 )}
 
                 {deployRunning && (
-                  <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-6 flex flex-col gap-4 shadow-md animate-pulse">
-                    <div className="flex items-center gap-3 mb-2">
+                  <div className="mt-4 md:mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4 md:p-6 flex flex-col gap-3 md:gap-4 shadow-md animate-pulse">
+                    <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
                       <svg
-                        className="w-6 h-6 text-yellow-400 animate-spin"
+                        className="w-5 h-5 md:w-6 md:h-6 text-yellow-400 animate-spin"
                         fill="none"
                         viewBox="0 0 24 24"
                       >
@@ -1113,11 +928,11 @@ export default function DevelopersGettingStarted() {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                       </svg>
-                      <span className="text-yellow-800 font-semibold text-lg">
+                      <span className="text-yellow-800 font-semibold text-base md:text-lg">
                         Deploying Your Agent...
                       </span>
                     </div>
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2 md:gap-3">
                       {/* Deployment Steps */}
                       {[
                         { label: "Building Docker image", key: "docker" },
@@ -1126,13 +941,16 @@ export default function DevelopersGettingStarted() {
                         { label: "Deploying to network", key: "deploy" },
                         { label: "Finalizing deployment", key: "finalize" },
                       ].map((step, idx) => (
-                        <div key={step.key} className="flex items-center gap-3">
+                        <div
+                          key={step.key}
+                          className="flex items-center gap-2 md:gap-3"
+                        >
                           <span
-                            className={`inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-yellow-300 bg-yellow-100 ${idx === 0 ? "animate-bounce" : ""}`}
+                            className={`inline-flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-yellow-300 bg-yellow-100 ${idx === 0 ? "animate-bounce" : ""}`}
                           >
                             {idx === 0 ? (
                               <svg
-                                className="w-4 h-4 text-yellow-500 animate-spin"
+                                className="w-3 h-3 md:w-4 md:h-4 text-yellow-500 animate-spin"
                                 fill="none"
                                 viewBox="0 0 24 24"
                               >
@@ -1152,7 +970,7 @@ export default function DevelopersGettingStarted() {
                               </svg>
                             ) : (
                               <svg
-                                className="w-4 h-4 text-yellow-400"
+                                className="w-3 h-3 md:w-4 md:h-4 text-yellow-400"
                                 fill="none"
                                 viewBox="0 0 24 24"
                               >
@@ -1167,24 +985,24 @@ export default function DevelopersGettingStarted() {
                               </svg>
                             )}
                           </span>
-                          <span className="text-yellow-900 font-medium">
+                          <span className="text-yellow-900 font-medium text-xs md:text-sm">
                             {step.label}
                           </span>
                           {/* Optionally, add a progress bar or animated dots */}
                           {idx === 0 && (
-                            <span className="ml-2 flex gap-1">
-                              <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
-                              <span className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse delay-150"></span>
-                              <span className="w-2 h-2 bg-yellow-200 rounded-full animate-pulse delay-300"></span>
+                            <span className="ml-1 md:ml-2 flex gap-1">
+                              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-yellow-300 rounded-full animate-pulse delay-150"></span>
+                              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-yellow-200 rounded-full animate-pulse delay-300"></span>
                             </span>
                           )}
                         </div>
                       ))}
                     </div>
-                    <div className="mt-4 w-full h-2 bg-yellow-100 rounded-full overflow-hidden">
-                      <div className="h-2 bg-yellow-400 animate-pulse rounded-full w-1/3 transition-all duration-700"></div>
+                    <div className="mt-3 md:mt-4 w-full h-1.5 md:h-2 bg-yellow-100 rounded-full overflow-hidden">
+                      <div className="h-1.5 md:h-2 bg-yellow-400 animate-pulse rounded-full w-1/3 transition-all duration-700"></div>
                     </div>
-                    <div className="text-yellow-700 text-sm mt-2 text-center">
+                    <div className="text-yellow-700 text-xs md:text-sm mt-1 md:mt-2 text-center">
                       This may take up to a minute. Please do not close this
                       window.
                     </div>
@@ -1194,7 +1012,7 @@ export default function DevelopersGettingStarted() {
                 <button
                   onClick={handleDeploy}
                   disabled={!!existingDeployment || deploying || deploySuccess}
-                  className={`w-full py-3 rounded-lg font-medium text-white flex items-center justify-center gap-2 transition-all duration-300 ${
+                  className={`w-full py-2 md:py-3 rounded-lg text-sm md:text-base font-medium text-white flex items-center justify-center gap-2 transition-all duration-300 ${
                     deploySuccess
                       ? "bg-green-500"
                       : deploying
@@ -1205,7 +1023,7 @@ export default function DevelopersGettingStarted() {
                   {deploySuccess ? (
                     <>
                       <svg
-                        className="w-5 h-5"
+                        className="w-4 h-4 md:w-5 md:h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -1223,7 +1041,7 @@ export default function DevelopersGettingStarted() {
                   ) : deploying ? (
                     <>
                       <svg
-                        className="w-5 h-5 animate-spin"
+                        className="w-4 h-4 md:w-5 md:h-5 animate-spin"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -1246,7 +1064,7 @@ export default function DevelopersGettingStarted() {
                     </>
                   ) : (
                     <>
-                      <Rocket className="w-5 h-5" />
+                      <Rocket className="w-4 h-4 md:w-5 md:h-5" />
                       <span>Deploy to Formation Network</span>
                     </>
                   )}
@@ -1254,9 +1072,9 @@ export default function DevelopersGettingStarted() {
 
                 {/* Only show success UI if not processing */}
                 {deploySuccess && !deployRunning && (
-                  <div className="mt-6 bg-green-50 border border-green-100 rounded-lg p-4 flex items-start gap-3">
+                  <div className="mt-4 md:mt-6 bg-green-50 border border-green-100 rounded-lg p-3 md:p-4 flex items-start gap-3">
                     <svg
-                      className="w-5 h-5 text-green-600 mt-0.5"
+                      className="w-4 h-4 md:w-5 md:h-5 text-green-600 mt-0.5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -1270,24 +1088,24 @@ export default function DevelopersGettingStarted() {
                       ></path>
                     </svg>
                     <div>
-                      <h5 className="font-medium text-green-800 mb-1">
+                      <h5 className="font-medium text-green-800 mb-1 text-sm md:text-base">
                         Deployment Successful
                       </h5>
-                      <p className="text-green-700 text-sm mb-3">
+                      <p className="text-green-700 text-xs md:text-sm mb-2 md:mb-3">
                         Your agent is now live on the Formation Network. You can
                         start using it right away or make additional
                         configurations.
                       </p>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <Link
                           href="/marketplace/command-center"
                           className="w-full"
                         >
-                          <Button className="text-sm px-3 w-full py-1 bg-white border border-gray-200 text-gray-700 rounded hover:bg-gray-50 transition-colors">
+                          <Button className="text-xs md:text-sm px-2 md:px-3 w-full py-1 bg-white border border-gray-200 text-gray-700 rounded hover:bg-gray-50 transition-colors">
                             View Command Center
                           </Button>
                         </Link>
-                        <Button className="text-sm w-full px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                        <Button className="text-xs md:text-sm w-full px-2 md:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
                           Chat With {agentName}
                         </Button>
                       </div>
