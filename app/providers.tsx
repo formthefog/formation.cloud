@@ -5,6 +5,7 @@ import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { toast } from "sonner";
 import { getAuthToken } from "@dynamic-labs/sdk-react-core";
 import { AuthProvider } from "@/components/auth-provider";
+import { jwtDecode } from "@/lib/utils";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -16,18 +17,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
         appName: "Formation",
         appLogoUrl: "/logo.png",
         events: {
-          onAuthSuccess: async ({ user, primaryWallet }) => {
+          onAuthSuccess: async ({ user, primaryWallet, handleLogOut }) => {
             try {
               console.log("Auth success", user, primaryWallet);
-              const token = await getAuthToken();
+              const token = getAuthToken();
 
-              console.log("Token", token);
+              console.log("Token", token, user);
 
               if (!token) {
                 throw new Error("No authentication token found");
               }
 
-              // Make API call to your backend to create/update account
               const response = await fetch("/api/account/create", {
                 method: "POST",
                 headers: {
@@ -35,13 +35,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  user_id: user.userId,
                   email: user?.email,
                   address: primaryWallet?.address,
                   name: user.firstName || user.lastName || "--",
-                  provider_account_id: user.userId,
                   access_token: token,
                   refresh_token: token,
+                  dynamic_id: user.userId,
                   expires_at: 1000000000,
                   token_type: "Bearer",
                   scope: "read:user,user:email",
@@ -56,6 +55,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             } catch (error) {
               console.error("Error creating account:", error);
               toast.error("Failed to create account. Please try again.");
+              handleLogOut();
             }
           },
         },

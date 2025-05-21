@@ -20,35 +20,20 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
-    // console.log("userData", userData);
-
-    // 1. Find the user by sub (Dynamic.xyz user id)
-    const { data: user, error: userError } = await supabase
-      .from("users")
-      .select("id")
-      .eq("id", userData.sub)
-      .single();
-
-    if (userError || !user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
     // 2. Find all accounts for this user
-    const { data: accounts, error: accountsError } = await supabase
+    const { data: account, error: accountError } = await supabase
       .from("accounts")
       .select("id")
-      .eq("user_id", user.id);
+      .eq("dynamic_id", userData.sub)
+      .single();
 
-    if (accountsError) {
-      return NextResponse.json(
-        { error: "Accounts not found" },
-        { status: 404 }
-      );
+    if (accountError || !account) {
+      return NextResponse.json({ error: "Account not found" }, { status: 404 });
     }
 
-    const accountIds = accounts.map((a: { id: string }) => a.id);
+    const accountId = account.id;
 
-    if (accountIds.length === 0) {
+    if (!accountId) {
       return NextResponse.json([], { status: 200 });
     }
 
@@ -56,7 +41,7 @@ export async function GET(request: Request) {
     const { data, error } = await supabase
       .from("github_integrations")
       .select("*")
-      .in("account_id", accountIds)
+      .eq("account_id", accountId)
       .order("created_at", { ascending: false });
 
     if (error) throw error;

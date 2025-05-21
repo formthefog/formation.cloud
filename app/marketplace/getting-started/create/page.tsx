@@ -240,8 +240,9 @@ export default function DevelopersGettingStarted() {
   const [deploying, setDeploying] = useState(false);
   const [deploySuccess, setDeploySuccess] = useState(false);
   const [deployError, setDeployError] = useState("");
+  const [deployRunning, setDeployRunning] = useState(false);
   const isLoggedIn = useIsLoggedIn();
-  const { accounts } = useAuth();
+  const { account } = useAuth();
 
   // Configuration templates
   const configTemplates = [
@@ -336,10 +337,10 @@ export default function DevelopersGettingStarted() {
   // Fetch deployments after authentication
   useEffect(() => {
     const fetchDeployments = async () => {
-      if (!isLoggedIn || !accounts || !accounts[0]?.id) return;
+      if (!isLoggedIn || !account || !account.id) return;
       try {
         const response = await fetch(
-          `/api/deployments?account_id=${accounts[0].id}`
+          `/api/deployments?account_id=${account.id}`
         );
         if (response.ok) {
           const { deployments } = await response.json();
@@ -365,8 +366,8 @@ export default function DevelopersGettingStarted() {
       }
     };
     fetchDeployments();
-    // Only run when logged in and accounts are available
-  }, [isLoggedIn, accounts]);
+    // Only run when logged in and account is available
+  }, [isLoggedIn, account]);
 
   // Scroll to step 3 if a deployment exists
   useEffect(() => {
@@ -382,7 +383,7 @@ export default function DevelopersGettingStarted() {
     setDeployError(""); // Clear previous error
     try {
       // TODO: Replace with real account_id and agent_id from user context/auth
-      const accountId = accounts[0].id;
+      const accountId = account.id;
       const agentId = selectedAgent.id;
 
       // Compose config object from state
@@ -415,7 +416,9 @@ export default function DevelopersGettingStarted() {
         throw new Error(error.error || "Failed to create deployment");
       }
 
-      setDeploySuccess(true);
+      setDeployRunning(true);
+
+      // setDeploySuccess(true);
     } catch (error) {
       setDeployError(error.message || "Deployment failed");
       // Optionally show error to user
@@ -1088,6 +1091,106 @@ export default function DevelopersGettingStarted() {
                   </div>
                 )}
 
+                {deployRunning && (
+                  <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-6 flex flex-col gap-4 shadow-md animate-pulse">
+                    <div className="flex items-center gap-3 mb-2">
+                      <svg
+                        className="w-6 h-6 text-yellow-400 animate-spin"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <span className="text-yellow-800 font-semibold text-lg">
+                        Deploying Your Agent...
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      {/* Deployment Steps */}
+                      {[
+                        { label: "Building Docker image", key: "docker" },
+                        { label: "Provisioning resources", key: "provision" },
+                        { label: "Configuring environment", key: "config" },
+                        { label: "Deploying to network", key: "deploy" },
+                        { label: "Finalizing deployment", key: "finalize" },
+                      ].map((step, idx) => (
+                        <div key={step.key} className="flex items-center gap-3">
+                          <span
+                            className={`inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-yellow-300 bg-yellow-100 ${idx === 0 ? "animate-bounce" : ""}`}
+                          >
+                            {idx === 0 ? (
+                              <svg
+                                className="w-4 h-4 text-yellow-500 animate-spin"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                />
+                              </svg>
+                            ) : (
+                              <svg
+                                className="w-4 h-4 text-yellow-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  className="opacity-30"
+                                />
+                              </svg>
+                            )}
+                          </span>
+                          <span className="text-yellow-900 font-medium">
+                            {step.label}
+                          </span>
+                          {/* Optionally, add a progress bar or animated dots */}
+                          {idx === 0 && (
+                            <span className="ml-2 flex gap-1">
+                              <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                              <span className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse delay-150"></span>
+                              <span className="w-2 h-2 bg-yellow-200 rounded-full animate-pulse delay-300"></span>
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 w-full h-2 bg-yellow-100 rounded-full overflow-hidden">
+                      <div className="h-2 bg-yellow-400 animate-pulse rounded-full w-1/3 transition-all duration-700"></div>
+                    </div>
+                    <div className="text-yellow-700 text-sm mt-2 text-center">
+                      This may take up to a minute. Please do not close this
+                      window.
+                    </div>
+                  </div>
+                )}
+
                 <button
                   onClick={handleDeploy}
                   disabled={!!existingDeployment || deploying || deploySuccess}
@@ -1149,24 +1252,23 @@ export default function DevelopersGettingStarted() {
                   )}
                 </button>
 
-                {deploySuccess && (
+                {/* Only show success UI if not processing */}
+                {deploySuccess && !deployRunning && (
                   <div className="mt-6 bg-green-50 border border-green-100 rounded-lg p-4 flex items-start gap-3">
-                    <div className="mt-0.5">
-                      <svg
-                        className="w-5 h-5 text-green-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        ></path>
-                      </svg>
-                    </div>
+                    <svg
+                      className="w-5 h-5 text-green-600 mt-0.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
                     <div>
                       <h5 className="font-medium text-green-800 mb-1">
                         Deployment Successful

@@ -6,68 +6,54 @@ import React, {
   useCallback,
 } from "react";
 import { getAuthToken, useDynamicContext } from "@dynamic-labs/sdk-react-core";
-
-// Define Account and User types (customize as needed)
-export interface Account {
-  id: string;
-  user_id: string;
-  primary_address: string;
-  created_at: string;
-  type: string;
-  provider: string;
-  provider_account_id: string;
-  access_token: string;
-  refresh_token: string;
-  expires_at: number;
-  token_type: string;
-  scope: string;
-  [key: string]: any;
-}
+import { Account } from "@/types/account";
 
 export interface AuthContextType {
   user: any; // You can type this more strictly if you have a user type
-  accounts: Account[];
+  account: Account | null;
   loading: boolean;
   error: string | null;
-  refreshAccounts: () => Promise<void>;
+  refreshAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useDynamicContext();
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const { user, handleLogOut } = useDynamicContext();
+  const [account, setAccount] = useState<Account | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch accounts for the current user
-  const fetchAccounts = useCallback(async () => {
+  const fetchAccount = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const token = await getAuthToken();
       if (!token) {
-        setAccounts([]);
+        setAccount(null);
         setError("No auth token");
         setLoading(false);
         return;
       }
-      const response = await fetch("/api/account/list", {
+      const response = await fetch("/api/account", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (!response.ok) {
         const data = await response.json();
-        setError(data.error || "Failed to fetch accounts");
-        setAccounts([]);
+        setError(data.error || "Failed to fetch account");
+        setAccount(null);
+        handleLogOut();
       } else {
         const data = await response.json();
-        setAccounts(data);
+        setAccount(data);
+        console.log("Account", data);
       }
     } catch (err: any) {
       setError(err.message || "Unknown error");
-      setAccounts([]);
+      setAccount(null);
     } finally {
       setLoading(false);
     }
@@ -76,18 +62,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Fetch accounts when user changes
   useEffect(() => {
     if (user) {
-      fetchAccounts();
+      fetchAccount();
     } else {
-      setAccounts([]);
+      setAccount(null);
     }
-  }, [user, fetchAccounts]);
+  }, [user, fetchAccount]);
 
   const value: AuthContextType = {
     user,
-    accounts,
+    account,
     loading,
     error,
-    refreshAccounts: fetchAccounts,
+    refreshAccount: fetchAccount,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,7 +1,8 @@
-import { Stripe } from 'stripe';
-import { NextResponse } from 'next/server';
-import { headers } from 'next/headers';
-import type { NextRequest } from 'next/server';
+import { Stripe } from "stripe";
+import { NextResponse } from "next/server";
+import { headers } from "next/headers";
+import type { NextRequest } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
 // Initialize Stripe with the secret key
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -10,12 +11,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 const rustServiceUrl = process.env.RUST_SERVICE_WEBHOOK_URL!;
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
-// Placeholder function to notify your Rust service
-// Adapt the payload based on what your Rust service needs
 async function notifyRustService(eventType: string, data: any) {
   if (!rustServiceUrl) {
-    console.warn('RUST_SERVICE_WEBHOOK_URL is not set. Cannot notify Rust service.');
+    console.warn(
+      "RUST_SERVICE_WEBHOOK_URL is not set. Cannot notify Rust service."
+    );
     return;
   }
 
@@ -23,37 +28,35 @@ async function notifyRustService(eventType: string, data: any) {
     const payload = {
       event_type: eventType,
       stripe_data: data,
-      // Add any other relevant info, like extracting userId from metadata if available
-      // userId: data.metadata?.userId,
     };
 
-    console.log(`Sending event ${eventType} to Rust service at ${rustServiceUrl}`);
+    console.log(
+      `Sending event ${eventType} to Rust service at ${rustServiceUrl}`
+    );
     const response = await fetch(rustServiceUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        // Add any necessary auth headers for your Rust service
-        // 'Authorization': `Bearer ${YOUR_RUST_SERVICE_AUTH_TOKEN}`
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
-      throw new Error(`Rust service notification failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Rust service notification failed: ${response.status} ${response.statusText}`
+      );
     }
 
     console.log(`Successfully notified Rust service for event ${eventType}`);
-
   } catch (error) {
-    console.error('Error notifying Rust service:', error);
-    // Implement retry logic or alerting if necessary
+    console.error("Error notifying Rust service:", error);
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const buf = await req.text();
-    const sig = req.headers.get('stripe-signature')!;
+    const sig = req.headers.get("stripe-signature")!;
 
     let event: Stripe.Event;
 
@@ -61,7 +64,10 @@ export async function POST(req: NextRequest) {
       event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
     } catch (err: any) {
       console.error(`Webhook signature verification failed: ${err.message}`);
-      return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
+      return NextResponse.json(
+        { error: `Webhook Error: ${err.message}` },
+        { status: 400 }
+      );
     }
 
     // Handle the event
@@ -69,81 +75,278 @@ export async function POST(req: NextRequest) {
     const eventData = event.data.object as any; // Cast to 'any' for easier access, handle with care
 
     switch (event.type) {
-      case 'checkout.session.completed':
-        // This event occurs when a Checkout Session is successful.
-        // It might trigger the initial subscription creation or a one-time payment.
-        // You might already handle subscription creation via 'customer.subscription.created'
-        // Check the 'mode' (subscription or payment) if needed.
-        console.log('Checkout session completed:', eventData.id);
-        // Example: Extract userId from metadata if you added it during session creation
-        const userId = eventData.metadata?.userId;
-        if (userId) {
-          console.log(`Checkout linked to internal user ID: ${userId}`);
-          // Potentially update user status or grant initial credits here,
-          // although subscription events are usually better for granting recurring credits.
+      case "checkout.session.completed": {
+        console.log("Checkout session completed:", eventData.id);
+        // Only handle one-time payment (credit top-up) sessions
+        if (eventData.mode === "payment" && eventData.metadata?.account_id) {
+          const accountId = eventData.metadata.account_id;
+          // Stripe amount is in cents, convert to credits as needed
+          const amount = eventData.amount_total; // e.g., 1000 = $10.00
+          const paymentIntentId = eventData.payment_intent;
+          const paymentIntent =
+            await stripe.paymentIntents.retrieve(paymentIntentId);
+          const paymentMethodId = paymentIntent.payment_method as string;
+
+          console.log("paymentIntentId", paymentIntentId);
+          console.log("paymentMethodId", paymentMethodId);
+
+          // Idempotency: check if this paymentIntent has already been processed
+          const { data: existing, error: existingError } = await supabase
+            .from("credit_transactions")
+            .select("id")
+            .eq("stripe_payment_intent_id", paymentIntentId)
+            .maybeSingle();
+          if (existing) break; // Already processed
+
+          // Store default payment method if present
+          if (paymentMethodId) {
+            try {
+              const paymentIntentCustomer = paymentIntent.customer as string;
+              if (paymentIntentCustomer) {
+                // First, check if this payment method is already attached to the customer
+                const customerPaymentMethods = await stripe.paymentMethods.list(
+                  {
+                    customer: paymentIntentCustomer,
+                    type: "card",
+                  }
+                );
+
+                const isAlreadyAttached = customerPaymentMethods.data.some(
+                  (pm) => pm.id === paymentMethodId
+                );
+
+                let validPaymentMethodId = paymentMethodId;
+
+                if (!isAlreadyAttached) {
+                  try {
+                    // Try to attach if not already attached
+                    await stripe.paymentMethods.attach(paymentMethodId, {
+                      customer: paymentIntentCustomer,
+                    });
+                  } catch (attachError: any) {
+                    // If we can't attach this payment method (already used without customer)
+                    if (attachError?.type === "StripeInvalidRequestError") {
+                      console.log(
+                        "Cannot reuse payment method, retrieving details to create a new one"
+                      );
+
+                      // Get the payment method details
+                      const paymentMethod =
+                        await stripe.paymentMethods.retrieve(paymentMethodId);
+
+                      if (paymentMethod.card) {
+                        // Create a new SetupIntent to securely collect the card details again
+                        console.log(
+                          "Creating setup intent for future payments"
+                        );
+                        const setupIntent = await stripe.setupIntents.create({
+                          customer: paymentIntentCustomer,
+                          payment_method_types: ["card"],
+                          usage: "off_session",
+                        });
+
+                        // We can't automatically create a new payment method here
+                        // Instead, log this so we know to prompt the user to add a new payment method
+                        console.log(
+                          "User needs to add a new payment method. SetupIntent created:",
+                          setupIntent.id
+                        );
+
+                        // Skip updating the default payment method
+                        validPaymentMethodId = null;
+                      }
+                    } else {
+                      // Rethrow if it's a different error
+                      throw attachError;
+                    }
+                  }
+                }
+
+                // Only update the default if we have a valid payment method
+                if (validPaymentMethodId) {
+                  // Set as default for invoices
+                  await stripe.customers.update(paymentIntentCustomer, {
+                    invoice_settings: {
+                      default_payment_method: validPaymentMethodId,
+                    },
+                  });
+
+                  console.log("updating default payment method");
+                  await supabase
+                    .from("accounts")
+                    .update({
+                      default_payment_method: validPaymentMethodId,
+                    })
+                    .eq("id", accountId);
+                }
+              }
+            } catch (err) {
+              console.warn(
+                `Error handling payment method ${paymentMethodId}:`,
+                err
+              );
+              // Continue processing the webhook even if payment method handling fails
+            }
+          }
+
+          const payload = {
+            account_id: accountId,
+            amount: amount,
+          };
+
+          console.log("payload", payload);
+
+          // Update credit balance atomically (assume 1 cent = 1 credit for now)
+          const { error: updateError } = await supabase.rpc(
+            "increment_credit_balance",
+            payload
+          );
+          if (updateError) throw updateError;
+
+          // Insert credit transaction
+          await supabase.from("credit_transactions").insert({
+            account_id: accountId,
+            amount: amount,
+            transaction_type: "purchase",
+            stripe_payment_intent_id: paymentIntentId,
+          });
         }
-        // Notify Rust service if needed for this event
         await notifyRustService(event.type, eventData);
         break;
+      }
 
-      case 'customer.subscription.created':
-      case 'customer.subscription.updated':
-        // Occurs when a subscription is created or updated (e.g., plan change, renewal)
-        console.log(`Subscription ${event.type}:`, eventData.id, `Status: ${eventData.status}`);
-        // Get customer data to access metadata containing userId
-        const customerResponseUpdated = await stripe.customers.retrieve(eventData.customer as string);
+      case "customer.subscription.created":
+      case "customer.subscription.updated": {
+        console.log(
+          `Subscription ${event.type}:`,
+          eventData.id,
+          `Status: ${eventData.status}`
+        );
+        const customerResponseUpdated = await stripe.customers.retrieve(
+          eventData.customer as string
+        );
         let userIdSubscriptionUpdated: string | null | undefined = null;
-        // Check if the customer is not deleted before accessing metadata
+        let accountIdSubscriptionUpdated: string | null | undefined = null;
         if (customerResponseUpdated && !customerResponseUpdated.deleted) {
-            userIdSubscriptionUpdated = (customerResponseUpdated as Stripe.Customer).metadata?.userId;
+          userIdSubscriptionUpdated = (
+            customerResponseUpdated as Stripe.Customer
+          ).metadata?.userId;
+          accountIdSubscriptionUpdated = (
+            customerResponseUpdated as Stripe.Customer
+          ).metadata?.account_id;
         }
+        if (accountIdSubscriptionUpdated) {
+          await supabase
+            .from("accounts")
+            .update({
+              stripe_customer_id: eventData.customer,
+              stripe_subscription_id: eventData.id,
+              stripe_price_id: eventData.items.data[0]?.price.id,
+            })
+            .eq("id", accountIdSubscriptionUpdated);
 
-        // Notify Rust service to update subscription status and potentially grant credits
+          // --- Begin crediting logic for subscriptions ---
+          // Placeholder: determine credits from price amount
+          let creditsToGrant = 0;
+          try {
+            // Try to get the price amount from Stripe
+            const priceId = eventData.items.data[0]?.price.id;
+            if (priceId) {
+              const price = await stripe.prices.retrieve(priceId);
+              // price.unit_amount is in cents, e.g., 19900 = $199.00
+              if (price && price.unit_amount) {
+                // Example: 1 cent = 1 credit (adjust as needed)
+                creditsToGrant = price.unit_amount;
+              }
+            }
+          } catch (err) {
+            console.warn(
+              "Could not determine subscription price amount for crediting.",
+              err
+            );
+          }
+          // Fallback: if not found, use a default
+          if (!creditsToGrant) creditsToGrant = 10000; // Placeholder default
+
+          // Update credit balance atomically
+          await supabase
+            .from("accounts")
+            .update({
+              credit_balance: supabase.rpc("increment_credit_balance", {
+                account_id: accountIdSubscriptionUpdated,
+                amount: creditsToGrant,
+              }),
+            })
+            .eq("id", accountIdSubscriptionUpdated);
+
+          // Insert credit transaction
+          await supabase.from("credit_transactions").insert({
+            account_id: accountIdSubscriptionUpdated,
+            amount: creditsToGrant,
+            transaction_type: "subscription",
+            stripe_payment_intent_id: null,
+          });
+          // --- End crediting logic for subscriptions ---
+        }
         await notifyRustService(event.type, {
-            subscriptionId: eventData.id,
-            customerId: eventData.customer,
-            status: eventData.status,
-            planId: eventData.items.data[0]?.price.id, // Get the price ID
-            currentPeriodEnd: eventData.current_period_end,
-            // Add userId from customer metadata if available
-            userId: eventData.metadata?.userId || userIdSubscriptionUpdated
+          subscriptionId: eventData.id,
+          customerId: eventData.customer,
+          status: eventData.status,
+          planId: eventData.items.data[0]?.price.id, // Get the price ID
+          currentPeriodEnd: eventData.current_period_end,
+          // Add userId from customer metadata if available
+          userId: eventData.metadata?.userId || userIdSubscriptionUpdated,
         });
         break;
+      }
 
-      case 'customer.subscription.deleted':
-        // Occurs when a subscription is canceled at the end of the billing period or immediately
-        console.log(`Subscription deleted:`, eventData.id, `Status: ${eventData.status}`);
-        // Get customer data to access metadata containing userId
-        const customerResponseDeleted = await stripe.customers.retrieve(eventData.customer as string);
+      case "customer.subscription.deleted":
+        console.log(
+          `Subscription deleted:`,
+          eventData.id,
+          `Status: ${eventData.status}`
+        );
+        const customerResponseDeleted = await stripe.customers.retrieve(
+          eventData.customer as string
+        );
         let userIdSubscriptionDeleted: string | null | undefined = null;
-        // Check if the customer is not deleted before accessing metadata
+        let accountIdSubscriptionDeleted: string | null | undefined = null;
         if (customerResponseDeleted && !customerResponseDeleted.deleted) {
-             userIdSubscriptionDeleted = (customerResponseDeleted as Stripe.Customer).metadata?.userId;
+          userIdSubscriptionDeleted = (
+            customerResponseDeleted as Stripe.Customer
+          ).metadata?.userId;
+          accountIdSubscriptionDeleted = (
+            customerResponseDeleted as Stripe.Customer
+          ).metadata?.account_id;
         }
-        // Notify Rust service to update subscription status (e.g., revoke access/credits at period end)
+        if (accountIdSubscriptionDeleted) {
+          await supabase
+            .from("accounts")
+            .update({
+              stripe_customer_id: eventData.customer,
+              stripe_subscription_id: null,
+              stripe_price_id: null,
+            })
+            .eq("id", accountIdSubscriptionDeleted);
+        }
         await notifyRustService(event.type, {
-            subscriptionId: eventData.id,
-            customerId: eventData.customer,
-            status: eventData.status,
-            userId: eventData.metadata?.userId || userIdSubscriptionDeleted
+          subscriptionId: eventData.id,
+          customerId: eventData.customer,
+          status: eventData.status,
+          userId: eventData.metadata?.userId || userIdSubscriptionDeleted,
         });
         break;
-
-      // Add other event types to handle as needed (e.g., payment_failed)
-      // case 'invoice.payment_failed':
-      //   console.log('Invoice payment failed:', eventData.id);
-      //   await notifyRustService(event.type, eventData);
-      //   break;
 
       default:
         console.warn(`Unhandled event type ${event.type}`);
     }
 
-    // Return a 200 response to acknowledge receipt of the event
     return NextResponse.json({ received: true });
-
   } catch (error) {
-      console.error('Error processing webhook:', error);
-      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error("Error processing webhook:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
-} 
+}

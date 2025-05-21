@@ -1,33 +1,54 @@
 import { Stripe } from "stripe";
 import { NextResponse, NextRequest } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { Account } from "@/types/account";
 
 // Initialize Stripe with the secret key from environment variables
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   // apiVersion: '2024-06-20', // Removed explicit API version
 });
 
-// Placeholder function for verifying the token and getting user data
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
 // Replace this with your actual authentication logic using Dynamic's verification
 async function verifyAuthAndGetUser(
   token: string | null
-): Promise<{ userId: string; email?: string } | null> {
+): Promise<Account | null> {
   if (!token) {
     return null;
   }
-  // Example: Decode JWT, verify signature/claims using Dynamic's keys/logic
-  // This is a simplified placeholder
   try {
-    // Replace with actual JWT verification logic
-    const decoded = /* await verifyDynamicToken(token) */ {
-      sub: "user_123",
-      email: "test@example.com",
-    }; // Placeholder
-    if (decoded && decoded.sub) {
-      return { userId: decoded.sub, email: decoded.email };
+    // TODO: Replace with actual JWT verification logic for Dynamic
+    // For now, decode the JWT and extract the dynamic_id (sub)
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    const decoded = JSON.parse(jsonPayload);
+    const dynamicId = decoded.sub;
+    if (!dynamicId) return null;
+    // Fetch the account from Supabase using dynamic_id
+    const { data: account, error } = await supabase
+      .from("accounts")
+      .select("*")
+      .eq("dynamic_id", dynamicId)
+      .single();
+    if (error || !account) {
+      console.error("Account not found or error:", error);
+      return null;
     }
-    return null;
+    return account;
   } catch (error) {
-    console.error("Auth verification failed:", error);
+    console.error("Auth verification or account fetch failed:", error);
     return null;
   }
 }
@@ -36,7 +57,8 @@ async function verifyAuthAndGetUser(
 // You'll need to store this mapping (yourUserId -> stripeCustomerId) in your database
 async function getOrCreateStripeCustomer(
   userId: string,
-  email?: string
+  email?: string,
+  accountId?: string
 ): Promise<string> {
   // 1. Check your database for an existing Stripe customer ID for this userId
   let stripeCustomerId = /* await db.findStripeCustomerId(userId) */ null; // Placeholder DB lookup
@@ -46,15 +68,15 @@ async function getOrCreateStripeCustomer(
     const customer = await stripe.customers.create({
       email: email,
       metadata: {
-        // Link the Stripe customer to your internal user ID
         userId: userId,
+        account_id: accountId,
       },
     });
     stripeCustomerId = customer.id;
     // 3. Save the new stripeCustomerId in your database associated with the userId
     // await db.saveStripeCustomerId(userId, stripeCustomerId); // Placeholder DB save
     console.log(
-      `Created Stripe customer ${stripeCustomerId} for user ${userId}`
+      `Created Stripe customer ${stripeCustomerId} for user ${userId} (account ${accountId})`
     );
   }
 
@@ -68,22 +90,25 @@ export async function POST(request: NextRequest) {
     const token = authorization?.split(" ")[1]; // Assuming "Bearer TOKEN" format
 
     // 1. Verify authentication
-    const user = await verifyAuthAndGetUser(token);
-    if (!user) {
+    const account = await verifyAuthAndGetUser(token);
+    if (!account) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { priceId, quantity = 1 } = await request.json();
+    const { priceId, quantity = 1, accountId } = await request.json();
 
     if (!priceId) {
       return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
     }
 
     // 2. Get or create Stripe Customer ID
-    const customerId = await getOrCreateStripeCustomer(user.userId, user.email);
+    const customerId = await getOrCreateStripeCustomer(
+      account.dynamic_id,
+      account.email,
+      account.id
+    );
 
-    const YOUR_DOMAIN =
-      process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const YOUR_DOMAIN = "http://localhost:3000";
 
     const plans = await stripe.plans.list({
       limit: 3,
@@ -91,8 +116,19 @@ export async function POST(request: NextRequest) {
 
     const price = await stripe.prices.list();
 
-    // 3. Create a Stripe Checkout session
-    const session = await stripe.checkout.sessions.create({
+    // 3. Determine checkout mode based on priceId
+    // 'price_1RBJv7FbFYF5MTmwhoXYqg5E' is the Pay As You Go (credit top-up) priceId
+    let mode: "payment" | "subscription" = "subscription";
+    let metadata: Record<string, any> = {
+      dynamic_id: account.dynamic_id,
+      account_id: account.id,
+    };
+    if (priceId === "price_1RBJv7FbFYF5MTmwhoXYqg5E") {
+      mode = "payment";
+    }
+
+    // 4. Build session params and conditionally add setup_future_usage
+    const sessionParams: any = {
       payment_method_types: ["card"],
       line_items: [
         {
@@ -100,16 +136,23 @@ export async function POST(request: NextRequest) {
           quantity: quantity,
         },
       ],
-      mode: "subscription", // Use 'payment' for one-time payments
-      customer: customerId, // Associate checkout with the Stripe Customer
-      success_url: `${YOUR_DOMAIN}/marketplace/settings?session_id={CHECKOUT_SESSION_ID}`, // Redirect URL on success
-      cancel_url: `${YOUR_DOMAIN}/marketplace/settings`, // Redirect URL on cancellation
-      metadata: {
-        userId: user.userId, // Add metadata to link session to your user
-      },
-    });
+      mode,
+      customer: customerId,
+      success_url: `${YOUR_DOMAIN}/marketplace/settings?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${YOUR_DOMAIN}/marketplace/settings`,
+      metadata,
+      // Add this to ensure payment methods are attached to customers automatically
+    };
 
-    // 4. Return the session ID
+    if (mode === "payment") {
+      sessionParams.payment_intent_data = {
+        setup_future_usage: "off_session",
+      };
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
+
+    // 5. Return the session ID
     return NextResponse.json({ sessionId: session.id });
   } catch (err: any) {
     console.error("Error creating checkout session:", err);

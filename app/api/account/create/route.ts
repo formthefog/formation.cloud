@@ -22,27 +22,26 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate required fields
-    if (!body.user_id || !body.email || !body.address) {
+    if (!body.email || !body.address) {
+      console.log("Missing required fields", body);
       return NextResponse.json(
         { error: "user_id, email, and address are required" },
         { status: 400 }
       );
     }
 
-    // Upsert user in 'users' table
-    const { error: userError } = await supabase.from("users").upsert(
-      [
-        {
-          id: body.user_id,
-          email: body.email,
-          name: body.name || null,
-        },
-      ],
-      { onConflict: "id" }
-    );
+    const foundAccount = await supabase
+      .from("accounts")
+      .select("*")
+      .eq("dynamic_id", body.dynamic_id)
+      .single();
 
-    if (userError) {
-      return NextResponse.json({ error: userError.message }, { status: 400 });
+    if (!foundAccount.error) {
+      console.log("Account already exists", foundAccount);
+      return NextResponse.json(
+        { message: "Already exists. All good." },
+        { status: 200 }
+      );
     }
 
     // Insert new account record into 'accounts' table, attributed to user_id
@@ -50,12 +49,9 @@ export async function POST(request: NextRequest) {
       .from("accounts")
       .insert([
         {
-          user_id: body.user_id,
+          dynamic_id: body.dynamic_id,
           primary_address: body.address,
           created_at: new Date().toISOString(),
-          type: "oauth",
-          provider: "github",
-          provider_account_id: body.provider_account_id,
           access_token: body.access_token,
           refresh_token: body.refresh_token,
           expires_at: body.expires_at,
@@ -67,10 +63,10 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
+      console.log("Error in account creation", error);
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Return the created account data
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error("Error in account creation:", error);

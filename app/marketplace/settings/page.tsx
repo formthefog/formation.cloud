@@ -31,6 +31,8 @@ import {
   PlusIcon,
   CheckIcon,
   CogIcon,
+  BoltIcon,
+  CheckCircleIcon,
 } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import {
@@ -41,7 +43,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-
+import { useAuth } from "@/components/auth-provider";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || ""
 );
@@ -52,6 +54,10 @@ export default function SettingsPage() {
   const [error, setError] = useState<string | null>(null);
   const isLoggedIn = useIsLoggedIn();
   const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+  const { account } = useAuth();
+  const [autoTopupThreshold, setAutoTopupThreshold] = useState(1000);
+  const [autoTopupAmount, setAutoTopupAmount] = useState(10000);
+  const [autoTopupSaved, setAutoTopupSaved] = useState(false);
 
   // Calculate prices based on billing period
   const getPriceDisplay = (monthlyPrice: number) => {
@@ -72,6 +78,52 @@ export default function SettingsPage() {
 
   const starterPrice = getPriceDisplay(49);
   const proPrice = getPriceDisplay(999);
+
+  // Helper to get current plan label from price ID
+  const getPlanLabel = () => {
+    if (!account?.stripe_customer_id) return "Exploring (No Billing Set Up)";
+    switch (account?.stripe_price_id) {
+      case "price_1RBJv7FbFYF5MTmwhoXYqg5E":
+        return "Pay As You Go";
+      case "price_1RBJD0FbFYF5MTmwHmoAAKYy":
+      case "price_1RBJD0FbFYF5MTmwVY2dJ1vg":
+        return "Pro";
+      case "price_1RBJFfFbFYF5MTmwHnaLs3WR":
+      case "price_1RBJGEFbFYF5MTmwLq6NLnyg":
+        return "Pro+";
+      case "price_1RBJtGFbFYF5MTmwOoeVlfgY":
+      case "price_1RBJtxFbFYF5MTmwJ0D0oDln":
+        return "Power";
+      default:
+        return "Active Subscription";
+    }
+  };
+
+  // Helper to get consistent button props for each plan
+  const getButtonProps = (plan: string) => {
+    const isCurrent = getPlanLabel() === plan;
+    if (isCurrent) {
+      return {
+        children: (
+          <>
+            <CheckIcon className="w-4 h-4 mr-2" />
+            Current Plan
+          </>
+        ),
+        className:
+          "w-full h-11 mt-6 rounded-full font-medium bg-blue-600 text-white flex items-center justify-center",
+        disabled: true,
+        variant: undefined,
+      };
+    }
+    return {
+      children: `Select Plan`,
+      className:
+        "w-full h-11 mt-6 rounded-full font-medium bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 flex items-center justify-center",
+      disabled: loading,
+      variant: undefined,
+    };
+  };
 
   const onLogout = async () => {
     try {
@@ -110,7 +162,7 @@ export default function SettingsPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ priceId: priceId }),
+        body: JSON.stringify({ priceId: priceId, accountId: account?.id }),
       });
 
       const { sessionId, error: apiError } = await response.json();
@@ -192,6 +244,73 @@ export default function SettingsPage() {
     }
   };
 
+  const handleSaveAutoTopup = async () => {
+    setError(null);
+    if (!isLoggedIn) {
+      setError("Please log in to save auto top-up settings.");
+      toast.error("Please log in first.");
+      setShowAuthFlow(true);
+      return;
+    }
+    setLoading(true);
+
+    try {
+      const token = await getAuthToken();
+      if (!token) {
+        throw new Error("Failed to retrieve authentication token.");
+      }
+
+      const response = await fetch("/api/account/auto-topup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          threshold: autoTopupThreshold,
+          amount: autoTopupAmount,
+        }),
+      });
+
+      const { success, error: apiError } = await response.json();
+
+      if (!response.ok || !success) {
+        throw new Error(apiError || "Failed to save auto top-up settings.");
+      }
+
+      setAutoTopupSaved(true);
+      toast.success("Auto top-up settings saved successfully.");
+    } catch (err: any) {
+      console.error("Auto Top-Up Error:", err);
+      const errorMessage =
+        err.message ||
+        "An unexpected error occurred while saving auto top-up settings.";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    const fetchAutoTopup = async () => {
+      try {
+        const token = await getAuthToken();
+        const response = await fetch("/api/account/auto-topup", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!response.ok) return;
+        const { threshold, amount } = await response.json();
+        if (threshold) setAutoTopupThreshold(threshold);
+        if (amount) setAutoTopupAmount(amount);
+      } catch (err) {
+        // Optionally handle error
+      }
+    };
+    fetchAutoTopup();
+  }, [isLoggedIn, getAuthToken]);
+
   if (!isLoggedIn) {
     return (
       <div className="flex min-h-screen flex-col bg-background">
@@ -202,7 +321,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="container p-4 md:p-8 mx-auto max-w-5xl">
+          <div className="container p-4 md:p-8 mx-auto max-w-7xl">
             <div className="max-w-2xl mx-auto">
               <Card className="relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50/50 to-white" />
@@ -285,31 +404,10 @@ export default function SettingsPage() {
         <div className="border-b">
           <div className="container flex h-16 items-center justify-between px-4">
             <h1 className="text-lg font-semibold">Settings</h1>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleManageSubscription}
-                disabled={loading || !isLoggedIn}
-              >
-                <CogIcon className="w-5 h-5 mr-1.5" />
-                Manage Billing
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onLogout}
-                disabled={loading}
-                className="text-red-600 hover:text-red-700 hover:bg-red-50"
-              >
-                <ArrowLeftOnRectangleIcon className="w-5 h-5 mr-1.5" />
-                Sign Out
-              </Button>
-            </div>
           </div>
         </div>
 
-        <div className="container p-4 md:p-8 mx-auto max-w-5xl space-y-8">
+        <div className="p-4 md:p-8 mx-auto max-w-7xl space-y-8">
           <Tabs defaultValue="billing" className="space-y-8">
             <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground relative w-full space-x-1">
               <TabsTrigger
@@ -319,13 +417,13 @@ export default function SettingsPage() {
                 <CreditCardIcon className="mr-2 h-4 w-4" />
                 Billing
               </TabsTrigger>
-              <TabsTrigger
+              {/* <TabsTrigger
                 value="api"
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow"
               >
                 <CodeBracketIcon className="mr-2 h-4 w-4" />
                 API
-              </TabsTrigger>
+              </TabsTrigger> */}
             </TabsList>
 
             {/* Billing Section */}
@@ -334,8 +432,16 @@ export default function SettingsPage() {
                 <CardHeader>
                   <CardTitle>Billing Information</CardTitle>
                   <CardDescription>
-                    Manage your billing information, credits, and subscription
-                    tier.
+                    {account?.stripe_customer_id ? (
+                      <span>
+                        Your current plan: <b>{getPlanLabel()}</b>
+                      </span>
+                    ) : (
+                      <span>
+                        You are currently exploring the platform. Billing is not
+                        set up yet. Enjoy your free credits!
+                      </span>
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8">
@@ -345,27 +451,37 @@ export default function SettingsPage() {
                       <div>
                         <div className="flex items-center gap-2">
                           <h3 className="text-xl font-semibold text-blue-900">
-                            Pay As You Go
+                            {getPlanLabel()}
                           </h3>
-                          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-                            Current Plan
-                          </span>
+                          {account?.stripe_customer_id ? (
+                            <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                              Current Plan
+                            </span>
+                          ) : (
+                            <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                              Free Trial
+                            </span>
+                          )}
                         </div>
                         <p className="text-sm text-blue-700 mt-1">
-                          $0.005 per credit • No monthly commitment
+                          {account?.stripe_customer_id
+                            ? "Your subscription is active."
+                            : "You have free credits to explore the platform. Upgrade or add billing when you're ready!"}
                         </p>
                       </div>
-                      <Button
-                        className="bg-blue-600 hover:bg-blue-700"
-                        disabled={loading || !isLoggedIn}
-                      >
-                        {loading ? "Processing..." : "Manage Plan"}
-                      </Button>
+                      {account?.stripe_customer_id ? (
+                        <Button
+                          className="bg-blue-600 hover:bg-blue-700"
+                          disabled={loading}
+                        >
+                          {loading ? "Processing..." : "Manage Plan"}
+                        </Button>
+                      ) : null}
                     </div>
                   </div>
 
                   {/* Credit Balance & Stats */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="rounded-xl border bg-gradient-to-br from-white to-gray-50 p-6">
                       <div className="flex items-start justify-between">
                         <div>
@@ -420,7 +536,6 @@ export default function SettingsPage() {
                         Usage Trends
                       </p>
                       <div className="h-[120px] mt-2">
-                        {/* Add your chart component here */}
                         <div className="w-full h-full bg-gradient-to-t from-blue-50 to-transparent rounded" />
                       </div>
                       <div className="grid grid-cols-3 gap-4 mt-4">
@@ -444,7 +559,7 @@ export default function SettingsPage() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Subscription Tiers */}
                   <div className="space-y-4">
@@ -471,7 +586,7 @@ export default function SettingsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                       {/* Basic Tier */}
                       <div className="rounded-xl border p-6 bg-white hover:border-blue-200 hover:shadow-lg transition-all flex flex-col min-h-[480px]">
-                        <div className="flex-1">
+                        <div className="flex-1 flex flex-col">
                           <h4 className="text-lg font-semibold">
                             Pay As You Go
                           </h4>
@@ -479,7 +594,7 @@ export default function SettingsPage() {
                             Perfect for testing and small projects
                           </p>
                           <div className="mt-5">
-                            <span className="text-3xl font-bold">$0.005</span>
+                            <span className="text-3xl font-bold">$0.01</span>
                             <span className="text-gray-500">/credit</span>
                           </div>
                           <ul className="mt-5 space-y-2.5">
@@ -496,19 +611,92 @@ export default function SettingsPage() {
                               Basic support
                             </li>
                           </ul>
+
+                          {/* Auto Top-Up Section */}
+                          <div className="mt-8">
+                            <div className="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-blue-100 shadow-sm p-5 flex flex-col gap-3">
+                              <div className="flex items-center gap-2 mb-1">
+                                <BoltIcon className="w-5 h-5 text-blue-500" />
+                                <span className="font-semibold text-lg text-blue-900">
+                                  Auto Top-Up
+                                </span>
+                              </div>
+                              <p className="text-sm text-blue-700 mb-2">
+                                Never run out of credits! Set a threshold and
+                                top-up amount for automatic refills.
+                              </p>
+                              <div className="flex flex-col gap-3 items-center">
+                                <div className="flex items-center gap-2">
+                                  <Label className="text-sm text-blue-900">
+                                    Threshold
+                                  </Label>
+                                  <Input
+                                    type="number"
+                                    min={1}
+                                    value={autoTopupThreshold}
+                                    onChange={(e) =>
+                                      setAutoTopupThreshold(
+                                        Number(e.target.value)
+                                      )
+                                    }
+                                    className="w-20 border-blue-200"
+                                  />
+                                  <span className="text-xs text-blue-700">
+                                    credits
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 md:ml-6">
+                                  <Label className="text-sm text-blue-900">
+                                    Top-Up Amount
+                                  </Label>
+                                  <Input
+                                    type="number"
+                                    min={1}
+                                    value={autoTopupAmount}
+                                    onChange={(e) =>
+                                      setAutoTopupAmount(Number(e.target.value))
+                                    }
+                                    className="w-20 border-blue-200"
+                                  />
+                                  <span className="text-xs text-blue-700">
+                                    credits
+                                  </span>
+                                </div>
+                                <Button
+                                  className="ml-0 md:ml-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full px-6 py-2 transition-all duration-150"
+                                  onClick={handleSaveAutoTopup}
+                                  disabled={loading}
+                                >
+                                  {loading ? "Saving..." : "Save"}
+                                </Button>
+                              </div>
+                              {autoTopupSaved && (
+                                <div className="flex items-center gap-2 mt-2 text-green-700">
+                                  <CheckCircleIcon className="w-5 h-5" />
+                                  <span className="text-sm">
+                                    Auto top-up enabled: when credits drop below{" "}
+                                    <b>{autoTopupThreshold}</b>,{" "}
+                                    <b>{autoTopupAmount}</b> credits will be
+                                    added automatically.
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                         <Button
-                          variant="outline"
-                          className="w-full h-11 mt-6 rounded-full font-medium"
-                        >
-                          Current Plan
-                        </Button>
+                          {...getButtonProps("Pay As You Go")}
+                          onClick={() =>
+                            handleCheckout("price_1RBJv7FbFYF5MTmwhoXYqg5E")
+                          }
+                          className="mt-8"
+                        />
                       </div>
 
-                      {/* Starter Tier */}
+                      {/* Starter (Pro) Tier */}
                       <div className="rounded-xl border p-6 bg-white hover:border-blue-200 hover:shadow-lg transition-all flex flex-col min-h-[480px]">
                         <div className="flex-1">
-                          <h4 className="text-lg font-semibold">Starter</h4>
+                          <h4 className="text-lg font-semibold">Pro</h4>
                           <p className="text-sm text-gray-500 mt-1">
                             For individuals and small teams
                           </p>
@@ -542,40 +730,39 @@ export default function SettingsPage() {
                           </ul>
                         </div>
                         <Button
-                          className="w-full h-11 mt-6 rounded-full font-medium bg-blue-600 hover:bg-blue-700"
+                          {...getButtonProps("Pro")}
                           onClick={() =>
                             handleCheckout(
                               billingPeriod === "annual"
-                                ? "price_starter_annual"
-                                : "price_starter_monthly"
+                                ? "price_1RBJD0FbFYF5MTmwVY2dJ1vg"
+                                : "price_1RBJD0FbFYF5MTmwHmoAAKYy"
                             )
                           }
-                          disabled={loading}
-                        >
-                          Upgrade to Starter
-                        </Button>
+                        />
                       </div>
 
-                      {/* Pro Tier */}
+                      {/* Pro+ Tier */}
                       <div className="rounded-xl border p-6 bg-gradient-to-b from-blue-50 to-white relative hover:shadow-lg transition-all flex flex-col min-h-[480px]">
                         <div className="absolute -top-2 right-4 px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
                           Most Popular
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-lg font-semibold">Pro</h4>
+                          <h4 className="text-lg font-semibold">Pro+</h4>
                           <p className="text-sm text-gray-500 mt-1">
                             For growing teams and applications
                           </p>
                           <div className="mt-5">
                             <span className="text-3xl font-bold">
-                              ${proPrice.price}
+                              {billingPeriod === "annual" ? "$1669" : "$199"}
                             </span>
                             <span className="text-gray-500">
-                              {proPrice.period}
+                              {billingPeriod === "annual" ? "/year" : "/month"}
                             </span>
                           </div>
                           <p className="text-sm text-gray-500 mt-1">
-                            {proPrice.subtitle}
+                            {billingPeriod === "annual"
+                              ? "billed annually at $1669"
+                              : "billed monthly"}
                           </p>
                           <p className="text-sm text-gray-500 mt-1">
                             Includes 250,000 credits
@@ -596,32 +783,36 @@ export default function SettingsPage() {
                           </ul>
                         </div>
                         <Button
-                          className="w-full h-11 mt-6 rounded-full font-medium bg-blue-600 hover:bg-blue-700"
+                          {...getButtonProps("Pro+")}
                           onClick={() =>
                             handleCheckout(
                               billingPeriod === "annual"
-                                ? "price_pro_annual"
-                                : "price_pro_monthly"
+                                ? "price_1RBJGEFbFYF5MTmwLq6NLnyg"
+                                : "price_1RBJFfFbFYF5MTmwHnaLs3WR"
                             )
                           }
-                          disabled={loading}
-                        >
-                          Upgrade to Pro
-                        </Button>
+                        />
                       </div>
 
-                      {/* Enterprise Tier */}
+                      {/* Power Tier */}
                       <div className="rounded-xl border p-6 bg-gradient-to-b from-purple-50 to-white hover:shadow-lg transition-all flex flex-col min-h-[480px]">
                         <div className="flex-1">
-                          <h4 className="text-lg font-semibold">Enterprise</h4>
+                          <h4 className="text-lg font-semibold">Power</h4>
                           <p className="text-sm text-gray-500 mt-1">
                             For large-scale deployments
                           </p>
                           <div className="mt-5">
-                            <span className="text-3xl font-bold">Custom</span>
+                            <span className="text-3xl font-bold">
+                              {billingPeriod === "annual" ? "$8399" : "$999"}
+                            </span>
+                            <span className="text-gray-500">
+                              {billingPeriod === "annual" ? "/year" : "/month"}
+                            </span>
                           </div>
                           <p className="text-sm text-gray-500 mt-1">
-                            Volume-based pricing
+                            {billingPeriod === "annual"
+                              ? "billed annually at $8399"
+                              : "billed monthly"}
                           </p>
                           <ul className="mt-5 space-y-2.5">
                             <li className="flex items-center text-sm text-gray-600">
@@ -639,17 +830,21 @@ export default function SettingsPage() {
                           </ul>
                         </div>
                         <Button
-                          variant="outline"
-                          className="w-full h-11 mt-6 rounded-full font-medium"
-                        >
-                          Contact Sales
-                        </Button>
+                          {...getButtonProps("Power")}
+                          onClick={() =>
+                            handleCheckout(
+                              billingPeriod === "annual"
+                                ? "price_1RBJtxFbFYF5MTmwJ0D0oDln"
+                                : "price_1RBJtGFbFYF5MTmwOoeVlfgY"
+                            )
+                          }
+                        />
                       </div>
                     </div>
                   </div>
 
                   {/* Payment Methods */}
-                  <div className="space-y-4">
+                  {/* <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <Label className="text-lg font-semibold">
                         Payment Methods
@@ -666,10 +861,10 @@ export default function SettingsPage() {
                         interruptions.
                       </p>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Billing History */}
-                  <div className="space-y-4">
+                  {/* <div className="space-y-4">
                     <h3 className="text-lg font-semibold">
                       Recent Transactions
                     </h3>
@@ -709,7 +904,7 @@ export default function SettingsPage() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </CardContent>
               </Card>
             </TabsContent>

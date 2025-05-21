@@ -76,7 +76,7 @@ interface ChatMessage {
 
 export default function AgentChatPage() {
   const isLoggedIn = useIsLoggedIn();
-  const { user, accounts } = useAuth();
+  const { user, account } = useAuth();
   const [deployments, setDeployments] = useState<AgentDeployment[]>([]);
   const [selectedDeployment, setSelectedDeployment] =
     useState<AgentDeployment | null>(null);
@@ -97,12 +97,10 @@ export default function AgentChatPage() {
   };
 
   const fetchDeployments = async () => {
-    if (!isLoggedIn || !accounts || !accounts[0]?.id) return;
+    if (!isLoggedIn || !account || !account.id) return;
     try {
       setIsLoading(true);
-      const response = await fetch(
-        `/api/deployments?account_id=${accounts[0].id}`
-      );
+      const response = await fetch(`/api/deployments?account_id=${account.id}`);
       if (response.ok) {
         const { deployments: apiDeployments } = await response.json();
         setDeployments(apiDeployments);
@@ -118,11 +116,11 @@ export default function AgentChatPage() {
   // Fetch deployments after authentication
   useEffect(() => {
     const fetchDeployments = async () => {
-      if (!isLoggedIn || !accounts || !accounts[0]?.id) return;
+      if (!isLoggedIn || !account || !account.id) return;
       try {
         setIsLoading(true);
         const response = await fetch(
-          `/api/deployments?account_id=${accounts[0].id}`
+          `/api/deployments?account_id=${account.id}`
         );
         if (response.ok) {
           const { deployments: apiDeployments } = await response.json();
@@ -155,7 +153,7 @@ export default function AgentChatPage() {
     };
 
     fetchDeployments();
-  }, [isLoggedIn, accounts]);
+  }, [isLoggedIn, account]);
 
   // Effect to scroll to bottom when messages change
   useEffect(() => {
