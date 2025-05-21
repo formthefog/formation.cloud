@@ -82,31 +82,7 @@ const MarketplaceNavigation = ({
           {user && account && (
             <Link href="/marketplace/settings">
               <div className="flex items-center space-x-2">
-                {(() => {
-                  const balance = Number(account.credit_balance) || 0;
-                  let color = "text-red-600 bg-red-100 border-red-300";
-                  let icon = "😨";
-                  let flair = "Low";
-                  if (balance >= 10000) {
-                    color = "text-green-700 bg-green-100 border-green-300";
-                    icon = "💎";
-                    flair = "";
-                  } else if (balance >= 1000) {
-                    color = "text-yellow-700 bg-yellow-100 border-yellow-300";
-                    icon = "😯";
-                    flair = "";
-                  }
-                  return (
-                    <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full border font-bold ${color} shadow-sm transition-all duration-300`}
-                      title={`Your current credit balance: ${balance}`}
-                    >
-                      <span className="mr-1">{icon}</span>
-                      {balance.toLocaleString()}
-                      <span className="ml-1 text-xs font-normal">Credits</span>
-                    </span>
-                  );
-                })()}
+                <CreditBadge account={account} />
               </div>
             </Link>
           )}
@@ -119,5 +95,47 @@ const MarketplaceNavigation = ({
     </header>
   );
 };
+
+function CreditBadge({ account }) {
+  const balance = Number(account?.credit_balance) || 0;
+
+  // Configure badge appearance based on balance
+  let color, icon, textSize;
+
+  if (balance >= 10000) {
+    color = "text-green-700 bg-green-100 border-green-300";
+    icon = "💎";
+  } else if (balance >= 1000) {
+    color = "text-yellow-700 bg-yellow-100 border-yellow-300";
+    icon = "😯";
+  } else {
+    color = "text-red-600 bg-red-100 border-red-300";
+    icon = "😨";
+  }
+
+  // For very small screens, if the number is large, we may need smaller text
+  if (balance >= 10000) {
+    textSize = "text-sm sm:text-base";
+  } else {
+    textSize = "text-base";
+  }
+
+  return (
+    <span
+      className={`
+        inline-flex items-center gap-1 px-2.5 py-1 rounded-full 
+        border ${color} shadow-sm transition-all duration-300 
+        ${textSize} whitespace-nowrap
+      `}
+      title={`Your current credit balance: ${balance.toLocaleString()}`}
+    >
+      <span className="flex-shrink-0 mr-0.5">{icon}</span>
+      <span className="font-bold">{balance.toLocaleString()}</span>
+      <span className="hidden sm:inline text-xs font-normal ml-0.5">
+        Credits
+      </span>
+    </span>
+  );
+}
 
 export default MarketplaceNavigation;
