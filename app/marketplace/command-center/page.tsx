@@ -19,6 +19,7 @@ import {
   CommandLineIcon,
   ChartBarIcon,
   RocketLaunchIcon,
+  Bars3Icon,
 } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
@@ -59,12 +60,11 @@ import { Agent } from "http";
 import AgentChatHeader from "./components/AgentChatHeader";
 import AgentChatMessages from "./components/AgentChatMessages";
 import AgentChatInput from "./components/AgentChatInput";
-import { ArrowRightIcon, KeyIcon } from "lucide-react";
+import { ArrowRightIcon, KeyIcon, X } from "lucide-react";
 import AgentChatList from "./components/AgentChatList";
 import AgentSidebar from "./components/AgentSidebar";
 
 // Define interfaces (unchanged)
-
 interface ChatMessage {
   id: string;
   role: "user" | "agent" | "system";
@@ -90,6 +90,10 @@ export default function AgentChatPage() {
   const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Mobile-specific state
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isMobileSettingsOpen, setIsMobileSettingsOpen] = useState(false);
 
   // Scroll to bottom of messages
   const scrollToBottom = () => {
@@ -159,6 +163,33 @@ export default function AgentChatPage() {
   useEffect(() => {
     scrollToBottom();
   }, [selectedDeployment, conversations]);
+
+  // Auto-close mobile sidebar when selecting a deployment
+  useEffect(() => {
+    if (selectedDeployment && isMobileSidebarOpen) {
+      setIsMobileSidebarOpen(false);
+    }
+  }, [selectedDeployment]);
+
+  // Listen for window resize to handle mobile/desktop views
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        // On desktop
+        setIsMobileSidebarOpen(false);
+        setIsMobileSettingsOpen(false);
+      }
+    };
+
+    // Set initial state
+    handleResize();
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Filter deployments based on search
   const filteredDeployments = deployments.filter(
@@ -362,305 +393,286 @@ export default function AgentChatPage() {
       .substring(0, 2);
   };
 
+  // Toggle mobile sidebar
+  const toggleMobileSidebar = () => {
+    setIsMobileSidebarOpen(!isMobileSidebarOpen);
+    // Close settings drawer if opening sidebar
+    if (!isMobileSidebarOpen) {
+      setIsMobileSettingsOpen(false);
+    }
+  };
+
+  // Toggle mobile settings
+  const toggleMobileSettings = () => {
+    setIsMobileSettingsOpen(!isMobileSettingsOpen);
+    // Close sidebar drawer if opening settings
+    if (!isMobileSettingsOpen) {
+      setIsMobileSidebarOpen(false);
+    }
+  };
+
   if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        {isLoggedIn ? (
-          <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex justify-between items-center mb-8">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                  Command Center
-                  <span className="flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-blue-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
-                  </span>
-                </h1>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Your AI agent command center awaits. Deploy your first agent
-                  to get started.
-                </p>
-              </div>
-              <Link href="/marketplace/getting-started/create">
-                <Button className="bg-[#0A84FF] hover:bg-[#0A84FF]/90 flex items-center gap-2">
-                  <RocketLaunchIcon className="w-5 h-5" />
-                  Deploy Your First Agent
-                </Button>
-              </Link>
-            </div>
-
-            {/* Empty State */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-12 text-center">
-              <div className="max-w-2xl mx-auto">
-                <div className="mb-6 relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0A84FF]/10 to-blue-500/10 blur-3xl" />
-                  <div className="relative">
-                    <div className="w-16 h-16 bg-gradient-to-r from-[#0A84FF]/10 to-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue-200/20">
-                      <SparklesIcon className="w-8 h-8 text-[#0A84FF]" />
-                    </div>
-                  </div>
-                </div>
-                <h2 className="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#0A84FF] to-blue-600">
-                  Begin Your AI Journey
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
-                  Transform your operations with AI agents. Deploy your first
-                  agent and watch as it automates tasks, processes data, and
-                  drives efficiency across your workflow.
-                </p>
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
-                  <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
-                    <CommandLineIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
-                    <h3 className="font-semibold mb-2">One-Click Deploy</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Deploy agents instantly with our streamlined setup
-                      process.
-                    </p>
-                  </div>
-                  <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
-                    <ChartBarIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
-                    <h3 className="font-semibold mb-2">Real-time Insights</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Monitor performance and costs with detailed analytics.
-                    </p>
-                  </div>
-                  <div className="p-6 rounded-xl bg-gradient-to-r flex flex-col items-center justify-center from-[#0A84FF]/5 to-blue-500/5 border border-blue-200/10">
-                    <BoltIcon className="w-8 h-8 text-[#0A84FF] mb-3" />
-                    <h3 className="font-semibold mb-2">Instant Results</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      See immediate impact with AI-powered automation.
-                    </p>
-                  </div>
-                </div>
-                <Link href="/marketplace/getting-started/create">
-                  <Button
-                    size="lg"
-                    className="bg-[#0A84FF] hover:bg-[#0A84FF]/90"
-                  >
-                    Explore Available Agents
-                    <ArrowRightIcon className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            {/* Hero Section */}
-            <div className="text-center mb-16">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="marketing-hero rounded-3xl p-8"
-              >
-                <div className="inline-block mb-3 px-4 py-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-300 text-sm font-medium">
-                  <span className="flex items-center gap-2">
-                    <KeyIcon className="w-4 h-4" />
-                    Early Access Now Available
-                  </span>
-                </div>
-                <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 mb-6">
-                  The Future of AI Management
-                </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-                  Join an exclusive group of innovative companies shaping the
-                  future of AI operations. Formation's AI Command Center is now
-                  accepting early access partners.
-                </p>
-                <div className="flex items-center justify-center">
-                  <AuthButton />
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Early Access Benefits */}
+        <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+          {/* Hero Section */}
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+              transition={{ duration: 0.6 }}
+              className="marketing-hero rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8"
             >
-              <div className="marketing-card">
-                <div className="text-purple-600 mb-4">
-                  <StarIcon className="h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Early Partner Benefits
-                </h3>
-                <p className="text-gray-600">
-                  Exclusive pricing, priority support, and direct input into our
-                  product roadmap.
-                </p>
+              <div className="inline-block mb-3 px-3 py-1 sm:px-4 sm:py-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-300 text-xs sm:text-sm font-medium">
+                <span className="flex items-center gap-1.5 sm:gap-2">
+                  <KeyIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Early Access Now Available
+                </span>
               </div>
-              <div className="marketing-card">
-                <div className="text-blue-600 mb-4">
-                  <ShieldCheckIcon className="h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Enterprise Ready</h3>
-                <p className="text-gray-600">
-                  SOC 2 compliant with dedicated support and custom deployment
-                  options.
-                </p>
-              </div>
-              <div className="marketing-card">
-                <div className="text-green-600 mb-4">
-                  <BoltIcon className="h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Instant Setup</h3>
-                <p className="text-gray-600">
-                  Deploy your first AI agent in under 60 seconds. No complex
-                  configuration needed.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Preview Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-2xl shadow-xl p-8 mb-16"
-            >
-              <div className="text-center mb-8">
-                <div className="inline-block mb-3 px-4 py-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-300 text-sm font-medium">
-                  <span className="flex items-center gap-2">
-                    <SparklesIcon className="w-4 h-4" />
-                    Sneak Peek
-                  </span>
-                </div>
-                <h2 className="text-3xl font-bold mb-4">
-                  Your AI Fleet Awaits
-                </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  Get early access to our growing marketplace of specialized AI
-                  agents.
-                </p>
-              </div>
-              {/* <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {hiredAgents.slice(0, 3).map((agent) => (
-                  <div
-                    key={agent.id}
-                    className="marketing-card group cursor-pointer"
-                    onClick={() => setShowAuthFlow(true)}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg group-hover:scale-110 transition-transform">
-                        {getAgentIcon(agent.type)}
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{agent.name}</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {agent.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div> */}
-            </motion.div>
-
-            {/* CTA Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-center bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-xl p-12 text-white"
-            >
-              <h2 className="text-3xl font-bold mb-6">
-                Join the AI Revolution
-              </h2>
-              <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-                Be among the first to experience the future of AI operations.
-                Early access spots are limited.
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 mb-3 sm:mb-6">
+                The Future of AI Management
+              </h1>
+              <p className="text-sm sm:text-base lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-4 sm:mb-8">
+                Join an exclusive group of innovative companies shaping the
+                future of AI operations. Formation's AI Command Center is now
+                accepting early access partners.
               </p>
-              <AuthButton
-                className="border-white text-white"
-                buttonStyle="bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors"
-              />
+              <div className="flex items-center justify-center">
+                <AuthButton />
+              </div>
             </motion.div>
           </div>
-        )}
+
+          {/* Early Access Benefits */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12 lg:mb-16"
+          >
+            <div className="marketing-card p-4 sm:p-6">
+              <div className="text-purple-600 mb-3 sm:mb-4">
+                <StarIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">
+                Early Partner Benefits
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600">
+                Exclusive pricing, priority support, and direct input into our
+                product roadmap.
+              </p>
+            </div>
+            <div className="marketing-card p-4 sm:p-6">
+              <div className="text-blue-600 mb-3 sm:mb-4">
+                <ShieldCheckIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">
+                Enterprise Ready
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600">
+                SOC 2 compliant with dedicated support and custom deployment
+                options.
+              </p>
+            </div>
+            <div className="marketing-card p-4 sm:p-6">
+              <div className="text-green-600 mb-3 sm:mb-4">
+                <BoltIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">
+                Instant Setup
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600">
+                Deploy your first AI agent in under 60 seconds. No complex
+                configuration needed.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Preview Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 lg:p-8 mb-8 sm:mb-12 lg:mb-16"
+          >
+            <div className="text-center mb-4 sm:mb-8">
+              <div className="inline-block mb-2 sm:mb-3 px-3 py-1 sm:px-4 sm:py-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-300 text-xs sm:text-sm font-medium">
+                <span className="flex items-center gap-1.5 sm:gap-2">
+                  <SparklesIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Sneak Peek
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-4">
+                Your AI Fleet Awaits
+              </h2>
+              <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+                Get early access to our growing marketplace of specialized AI
+                agents.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="text-center bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-6 sm:p-8 lg:p-12 text-white"
+          >
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-6">
+              Join the AI Revolution
+            </h2>
+            <p className="text-sm sm:text-base lg:text-xl mb-4 sm:mb-8 max-w-2xl mx-auto opacity-90">
+              Be among the first to experience the future of AI operations.
+              Early access spots are limited.
+            </p>
+            <AuthButton
+              className="border-white text-white"
+              buttonStyle="bg-white text-[#9333EA] hover:text-[#7928CA] transition-colors"
+            />
+          </motion.div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex max-h-[calc(100vh-85px)] overflow-hidden bg-white dark:bg-gray-900 mt-[10px]">
-      {/* Sidebar - Now fixed */}
-      <div>
-        <div className="w-[480px] flex flex-col h-full border-r  border-gray-200 dark:border-gray-800">
-          {/* Sidebar Header - Fixed */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Command Center
-            </h1>
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-8 w-8 p-0"
-              onClick={() => setIsNewChatDialogOpen(true)}
-            >
-              <PlusIcon className="h-5 w-5" />
-            </Button>
-          </div>
+    <div className="flex flex-col lg:flex-row max-h-[calc(100vh-85px)] overflow-hidden bg-white dark:bg-gray-900 mt-[10px]">
+      {/* Mobile Top Bar - Only on mobile */}
+      <div className="lg:hidden flex items-center justify-between border-b border-gray-200 dark:border-gray-800 p-3 bg-white dark:bg-gray-900 z-20">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="p-1"
+          onClick={toggleMobileSidebar}
+        >
+          <Bars3Icon className="h-6 w-6" />
+        </Button>
 
-          {/* Search - Fixed */}
-          <div className="p-3 border-b border-gray-200 dark:border-gray-800">
-            <div className="relative">
-              <Input
-                placeholder="Search agents..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8"
-              />
-              <div className="absolute left-2 top-2.5 text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-              </div>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-white truncate px-2">
+          {selectedDeployment
+            ? selectedDeployment.config.name
+            : "Command Center"}
+        </h1>
+
+        {selectedDeployment && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="p-1"
+            onClick={toggleMobileSettings}
+          >
+            <InformationCircleIcon className="h-6 w-6" />
+          </Button>
+        )}
+      </div>
+
+      {/* Mobile Sidebar - Only visible when active on mobile */}
+      <div
+        className={`
+        fixed inset-0 z-30 lg:relative lg:z-auto
+        ${isMobileSidebarOpen ? "flex" : "hidden lg:flex"}
+        flex-col lg:w-[320px] xl:w-[480px] h-full 
+        bg-white dark:bg-gray-900 
+        border-r border-gray-200 dark:border-gray-800
+        transition-all duration-300
+      `}
+      >
+        {/* Mobile sidebar close button - Only on mobile */}
+        <div className="lg:hidden flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-800">
+          <h2 className="font-semibold">Agent List</h2>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="p-0 h-8 w-8"
+            onClick={() => setIsMobileSidebarOpen(false)}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        {/* Sidebar Header */}
+        <div className="hidden lg:flex p-4 border-b border-gray-200 dark:border-gray-800 items-center justify-between">
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Command Center
+          </h1>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-8 w-8 p-0"
+            onClick={() => setIsNewChatDialogOpen(true)}
+          >
+            <PlusIcon className="h-5 w-5" />
+          </Button>
+        </div>
+
+        {/* Search */}
+        <div className="p-3 border-b border-gray-200 dark:border-gray-800">
+          <div className="relative">
+            <Input
+              placeholder="Search agents..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8"
+            />
+            <div className="absolute left-2 top-2.5 text-gray-400">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
             </div>
           </div>
-
-          {/* Chat List - Independently scrollable */}
-          <AgentChatList
-            isLoading={isLoading}
-            filteredDeployments={filteredDeployments}
-            selectedDeployment={selectedDeployment}
-            setSelectedDeployment={setSelectedDeployment}
-            getInitials={getInitials}
-            conversations={conversations}
-            formatRelativeTime={formatRelativeTime}
-            searchQuery={searchQuery}
-            setIsNewChatDialogOpen={setIsNewChatDialogOpen}
-          />
         </div>
+
+        {/* New chat button - Mobile only */}
+        <div className="lg:hidden p-3 border-b border-gray-200 dark:border-gray-800">
+          <Link href="/marketplace/getting-started/create">
+            <Button className="w-full flex items-center justify-center gap-2">
+              <PlusIcon className="h-5 w-5" />
+              Create New Agent
+            </Button>
+          </Link>
+        </div>
+
+        {/* Chat List - Independently scrollable */}
+        <AgentChatList
+          isLoading={isLoading}
+          filteredDeployments={filteredDeployments}
+          selectedDeployment={selectedDeployment}
+          setSelectedDeployment={setSelectedDeployment}
+          getInitials={getInitials}
+          conversations={conversations}
+          formatRelativeTime={formatRelativeTime}
+          searchQuery={searchQuery}
+          setIsNewChatDialogOpen={setIsNewChatDialogOpen}
+        />
       </div>
 
       {/* Main Chat Area with Settings Sidebar */}
-      <div className="flex flex-1 h-[calc(100vh-85px)]">
+      <div className="flex flex-1 h-[calc(100vh-85px-48px)] lg:h-[calc(100vh-85px)] overflow-hidden relative">
         {/* Chat Messages and Input Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {selectedDeployment ? (
             <>
-              {/* Chat Header - Fixed */}
-              <AgentChatHeader
-                selectedDeployment={selectedDeployment}
-                clearChat={clearChat}
-                getInitials={getInitials}
-                fetchDeployments={fetchDeployments}
-              />
+              {/* Chat Header - Fixed (desktop only) */}
+              <div className="hidden lg:block">
+                <AgentChatHeader
+                  selectedDeployment={selectedDeployment}
+                  clearChat={clearChat}
+                  getInitials={getInitials}
+                  fetchDeployments={fetchDeployments}
+                />
+              </div>
 
               {/* Chat Messages with Input - Scrollable */}
               <div className="flex-1 flex flex-col overflow-hidden">
@@ -677,19 +689,19 @@ export default function AgentChatPage() {
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-full p-8">
-              <div className="text-center max-w-md">
-                <ChatBubbleLeftRightIcon className="h-16 w-16 text-gray-300 dark:text-gray-700 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            <div className="flex items-center justify-center h-full p-4 sm:p-8">
+              <div className="text-center max-w-md px-3 py-6">
+                <ChatBubbleLeftRightIcon className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 dark:text-gray-700 mx-auto mb-4" />
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
                   Select an agent to start chatting
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
                   Choose an agent from the sidebar or create a new one to begin
                   a conversation.
                 </p>
                 <Link href="/marketplace/getting-started/create">
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <PlusIcon className="h-5 w-5 mr-2" />
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-sm sm:text-base py-1.5 sm:py-2">
+                    <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                     Create New Agent
                   </Button>
                 </Link>
@@ -698,92 +710,55 @@ export default function AgentChatPage() {
           )}
         </div>
 
-        {/* Settings Sidebar - Always visible */}
+        {/* Settings Sidebar - Always visible on desktop, slide-in on mobile */}
         {selectedDeployment && (
-          <AgentSidebar
-            selectedDeployment={selectedDeployment}
-            isMinimized={isSidebarMinimized}
-            onToggleMinimize={() => setIsSidebarMinimized(!isSidebarMinimized)}
-          />
+          <div
+            className={`
+            ${isMobileSettingsOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none lg:translate-x-0 lg:opacity-100 lg:pointer-events-auto"}
+            fixed inset-y-0 right-0 z-30 lg:relative lg:z-auto
+            w-[85%] sm:w-[350px] lg:w-80 xl:w-96
+            h-full 
+            bg-white dark:bg-gray-900
+            border-l border-gray-200 dark:border-gray-800
+            transition-all duration-300 ease-in-out
+            overflow-y-auto
+          `}
+          >
+            {/* Mobile close button */}
+            <div className="lg:hidden flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-800">
+              <h2 className="font-semibold">Agent Details</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-0 h-8 w-8"
+                onClick={() => setIsMobileSettingsOpen(false)}
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+
+            {/* Agent sidebar content */}
+            <AgentSidebar
+              selectedDeployment={selectedDeployment}
+              isMinimized={isSidebarMinimized}
+              onToggleMinimize={() =>
+                setIsSidebarMinimized(!isSidebarMinimized)
+              }
+            />
+          </div>
         )}
       </div>
 
-      {/* New Chat Dialog */}
-      <Dialog open={isNewChatDialogOpen} onOpenChange={setIsNewChatDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create New Agent</DialogTitle>
-            <DialogDescription>
-              Set up a new AI agent to help with specific tasks.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Agent Name</label>
-              <Input
-                placeholder="e.g. Research Assistant, Financial Advisor"
-                value={newAgentName}
-                onChange={(e) => setNewAgentName(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Agent Type</label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    Select Type
-                    <ChevronDownIcon className="h-4 w-4 ml-2" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-full">
-                  <DropdownMenuItem>Financial Analysis</DropdownMenuItem>
-                  <DropdownMenuItem>Research Assistant</DropdownMenuItem>
-                  <DropdownMenuItem>Code Assistant</DropdownMenuItem>
-                  <DropdownMenuItem>Customer Support</DropdownMenuItem>
-                  <DropdownMenuItem>Data Analyst</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Model</label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    Select Model
-                    <ChevronDownIcon className="h-4 w-4 ml-2" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-full">
-                  <DropdownMenuItem>GPT-4</DropdownMenuItem>
-                  <DropdownMenuItem>GPT-4o</DropdownMenuItem>
-                  <DropdownMenuItem>Claude 3 Opus</DropdownMenuItem>
-                  <DropdownMenuItem>Claude 3 Sonnet</DropdownMenuItem>
-                  <DropdownMenuItem>Llama 3 70B</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsNewChatDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleCreateNewChat}
-              disabled={!newAgentName.trim()}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              Create Agent
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Backdrop for mobile sidebar/settings - Only visible on mobile */}
+      {(isMobileSidebarOpen || isMobileSettingsOpen) && (
+        <div
+          className="fixed inset-0 bg-black/30 z-20 lg:hidden"
+          onClick={() => {
+            setIsMobileSidebarOpen(false);
+            setIsMobileSettingsOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }
