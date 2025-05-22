@@ -61,10 +61,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("VERCEL_URL", process.env.VERCEL_URL);
+    console.log("VERCEL_BRANCH_URL", process.env.VERCEL_BRANCH_URL);
 
     const YOUR_DOMAIN =
-      `https://${process.env.VERCEL_URL}` || "http://localhost:3000";
+      `https://${process.env.VERCEL_BRANCH_URL}` || "http://localhost:3000";
     const returnUrl = `${YOUR_DOMAIN}/marketplace/settings`; // Where to redirect after portal
 
     console.log("RETURN URL", returnUrl);

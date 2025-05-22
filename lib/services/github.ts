@@ -26,7 +26,7 @@ export class GitHubService {
         owner,
         repo,
         config: {
-          url: `https://${process.env.VERCEL_URL}/api/github/webhooks`,
+          url: `https://${process.env.VERCEL_BRANCH_URL}/api/github/webhooks`,
           content_type: "json",
           secret: process.env.GITHUB_WEBHOOK_SECRET,
         },
