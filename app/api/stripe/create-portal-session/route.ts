@@ -61,10 +61,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log(
+      "VERCEL_PROJECT_PRODUCTION_URL",
+      process.env.VERCEL_PROJECT_PRODUCTION_URL
+    );
+
     const YOUR_DOMAIN =
       `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` ||
       "http://localhost:3000";
     const returnUrl = `${YOUR_DOMAIN}/marketplace/settings`; // Where to redirect after portal
+
+    console.log("RETURN URL", returnUrl);
 
     // 3. Create a Stripe Billing Portal session
     const portalSession = await stripe.billingPortal.sessions.create({
