@@ -109,8 +109,7 @@ export async function POST(request: NextRequest) {
     );
 
     const YOUR_DOMAIN =
-      `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` ||
-      "http://localhost:3000";
+      `https://${process.env.VERCEL_URL}` || "http://localhost:3000";
 
     console.log("YOUR_DOMAIN", YOUR_DOMAIN);
 
