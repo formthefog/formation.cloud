@@ -108,7 +108,11 @@ export async function POST(request: NextRequest) {
       account.id
     );
 
-    const YOUR_DOMAIN = "http://localhost:3000";
+    const YOUR_DOMAIN =
+      `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` ||
+      "http://localhost:3000";
+
+    console.log("YOUR_DOMAIN", YOUR_DOMAIN);
 
     const plans = await stripe.plans.list({
       limit: 3,
