@@ -7,6 +7,8 @@ import RightCaret from "./icons/RightCaret";
 import Hamburger from "./icons/Hamburger";
 import Image from "next/image";
 import { useModal } from "@/context/ModalContext";
+import { BsTwitterX } from "react-icons/bs";
+import Link from "next/link";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -55,43 +57,47 @@ const Navigation = () => {
 
   return (
     <header
-      className={`w-full sticky top-0 z-50 transition-all duration-300 ${isScrolled
-        ? "bg-white shadow-md border-b"
-        : "bg-transparent border-b border-black border-opacity-[0.05]"
-        }`}
+      className={`w-full sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white shadow-md border-b"
+          : "bg-transparent border-b border-black border-opacity-[0.05]"
+      }`}
     >
       <div className="container border-l border-r mx-auto max-w-[1280px] px-6 py-4 flex items-center justify-between">
         <div className="flex-shrink-0">
-          <FormationLogo />
+          <FormationLogo className="w-32 lg:w-36" />
         </div>
 
         <nav className="hidden md:flex flex-1 text-[13px] justify-evenly leading-[1.5385] tracking-[0.05em] font-geistMono font-[600] items-center">
           <a
             href="#features"
-            className={`font-medium uppercase text-gray-600 hover:text-black transition-all ${activeSection === "features"
-              ? "text-black underline underline-offset-[8px] decoration-formation-blue decoration-4"
-              : ""
-              }`}
+            className={`font-medium uppercase text-gray-600 hover:text-black transition-all ${
+              activeSection === "features"
+                ? "text-black underline underline-offset-[8px] decoration-formation-blue decoration-4"
+                : ""
+            }`}
             onClick={(e) => handleSmoothScroll(e, "#features")}
           >
             Features
           </a>
           <a
             href="#why-formation"
-            className={`font-medium uppercase text-gray-600 hover:text-black transition-all ${activeSection === "why-formation"
-              ? "text-black underline underline-offset-[8px] decoration-formation-blue decoration-4"
-              : ""
-              }`}
+            className={`font-medium uppercase text-gray-600 hover:text-black transition-all ${
+              activeSection === "why-formation"
+                ? "text-black underline underline-offset-[8px] decoration-formation-blue decoration-4"
+                : ""
+            }`}
             onClick={(e) => handleSmoothScroll(e, "#why-formation")}
           >
             Why Formation
           </a>
           <a
             href="#use-cases"
-            className={`font-medium uppercase text-gray-600 hover:text-black transition-all ${activeSection === "use-cases"
-              ? "text-black underline underline-offset-[8px] decoration-formation-blue decoration-4"
-              : ""
-              }`}
+            className={`font-medium uppercase text-gray-600 hover:text-black transition-all ${
+              activeSection === "use-cases"
+                ? "text-black underline underline-offset-[8px] decoration-formation-blue decoration-4"
+                : ""
+            }`}
             onClick={(e) => handleSmoothScroll(e, "#use-cases")}
           >
             Use Cases
@@ -99,16 +105,21 @@ const Navigation = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={openWaitlistModal}
-          >
-            <span className="block sm:hidden">WAITLIST</span>
+          <Link href="https://x.com/formthefog" target="_blank">
+            <BsTwitterX
+              size={25}
+              className="text-gray-500 md:mr-4 hover:text-black cursor-pointer hidden lg:block"
+            />
+          </Link>
+          <Button variant="outline" size="sm" onClick={openWaitlistModal}>
+            <span className="block sm:hidden text-xs">WAITLIST</span>
             <span className="hidden sm:block lg:hidden">JOIN THE WAITLIST</span>
             <span className="hidden lg:block">JOIN THE WAITLIST</span>
             <RightCaret />
           </Button>
+          <Link href="https://x.com/formthefog" target="_blank">
+            <BsTwitterX className="text-gray-500 lg:mr-4 hover:text-black cursor-pointer block lg:hidden" />
+          </Link>
           <button onClick={toggleMenu} className="md:hidden">
             <Hamburger />
           </button>
@@ -118,7 +129,6 @@ const Navigation = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="fixed inset-x-0 border-t text-2xl bottom-0 z-40 bg-white shadow-xl transition-transform h-[50%]  duration-300 ease-in-out transform translate-y-0">
-
           <Image
             alt="Orb"
             width={75}
