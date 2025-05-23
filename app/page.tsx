@@ -5,10 +5,12 @@ import KeyFeaturesSection from "@/components/KeyFeaturesSection";
 import Navigation from "@/components/Navigation";
 import UseCasesSection from "@/components/UseCasesSection";
 import WhyFormationSection from "@/components/WhyFormationSection";
+import FeaturedAgentsSection from "@/components/FeaturedAgentsSection";
 import { content } from "@/lib/contentArray";
+import TopSection from "@/components/TopSection";
 
 export default function Home() {
-  const currentContent = content[0]
+  const currentContent = content[0];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -18,10 +20,16 @@ export default function Home() {
         subtitle={currentContent.hero.subtitle}
         buttonText={currentContent.hero.buttonText}
       />
-      <KeyFeaturesSection
+      <TopSection
         tagline={currentContent.keyFeatures.tagline}
         features={currentContent.keyFeatures.features}
       />
+      <FeaturedAgentsSection />
+      {/* <KeyFeaturesSection
+        tagline={currentContent.keyFeatures.tagline}
+        features={currentContent.keyFeatures.features}
+      /> */}
+
       <WhyFormationSection
         title={currentContent.whyFormation.title}
         subtitle={currentContent.whyFormation.subtitle}

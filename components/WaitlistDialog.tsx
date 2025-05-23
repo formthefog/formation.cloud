@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import RightCaret from '@/components/icons/RightCaret';
@@ -140,7 +141,11 @@ export function WaitlistDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      {trigger && (
+        <DialogTrigger asChild={React.isValidElement(trigger) && typeof trigger.type !== 'string'}>
+          {trigger}
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         {!isSuccess ? (
           <>
