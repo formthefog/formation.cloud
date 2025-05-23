@@ -143,14 +143,14 @@ export default function Marketplace() {
 
   return (
     <div className="min-h-[calc(100vh-73px)] py-6 px-4 md:px-8">
-      <div className="max-w-[1280px] mx-auto gap-4 flex flex-col h-full items-center justify-center">
+      <div className="max-w-[1280px] mx-auto gap-8 flex flex-col h-full items-center justify-center">
         {/* Hero Section */}
         <MarketplaceHero />
 
         {/* Featured Agents Section */}
-        {selectedCategory === "all" && (
+        {/* {selectedCategory === "all" && (
           <FeaturedAgents agents={filteredAgents} />
-        )}
+        )} */}
 
         {/* Filters and Sort */}
 

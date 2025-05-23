@@ -109,15 +109,9 @@ export async function POST(request: NextRequest) {
     );
 
     const YOUR_DOMAIN =
-      `https://${process.env.VERCEL_BRANCH_URL}` || "http://localhost:3000";
-
-    console.log("YOUR_DOMAIN", YOUR_DOMAIN);
-
-    const plans = await stripe.plans.list({
-      limit: 3,
-    });
-
-    const price = await stripe.prices.list();
+      (process.env.VERCEL_BRANCH_URL
+        ? `https://${process.env.VERCEL_BRANCH_URL}`
+        : "http://localhost:3000") || "http://localhost:3000";
 
     // 3. Determine checkout mode based on priceId
     // 'price_1RBJv7FbFYF5MTmwhoXYqg5E' is the Pay As You Go (credit top-up) priceId
@@ -125,6 +119,7 @@ export async function POST(request: NextRequest) {
     let metadata: Record<string, any> = {
       dynamic_id: account.dynamic_id,
       account_id: account.id,
+      price_id: priceId,
     };
     if (priceId === "price_1RBJv7FbFYF5MTmwhoXYqg5E") {
       mode = "payment";

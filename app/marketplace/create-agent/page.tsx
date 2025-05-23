@@ -171,7 +171,7 @@ services:
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-73px)] bg-white py-12">
+    <div className="w-full min-h-[calc(100vh-83px)] bg-white py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center py-12 bg-white text-gray-900">

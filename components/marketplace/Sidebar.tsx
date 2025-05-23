@@ -39,31 +39,9 @@ const navigationItems = [
         />
       </svg>
     ),
-    href: "/marketplace/getting-started/create",
+    href: "/marketplace/getting-started",
     section: "top",
   },
-  // {
-  //   id: "discover",
-  //   name: "Discover",
-  //   icon: (
-  //     <svg
-  //       className="w-4 h-4"
-  //       fill="none"
-  //       stroke="currentColor"
-  //       viewBox="0 0 24 24"
-  //     >
-  //       <path
-  //         strokeLinecap="round"
-  //         strokeLinejoin="round"
-  //         strokeWidth={2}
-  //         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-  //       />
-  //     </svg>
-  //   ),
-  //   href: "/marketplace",
-  //   section: "top",
-  // },
-
   {
     id: "agents",
     name: "Explore Agents",
@@ -273,9 +251,9 @@ export default function Sidebar({
   return (
     <aside
       className={`w-[280px] bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 ease-in-out
-        fixed md:sticky top-[73px] h-[calc(100vh-73px)] 
+        fixed md:sticky top-[82px] h-[calc(100vh-100px)] 
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-        overflow-y-auto z-30`}
+        overflow-y-hidden z-30`}
     >
       <div className="flex flex-col h-full p-6">
         <div className="flex-grow space-y-6">
@@ -357,7 +335,7 @@ export default function Sidebar({
                         key={item.id}
                         href={item.href}
                         onClick={handleLinkClick}
-                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-md transition-all
                           ${item.special ? "bg-gradient-to-r from-blue-500/5 to-purple-500/5 hover:from-blue-500/10 hover:to-purple-500/10" : ""}
                           ${
                             isActiveLink(item.href)
@@ -499,7 +477,7 @@ export default function Sidebar({
         <div className="pt-6 border-t border-gray-200">
           <Link
             href="/marketplace/settings"
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all
+            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-lg transition-all
               ${
                 isActiveLink("/marketplace/settings")
                   ? "bg-blue-50 text-blue-600 font-medium"

@@ -10,7 +10,7 @@ import { content } from "@/lib/contentArray";
 import TopSection from "@/components/TopSection";
 
 export default function Home() {
-  const currentContent = content[0]
+  const currentContent = content[0];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -20,7 +20,7 @@ export default function Home() {
         subtitle={currentContent.hero.subtitle}
         buttonText={currentContent.hero.buttonText}
       />
-      <TopSection 
+      <TopSection
         tagline={currentContent.keyFeatures.tagline}
         features={currentContent.keyFeatures.features}
       />

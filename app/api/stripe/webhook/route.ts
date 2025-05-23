@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
 
     switch (event.type) {
       case "checkout.session.completed": {
-        console.log("Checkout session completed:", eventData.id);
+        console.log("Checkout session completed:", eventData);
         // Only handle one-time payment (credit top-up) sessions
         if (eventData.mode === "payment" && eventData.metadata?.account_id) {
           const accountId = eventData.metadata.account_id;
@@ -96,12 +96,14 @@ export async function POST(req: NextRequest) {
             .select("id")
             .eq("stripe_payment_intent_id", paymentIntentId)
             .maybeSingle();
+          console.log("existing", existing);
           if (existing) break; // Already processed
 
           // Store default payment method if present
           if (paymentMethodId) {
             try {
               const paymentIntentCustomer = paymentIntent.customer as string;
+              console.log("paymentIntentCustomer", paymentIntentCustomer);
               if (paymentIntentCustomer) {
                 // First, check if this payment method is already attached to the customer
                 const customerPaymentMethods = await stripe.paymentMethods.list(
@@ -116,6 +118,8 @@ export async function POST(req: NextRequest) {
                 );
 
                 let validPaymentMethodId = paymentMethodId;
+
+                console.log("isAlreadyAttached", isAlreadyAttached);
 
                 if (!isAlreadyAttached) {
                   try {
@@ -176,6 +180,7 @@ export async function POST(req: NextRequest) {
                     .from("accounts")
                     .update({
                       default_payment_method: validPaymentMethodId,
+                      stripe_price_id: eventData.metadata?.price_id,
                     })
                     .eq("id", accountId);
                 }
@@ -210,6 +215,29 @@ export async function POST(req: NextRequest) {
             transaction_type: "purchase",
             stripe_payment_intent_id: paymentIntentId,
           });
+
+          // Debug: log eventData and intended update
+          console.log(
+            "Updating stripe_price_id for account",
+            accountId,
+            "to",
+            eventData.metadata?.price_id
+          );
+          console.log("eventData in checkout.session.completed", eventData);
+
+          // Update the account's stripe_price_id for pay-as-you-go
+          const { error: priceUpdateError } = await supabase
+            .from("accounts")
+            .update({
+              stripe_price_id: eventData.metadata?.price_id,
+            })
+            .eq("id", accountId);
+          if (priceUpdateError) {
+            console.error(
+              "Failed to update stripe_price_id:",
+              priceUpdateError
+            );
+          }
         }
         await notifyRustService(event.type, eventData);
         break;
@@ -220,7 +248,9 @@ export async function POST(req: NextRequest) {
         console.log(
           `Subscription ${event.type}:`,
           eventData.id,
-          `Status: ${eventData.status}`
+          `Status: ${eventData.status}`,
+          "eventData",
+          eventData
         );
         const customerResponseUpdated = await stripe.customers.retrieve(
           eventData.customer as string
@@ -269,15 +299,14 @@ export async function POST(req: NextRequest) {
           if (!creditsToGrant) creditsToGrant = 10000; // Placeholder default
 
           // Update credit balance atomically
-          await supabase
-            .from("accounts")
-            .update({
-              credit_balance: supabase.rpc("increment_credit_balance", {
-                account_id: accountIdSubscriptionUpdated,
-                amount: creditsToGrant,
-              }),
-            })
-            .eq("id", accountIdSubscriptionUpdated);
+          const { error: updateError } = await supabase.rpc(
+            "increment_credit_balance",
+            {
+              account_id: accountIdSubscriptionUpdated,
+              amount: creditsToGrant,
+            }
+          );
+          if (updateError) throw updateError;
 
           // Insert credit transaction
           await supabase.from("credit_transactions").insert({

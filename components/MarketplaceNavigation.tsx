@@ -45,7 +45,7 @@ const MarketplaceNavigation = ({
       }`}
     >
       <div className="px-3 md:px-6 flex flex-row justify-center py-4 md:py-4 items-center w-full">
-        <div className="flex flex-row gap-2 md:gap-8">
+        <div className="flex flex-row gap-2 items-center justify-center md:gap-8">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-1.5 ml-1.5 md:hidden"
@@ -87,7 +87,7 @@ const MarketplaceNavigation = ({
             </Link>
           )}
 
-          <div className="">
+          <div className="pr-8">
             <AuthButton />
           </div>
         </div>
