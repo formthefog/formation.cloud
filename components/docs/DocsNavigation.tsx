@@ -1,3 +1,4 @@
+import { AuthButton } from "../AuthButton";
 import FormationLogo from "../icons/FormationLogo";
 import Link from "next/link";
 
@@ -11,16 +12,18 @@ export default function DocsNavigation() {
         <div className="flex-grow" />
         <Link
           href="/"
-          className="text-lg font-bold text-gray-700 tracking-wide hover:text-blue-600 transition-colors ml-4"
+          className="text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors ml-4"
         >
-          Home
+          return to Home
         </Link>
         <Link
           href="/marketplace"
-          className="text-lg font-bold text-gray-700 tracking-wide hover:text-blue-600 transition-colors ml-4"
+          className="text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors ml-4"
         >
-          Marketplace
+          return to Marketplace
         </Link>
+
+        <AuthButton />
       </div>
     </header>
   );
