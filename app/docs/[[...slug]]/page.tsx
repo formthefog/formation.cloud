@@ -7,6 +7,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { extractTocLinks } from "@/lib/extractTocLinks";
 import TableOfContents from "@/components/docs/TableOfContents";
+import { Prism, SyntaxHighlighterProps } from "react-syntax-highlighter";
+const SyntaxHighlighter = Prism as any as React.FC<SyntaxHighlighterProps>;
 
 const GITHUB_BASE_URL =
   "https://raw.githubusercontent.com/formthefog/formation/4c21569a65769fbb4e6b0c069f19c598bd88ce49/docs/";
@@ -59,6 +61,23 @@ export default async function DocsCatchAllPage({
                 <Link href={newHref} {...props}>
                   {children}
                 </Link>
+              );
+            },
+            code(props) {
+              const { children, className, node, style, ref, ...rest } = props;
+              const match = /language-(\w+)/.exec(className || "");
+              return match ? (
+                <SyntaxHighlighter
+                  language={match[1]} // Language extracted from className (e.g., language-js for JavaScript)
+                  PreTag="div"
+                  {...rest}
+                >
+                  {String(children).replace(/\n$/, "")}
+                </SyntaxHighlighter>
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
               );
             },
           }}

@@ -114,14 +114,6 @@ body {
   background: #fff !important;
   color: #111 !important;
 }
-.markdown-body pre,
-.markdown-body code,
-.markdown-body table,
-.markdown-body th,
-.markdown-body td {
-  background: #fff !important;
-  color: #111 !important;
-}
 
 /* Custom selection color for markdown content */
 .markdown-body ::selection {
@@ -132,4 +124,9 @@ body {
 .markdown-body ::-moz-selection {
   background: #e0edff;
   color: #2563eb;
+}
+
+.markdown-body table {
+  background: #fff !important;
+  color: #111 !important;
 }

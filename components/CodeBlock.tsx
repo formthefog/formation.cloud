@@ -18,6 +18,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
       className={`overflow-x-auto w-full ${className || ""}`}
       style={{ WebkitOverflowScrolling: "touch" }}
     >
+      {/* @ts-ignore */}
       <SyntaxHighlighter
         language={language}
         style={atomDark}
