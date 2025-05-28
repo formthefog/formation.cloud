@@ -6,7 +6,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 .button-with-gradient {
   position: relative;
   display: inline-flex;
@@ -16,9 +15,11 @@ body {
   font-size: 14px; /* Match text size */
   font-weight: 500;
   color: white; /* Text color */
-  background-color: #0A84FF; /* Flat primary background color */
+  background-color: #0a84ff; /* Flat primary background color */
   border-radius: 100px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(20, 40, 82, 0.25), 0 0 0 1px #0A84FF; /* Outer shadow and border */
+  box-shadow:
+    0 4px 8px rgba(20, 40, 82, 0.25),
+    0 0 0 1px #0a84ff; /* Outer shadow and border */
   text-transform: uppercase; /* Optional for Figma style */
 
   /* Create the inner gradient border */
@@ -27,9 +28,13 @@ body {
     position: absolute;
     inset: 0; /* Covers entire button */
     border-radius: inherit;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box, 
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0.1)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0); /* Masking to create the border effect */
     -webkit-mask-composite: destination-out;
     mask-composite: exclude; /* Ensures the gradient is only on the border */
@@ -105,3 +110,26 @@ body {
   }
 }
 
+.markdown-body {
+  background: #fff !important;
+  color: #111 !important;
+}
+.markdown-body pre,
+.markdown-body code,
+.markdown-body table,
+.markdown-body th,
+.markdown-body td {
+  background: #fff !important;
+  color: #111 !important;
+}
+
+/* Custom selection color for markdown content */
+.markdown-body ::selection {
+  background: #e0edff; /* Soft blue, matches bg-blue-50 */
+  color: #2563eb; /* Tailwind blue-700 */
+}
+
+.markdown-body ::-moz-selection {
+  background: #e0edff;
+  color: #2563eb;
+}
