@@ -1,7 +1,7 @@
 import React from "react";
 import "github-markdown-css/github-markdown.css";
-import FormationLogo from "@/components/icons/FormationLogo";
-import DocsSidebar from "@/components/DocsSidebar";
+import DocsSidebar from "@/components/docs/DocsSidebar";
+import DocsNavigation from "@/components/docs/DocsNavigation";
 
 const navLinks = [
   { href: "/docs", label: "Home" },
@@ -68,14 +68,7 @@ export default function DocsLayout({
   return (
     <div className="min-h-screen">
       {/* Top Navigation */}
-      <header className="sticky top-0 z-40 w-full bg-white border-b border-gray-200 shadow-sm">
-        <div className="flex items-center gap-3 px-6 py-3 max-w-screen-2xl mx-auto">
-          <FormationLogo />
-          <span className="text-lg font-bold text-gray-700 tracking-wide ml-2">
-            Docs
-          </span>
-        </div>
-      </header>
+      <DocsNavigation />
       {/* Main Layout */}
       <div className="flex max-w-screen-2xl mx-auto w-full">
         {/* Left Sidebar Navigation (sticky) */}
