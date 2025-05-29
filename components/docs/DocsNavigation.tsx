@@ -14,6 +14,9 @@ export default function DocsNavigation() {
         <Link href="/docs" className="flex-shrink-0">
           <FormationLogo />
         </Link>
+        <span className="hidden md:block text-sm font-bold text-gray-300">
+          DOCS
+        </span>
 
         <div className="flex-grow" />
         {/* Mobile menu button */}

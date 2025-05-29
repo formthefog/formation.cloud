@@ -70,7 +70,7 @@ const MarketplaceNavigation = ({
             </svg>
           </button>
 
-          <Link href="/" className="flex-shrink-0">
+          <Link href="/marketplace" className="flex-shrink-0">
             <FormationLogo />
           </Link>
           <span className="hidden md:block text-sm font-bold text-gray-300">

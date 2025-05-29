@@ -19,15 +19,39 @@ const SyntaxHighlighter = Prism as any as React.FC<SyntaxHighlighterProps>;
 const GITHUB_BASE_URL =
   "https://raw.githubusercontent.com/formthefog/formation/4c21569a65769fbb4e6b0c069f19c598bd88ce49/docs/";
 
+// const GITHUB_BASE_URL = "http://127.0.0.1:8080/";
+
 async function fetchMarkdownDoc(slug: string[]): Promise<string | null> {
   // If no slug, default to README.md
-  const docPath =
-    slug && slug.length > 0 ? `${slug.join("/")}.md` : "README.md";
-  const url = `${GITHUB_BASE_URL}${docPath}`;
+  if (!slug || slug.length === 0) {
+    try {
+      const res = await fetch(`${GITHUB_BASE_URL}README.md`, {
+        next: { revalidate: 60 },
+      });
+      if (!res.ok) return null;
+      return await res.text();
+    } catch {
+      return null;
+    }
+  }
+
+  // Try to fetch as a file first
+  const filePath = `${slug.join("/")}.md`;
   try {
-    const res = await fetch(url, { next: { revalidate: 60 } });
-    if (!res.ok) return null;
-    return await res.text();
+    let res = await fetch(`${GITHUB_BASE_URL}${filePath}`, {
+      next: { revalidate: 60 },
+    });
+    if (res.ok) return await res.text();
+
+    // If not found, try as a directory README
+    const dirReadmePath = `${slug.join("/")}/README.md`;
+    res = await fetch(`${GITHUB_BASE_URL}${dirReadmePath}`, {
+      next: { revalidate: 60 },
+    });
+    if (res.ok) return await res.text();
+
+    // Not found
+    return null;
   } catch {
     return null;
   }
@@ -48,7 +72,7 @@ export default async function DocsCatchAllPage({
   return (
     <div className="flex w-full flex-col px-4 md:px-0 pt-4 md:pt-0 md:flex-row">
       {/* Main Content */}
-      <main className="markdown-body w-full flex-1 px-4 sm:px-6 md:px-12 py-4 md:py-10 shadow-sm min-h-[calc(100vh-64px)] overflow-x-auto md:overflow-x-hidden">
+      <main className="markdown-body w-full flex-1 px-4 bg-white sm:px-6 md:px-12 py-4 md:py-10 shadow-sm min-h-[calc(100vh-64px)] overflow-x-auto md:overflow-x-hidden">
         <ReactMarkdown
           // @ts-ignore
           remarkPlugins={[remarkGfm]}
@@ -63,8 +87,13 @@ export default async function DocsCatchAllPage({
                 !href.startsWith("/") &&
                 href.endsWith(".md")
               ) {
-                // Remove .md extension and prepend /docs/
-                newHref = "/docs/" + href.replace(/\.md$/, "");
+                let withoutMd = href.replace(/\.md$/, "");
+                let segments = withoutMd.split("/");
+                if (segments[segments.length - 1].toLowerCase() === "readme") {
+                  segments.pop();
+                }
+                newHref =
+                  "/docs" + (segments.length ? "/" + segments.join("/") : "");
               }
               return (
                 <Link href={newHref} {...props}>
