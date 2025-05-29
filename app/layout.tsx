@@ -126,7 +126,7 @@ export const metadata = {
       "The AI-agent marketplace: build, discover & deploy pre-built agents in seconds.",
     images: [
       {
-        url: "https://opengraph.b-cdn.net/production/images/52ad98f5-7554-466b-b96a-6fa0cc77376d.png?token=m6B_oJysXF-CAFf_wUXXSH7XK2M3881DA8i0LwAym-4&height=569&width=569&expires=33278307078",
+        url: "/formation-og-image.jpg",
         width: 430,
         height: 430,
         alt: "Formation – Agent Marketplace",
@@ -142,9 +142,7 @@ export const metadata = {
     title: "Formation",
     description:
       "Discover & deploy pre-built agents in seconds—pay-per-use or subscription.",
-    images: [
-      "https://opengraph.b-cdn.net/production/images/52ad98f5-7554-466b-b96a-6fa0cc77376d.png?token=m6B_oJysXF-CAFf_wUXXSH7XK2M3881DA8i0LwAym-4&height=569&width=569&expires=33278307078",
-    ],
+    images: ["/formation-og-image.jpg"],
   },
 
   // Favicons & PWA
