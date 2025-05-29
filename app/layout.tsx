@@ -127,8 +127,8 @@ export const metadata = {
     images: [
       {
         url: "/formation-og-image.jpg",
-        width: 430,
-        height: 430,
+        width: 1200,
+        height: 630,
         alt: "Formation – Agent Marketplace",
       },
     ],
