@@ -78,7 +78,35 @@ const MarketplaceNavigation = ({
           </span>
         </div>
         <div className="grow" />
+
         <div className="flex items-center gap-2 md:gap-2">
+          <Link href="/docs" className="hidden sm:block">
+            <button
+              className="border border-green-600 text-green-600 bg-transparent hover:bg-green-600 hover:text-white flex items-center gap-2 transition-colors px-4 py-2 rounded-full font-semibold text-sm"
+              type="button"
+            >
+              <span>GO TO DOCS</span>
+              <svg
+                className="w-4 h-4 ml-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6v6l4 2"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z"
+                />
+              </svg>
+            </button>
+          </Link>
           {user && account && (
             <Link href="/marketplace/settings">
               <div className="flex items-center space-x-2">

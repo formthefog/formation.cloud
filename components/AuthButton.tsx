@@ -12,6 +12,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import { useAuth } from "./auth-provider";
+import { getPlanFromPriceId } from "@/lib/stripe";
 
 export function AuthButton({
   className,
@@ -25,6 +27,11 @@ export function AuthButton({
   const router = useRouter();
   const { primaryWallet, handleLogOut, setShowAuthFlow, sdkHasLoaded, user } =
     useDynamicContext();
+  const { account } = useAuth();
+  const plan = account?.stripe_price_id
+    ? getPlanFromPriceId(account.stripe_price_id)
+    : null;
+  const planLabel = plan?.label;
 
   const isLoggedIn = useIsLoggedIn();
   const refreshUser = useRefreshUser();
@@ -124,6 +131,11 @@ export function AuthButton({
               {user?.email?.charAt(0).toUpperCase() || "A"}
             </div>
           </div>
+          {planLabel && (
+            <span className="ml-2 text-[10px] bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 px-2 py-0.5 rounded-full font-medium">
+              {planLabel}
+            </span>
+          )}
           {isSignOutHovered && (
             <div
               onClick={handleSignOutClick}
@@ -212,9 +224,11 @@ export function AuthButton({
               <span className={`text-sm font-medium ${textStyle}`}>
                 {user?.email?.split("@")[0] || "Account"}
               </span>
-              <span className="text-xs bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 px-2 py-0.5 rounded-full font-medium">
-                PRO
-              </span>
+              {planLabel && (
+                <span className="text-xs bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 px-2 py-0.5 rounded-full font-medium">
+                  {planLabel}
+                </span>
+              )}
             </div>
           </>
         ) : (
