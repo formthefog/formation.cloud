@@ -15,7 +15,7 @@ export default function GettingStarted() {
 
   return (
     <div className="w-full min-h-[calc(100vh-73px)] bg-white flex items-start justify-center">
-      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 mt-[10vh]">
+      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 md:mt-[10vh]">
         <motion.div {...fadeIn} className="space-y-6 md:space-y-12">
           {/* Hero Section */}
           <div className="text-left space-y-3 md:text-center">

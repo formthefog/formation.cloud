@@ -87,7 +87,7 @@ const MarketplaceNavigation = ({
             </Link>
           )}
 
-          <div className="pr-8">
+          <div className="md:pr-8">
             <AuthButton />
           </div>
         </div>
