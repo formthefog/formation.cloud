@@ -6,20 +6,11 @@ import rehypeSlug from "rehype-slug";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import "github-markdown-css/github-markdown-light.css"; // Add this at the top
-import rehypeMermaid from "rehype-mermaid";
 import { extractTocLinks } from "@/lib/extractTocLinks";
 import TableOfContents from "@/components/docs/TableOfContents";
 import { Prism, SyntaxHighlighterProps } from "react-syntax-highlighter";
 import TocMobileButton from "@/components/docs/ToCMobileButton";
-import {
-  dracula,
-  duotoneLight,
-  materialOceanic,
-  shadesOfPurple,
-  oneDark,
-  gruvboxDark,
-  nightOwl,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
+import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
 import CopyButton from "@/components/CopyButton";
 import Mermaid from "@/components/Mermaid";
 
