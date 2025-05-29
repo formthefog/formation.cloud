@@ -49,13 +49,13 @@ export default function DocsNavigation() {
             href="/"
             className="text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors ml-4"
           >
-            return to Home
+            Homepage
           </Link>
           <Link
             href="/marketplace"
-            className="text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors ml-4"
+            className="text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors mx-4"
           >
-            return to Marketplace
+            Marketplace
           </Link>
           <AuthButton />
         </div>
@@ -70,14 +70,14 @@ export default function DocsNavigation() {
               className="block text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors py-2"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Return to Home
+              Homepage
             </Link>
             <Link
               href="/marketplace"
               className="block text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors py-2"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Return to Marketplace
+              Marketplace
             </Link>
             <div className="py-2">
               <AuthButton />

@@ -3,7 +3,6 @@ import "./globals.css";
 import { ModalProvider } from "@/context/ModalContext";
 import { Analytics } from "@vercel/analytics/react";
 import { Providers } from "./providers";
-import Head from "next/head";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -90,28 +89,71 @@ const interDisplay = localFont({
   variable: "--font-inter-display",
 });
 
+// app/layout.tsx
 export const metadata = {
-  title: "Formation",
-  description: "A Fog is Forming...",
+  metadataBase: new URL("https://formation.cloud"),
+  title: {
+    default: "Formation",
+    template: "%s — Formation",
+  },
+  description:
+    "Formation.cloud is the agent marketplace—discover, customize and deploy ready-made agents on pay-per-use or subscription plans.",
+  keywords: [
+    "AI agents",
+    "marketplace",
+    "pay per use",
+    "agent deployment",
+    "Next.js",
+    "React",
+    "TypeScript",
+    "decentralized cloud",
+  ],
+  applicationName: "Formation",
+  generator: "Next.js",
+  viewport: "width=device-width,initial-scale=1",
+  themeColor: "#009CFF",
+  robots: "index, follow",
+  canonical: "https://formation.cloud",
+
+  // Open Graph (Discord, Slack, iMessage…)
   openGraph: {
-    title: "Formation",
-    description: "A Fog is Forming...",
-    url: "https://formation.cloud",
     type: "website",
+    locale: "en_US",
+    siteName: "Formation",
+    url: "https://formation.cloud",
+    title: "Formation",
+    description:
+      "The AI-agent marketplace: build, discover & deploy pre-built agents in seconds.",
     images: [
       {
         url: "https://opengraph.b-cdn.net/production/images/52ad98f5-7554-466b-b96a-6fa0cc77376d.png?token=m6B_oJysXF-CAFf_wUXXSH7XK2M3881DA8i0LwAym-4&height=569&width=569&expires=33278307078",
+        width: 430,
+        height: 430,
+        alt: "Formation – Agent Marketplace",
       },
     ],
   },
+
+  // Twitter Card
   twitter: {
     card: "summary_large_image",
+    site: "@formthefog",
+    creator: "@formthefog",
     title: "Formation",
-    description: "A Fog is Forming...",
+    description:
+      "Discover & deploy pre-built agents in seconds—pay-per-use or subscription.",
     images: [
       "https://opengraph.b-cdn.net/production/images/52ad98f5-7554-466b-b96a-6fa0cc77376d.png?token=m6B_oJysXF-CAFf_wUXXSH7XK2M3881DA8i0LwAym-4&height=569&width=569&expires=33278307078",
     ],
   },
+
+  // Favicons & PWA
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-96x96.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
