@@ -3,11 +3,26 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
-import { notFound } from "next/navigation";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import "github-markdown-css/github-markdown-light.css"; // Add this at the top
+import rehypeMermaid from "rehype-mermaid";
 import { extractTocLinks } from "@/lib/extractTocLinks";
 import TableOfContents from "@/components/docs/TableOfContents";
 import { Prism, SyntaxHighlighterProps } from "react-syntax-highlighter";
+import TocMobileButton from "@/components/docs/ToCMobileButton";
+import {
+  dracula,
+  duotoneLight,
+  materialOceanic,
+  shadesOfPurple,
+  oneDark,
+  gruvboxDark,
+  nightOwl,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
+import CopyButton from "@/components/CopyButton";
+import Mermaid from "@/components/Mermaid";
+
 const SyntaxHighlighter = Prism as any as React.FC<SyntaxHighlighterProps>;
 
 const GITHUB_BASE_URL =
@@ -38,10 +53,13 @@ export default async function DocsCatchAllPage({
     notFound();
   }
   const tocLinks = await extractTocLinks(markdown);
+
   return (
-    <div className="flex w-full">
-      <main className="markdown-body max-w-screen-lg w-full min-w-screen-lg flex-1 px-0 md:px-12 py-10 bg-white shadow-sm min-h-[calc(100vh-64px)]">
+    <div className="flex w-full flex-col px-4 md:px-0 pt-4 md:pt-0 md:flex-row">
+      {/* Main Content */}
+      <main className="markdown-body w-full flex-1 px-4 sm:px-6 md:px-12 py-4 md:py-10 shadow-sm min-h-[calc(100vh-64px)] overflow-x-auto md:overflow-x-hidden">
         <ReactMarkdown
+          // @ts-ignore
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw, rehypeSlug]}
           components={{
@@ -64,18 +82,31 @@ export default async function DocsCatchAllPage({
               );
             },
             code(props) {
-              const { children, className, node, style, ref, ...rest } = props;
+              const { children, className, ...rest } = props;
               const match = /language-(\w+)/.exec(className || "");
-              return match ? (
-                <SyntaxHighlighter
-                  language={match[1]} // Language extracted from className (e.g., language-js for JavaScript)
-                  PreTag="div"
-                  {...rest}
-                >
-                  {String(children).replace(/\n$/, "")}
-                </SyntaxHighlighter>
+              const codeString = String(children).replace(/\n$/, "");
+
+              console.log("match", match);
+
+              return match && match[1] !== "mermaid" ? (
+                <div className="relative group overflow-x-auto rounded-md font-mono">
+                  <SyntaxHighlighter
+                    language={match[1]}
+                    PreTag="div"
+                    {...rest}
+                    style={materialOceanic}
+                  >
+                    {codeString}
+                  </SyntaxHighlighter>
+                  <CopyButton text={codeString} />
+                </div>
+              ) : match && match[1] === "mermaid" ? (
+                <Mermaid chart={codeString} />
               ) : (
-                <code className={className} {...props}>
+                <code
+                  className={`px-1.5 py-0.5 rounded font-mono text-sm ${className || ""}`}
+                  {...props}
+                >
                   {children}
                 </code>
               );
@@ -85,11 +116,18 @@ export default async function DocsCatchAllPage({
           {markdown}
         </ReactMarkdown>
       </main>
+
+      {/* Table of Contents (desktop only) */}
       <aside className="hidden md:flex flex-col w-64 bg-white border-l border-gray-100 py-8 pl-2">
         <div className="sticky top-24">
           <TableOfContents tocLinks={tocLinks} />
         </div>
       </aside>
+
+      {/* Mobile Table of Contents Floating Button */}
+      <div className="md:hidden">
+        <TocMobileButton tocLinks={tocLinks} />
+      </div>
     </div>
   );
 }

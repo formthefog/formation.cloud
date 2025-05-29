@@ -68,8 +68,8 @@ export default function TableOfContents({
                     className={
                       "block px-3 py-2 rounded-lg font-medium transition-colors " +
                       (activeId === link.href.slice(1)
-                        ? "bg-blue-50 text-blue-700"
-                        : "text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700")
+                        ? "bg-blue-50 text-formation-blue font-black"
+                        : "text-sm text-gray-700 hover:bg-blue-50 hover:text-formation-blue")
                     }
                   >
                     {link.label}

@@ -110,23 +110,50 @@ body {
   }
 }
 
-.markdown-body {
-  background: #fff !important;
-  color: #111 !important;
-}
+@media (max-width: 768px) {
+  .markdown-body {
+    font-size: 16px;
+    padding: 0 !important;
+  }
 
-/* Custom selection color for markdown content */
-.markdown-body ::selection {
-  background: #e0edff; /* Soft blue, matches bg-blue-50 */
-  color: #2563eb; /* Tailwind blue-700 */
-}
+  .markdown-body pre {
+    font-size: 14px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
 
-.markdown-body ::-moz-selection {
-  background: #e0edff;
-  color: #2563eb;
-}
+  .markdown-body table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
 
-.markdown-body table {
-  background: #fff !important;
-  color: #111 !important;
+  .markdown-body img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .markdown-body code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Fix table display on mobile */
+  .markdown-body table th,
+  .markdown-body table td {
+    padding: 8px !important;
+    font-size: 14px !important;
+    min-width: 120px !important;
+    word-break: break-word !important;
+  }
+
+  /* Improve code block readability */
+  .markdown-body .hljs,
+  .markdown-body .prismjs {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    border-radius: 6px !important;
+    color: #d4d4d4 !important;
+  }
 }

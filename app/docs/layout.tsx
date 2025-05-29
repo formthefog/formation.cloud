@@ -1,7 +1,9 @@
+// layout.tsx - Updated for mobile responsiveness
 import React from "react";
 import "github-markdown-css/github-markdown.css";
 import DocsSidebar from "@/components/docs/DocsSidebar";
 import DocsNavigation from "@/components/docs/DocsNavigation";
+import MobileSidebarToggle from "@/components/docs/MobileSidebarToggle";
 
 const navLinks = [
   { href: "/docs", label: "Home" },
@@ -69,16 +71,23 @@ export default function DocsLayout({
     <div className="min-h-screen">
       {/* Top Navigation */}
       <DocsNavigation />
+
       {/* Main Layout */}
       <div className="flex max-w-screen-2xl mx-auto w-full">
-        {/* Left Sidebar Navigation (sticky) */}
+        {/* Left Sidebar Navigation (desktop) */}
         <aside className="hidden md:flex flex-col w-72 bg-white border-r border-gray-100 py-8 pr-2">
           <div className="sticky top-24">
             <DocsSidebar links={navLinks} title="Docs Navigation" />
           </div>
         </aside>
+
+        {/* Mobile Sidebar Toggle and Drawer */}
+        <MobileSidebarToggle>
+          <DocsSidebar links={navLinks} title="Docs Navigation" />
+        </MobileSidebarToggle>
+
         {/* Main Content */}
-        <div className="flex-1 flex flex-col items-center">{children}</div>
+        <div className="flex-1 flex flex-col w-full">{children}</div>
       </div>
     </div>
   );
