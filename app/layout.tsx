@@ -126,7 +126,7 @@ export const metadata = {
       "The AI-agent marketplace: build, discover & deploy agents in seconds.",
     images: [
       {
-        url: "/formation-og-image.jpg",
+        url: "/formation-logos/formation-og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Formation – Agent Marketplace",
@@ -142,7 +142,7 @@ export const metadata = {
     title: "Formation",
     description:
       "Discover & deploy agents in seconds—pay-per-use or subscription.",
-    images: ["/formation-og-image.jpg"],
+    images: ["/formation-logos/formation-og-image.jpg"],
   },
 
   // Favicons & PWA
