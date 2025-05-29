@@ -97,7 +97,7 @@ export const metadata = {
     template: "%s — Formation",
   },
   description:
-    "Formation.cloud is the agent marketplace—discover, customize and deploy ready-made agents on pay-per-use or subscription plans.",
+    "Formation.cloud is the agent marketplace—discover, customize and deploy agents on pay-per-use or subscription plans.",
   keywords: [
     "AI agents",
     "marketplace",
@@ -123,7 +123,7 @@ export const metadata = {
     url: "https://formation.cloud",
     title: "Formation",
     description:
-      "The AI-agent marketplace: build, discover & deploy pre-built agents in seconds.",
+      "The AI-agent marketplace: build, discover & deploy agents in seconds.",
     images: [
       {
         url: "/formation-og-image.jpg",
@@ -141,7 +141,7 @@ export const metadata = {
     creator: "@formthefog",
     title: "Formation",
     description:
-      "Discover & deploy pre-built agents in seconds—pay-per-use or subscription.",
+      "Discover & deploy agents in seconds—pay-per-use or subscription.",
     images: ["/formation-og-image.jpg"],
   },
 
