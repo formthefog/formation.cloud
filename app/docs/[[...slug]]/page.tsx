@@ -17,7 +17,7 @@ import Mermaid from "@/components/Mermaid";
 const SyntaxHighlighter = Prism as any as React.FC<SyntaxHighlighterProps>;
 
 const GITHUB_BASE_URL =
-  "https://raw.githubusercontent.com/formthefog/formation/4c21569a65769fbb4e6b0c069f19c598bd88ce49/docs/";
+  "https://raw.githubusercontent.com/formthefog/formation/refs/heads/main/docs/";
 
 // const GITHUB_BASE_URL = "http://127.0.0.1:8080/";
 
