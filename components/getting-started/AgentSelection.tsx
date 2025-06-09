@@ -39,7 +39,6 @@ export default function AgentSelection({
         currentStep === 1 ? "opacity-100" : "opacity-70"
       }`}
     >
-      {/* Responsive Header */}
       <div className="text-center flex flex-col gap-2 px-4">
         <div className="mx-auto mb-2 flex items-center justify-center">
           <span className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-blue-500/30 to-green-400/30 backdrop-blur-md shadow-xl">
@@ -52,7 +51,7 @@ export default function AgentSelection({
         >
           Step 1:{" "}
           <span className="bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent">
-            Select an Agent
+            Select
           </span>
         </h2>
         <p className="text-sm md:text-base text-gray-500 font-medium mt-1 max-w-2xl mx-auto">
