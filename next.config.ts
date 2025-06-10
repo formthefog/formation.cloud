@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   // Adjust for your production domain
   const isDocsSubdomain = host.startsWith("docs.");
 
-  if (isDocsSubdomain && !request.nextUrl.pathname.startsWith("/docs")) {
+  if (isDocsSubdomain) {
     // Rewrite to /docs, preserving the rest of the path
     const url = request.nextUrl.clone();
     url.pathname = "/docs" + url.pathname;
