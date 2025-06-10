@@ -193,7 +193,11 @@ export default function ConfigureAgent({
               <label className="block text-sm font-medium mb-1">License</label>
               <select
                 className="w-full rounded-lg border-2 border-gray-200 focus:border-purple-500 px-3 py-2 transition-all text-sm"
-                value={localAgent?.license ?? ""}
+                value={
+                  typeof localAgent?.license === "string"
+                    ? localAgent.license
+                    : ""
+                }
                 onChange={(e) => update("license", e.target.value)}
               >
                 <option value="">Select License</option>
@@ -291,7 +295,7 @@ export default function ConfigureAgent({
                 Compatible Model Types
               </label>
               <Chips
-                value={localAgent?.compatible_model_types ?? []}
+                value={(localAgent?.compatible_model_types ?? []) as string[]}
                 onChange={(v) => update("compatible_model_types", v)}
                 placeholder="e.g., LLM, Embedding"
               />
