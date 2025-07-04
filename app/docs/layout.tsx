@@ -70,7 +70,7 @@ export const metadata = {
     template: "%s — Formation Docs",
   },
   description:
-    "Comprehensive documentation for Formation.cloud: learn how to use, integrate, and build with the Formation agent marketplace.",
+    "Comprehensive documentation for Formation: learn how to use, integrate, and build with the Formation agent marketplace.",
   keywords: [
     "Formation documentation",
     "docs",
@@ -102,7 +102,7 @@ export const metadata = {
     url: "https://docs.formation.cloud",
     title: "Formation Documentation",
     description:
-      "Official documentation for Formation.cloud: guides, API reference, and integration tutorials for the agent marketplace.",
+      "Official documentation for Formation: guides, API reference, and integration tutorials for the agent marketplace.",
     images: [
       {
         url: "/formation-logos/formation-og-image.jpg",
@@ -120,7 +120,7 @@ export const metadata = {
     creator: "@formthefog",
     title: "Formation Documentation",
     description:
-      "Learn how to use, integrate, and build with Formation.cloud. Access guides, API docs, and tutorials.",
+      "Learn how to use, integrate, and build with Formation. Access guides, API docs, and tutorials.",
     images: ["/formation-logos/formation-og-image.jpg"],
   },
 
