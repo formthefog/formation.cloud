@@ -7,6 +7,7 @@ import RightCaret from "./icons/RightCaret";
 import Hamburger from "./icons/Hamburger";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { BsTwitterX } from "react-icons/bs";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -127,6 +128,12 @@ const Navigation = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
+          <Link href="https://x.com/formthefog" target="_blank">
+            <BsTwitterX
+              size={25}
+              className="text-gray-500 md:mr-4 hover:text-black cursor-pointer hidden lg:block"
+            />
+          </Link>
           <Link href="/docs" className="hidden sm:block">
             <Button
               className="border border-green-600 text-green-600 bg-transparent hover:bg-green-600 hover:text-white flex items-center gap-2 transition-colors"
