@@ -68,7 +68,7 @@ export default function DocsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen max-w-[100vw]">
       {/* Top Navigation */}
       <DocsNavigation />
 

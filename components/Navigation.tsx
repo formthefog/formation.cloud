@@ -157,7 +157,7 @@ const Navigation = () => {
               </svg>
             </Button>
           </Link>
-          <Link href="/marketplace/getting-started">
+          {/* <Link href="/marketplace/getting-started">
             <Button
               variant="outline"
               className="hover:bg-formation-blue hover:text-white"
@@ -170,7 +170,7 @@ const Navigation = () => {
               <span className="hidden lg:block">GO TO MARKETPLACE</span>
               <RightCaret />
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </div>
 
@@ -277,7 +277,7 @@ const Navigation = () => {
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
                 Quick Access
               </h3>
-              <Link
+              {/* <Link
                 href="/marketplace/getting-started"
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-600 font-medium"
               >
@@ -295,7 +295,7 @@ const Navigation = () => {
                   />
                 </svg>
                 <span>Go to Marketplace</span>
-              </Link>
+              </Link> */}
               <Link
                 href="/docs"
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm border border-green-600 text-green-600 bg-transparent font-medium mt-2 hover:bg-green-600 hover:text-white transition-colors"

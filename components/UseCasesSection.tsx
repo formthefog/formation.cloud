@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import Dots from "./icons/Dots";
 import { FaArrowRight } from "react-icons/fa6";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import AgentPlayground from "./AgentPlayground";
 import Link from "next/link";
-import { Button } from './ui/button';
-import RightCaret from './icons/RightCaret';
+import { Button } from "./ui/button";
+import RightCaret from "./icons/RightCaret";
 
 const UseCaseCard = ({ useCase, index }) => {
   const router = useRouter();
-  
-  const handleClick = () => {
-    router.push('/marketplace/agents');
-  };
+
+  // const handleClick = () => {
+  //   router.push("/marketplace/agents");
+  // };
 
   return (
     <div
       className="flex flex-col gap-[72px] overflow-hidden relative gap-4 items-start border border-gray-200 bg-white p-[32px] shadow-sm hover:shadow-md transition-shadow group cursor-pointer"
-      onClick={handleClick}
+      // onClick={handleClick}
     >
       <div className="flex-shrink-0 relative">
         <Image
@@ -40,10 +40,10 @@ const UseCaseCard = ({ useCase, index }) => {
         <p className="mt-2 text-gray-600 text-[16px] leading-[24px] font-[400]">
           {useCase.description}
         </p>
-        <div className="mt-4 flex items-center text-formation-blue opacity-0 group-hover:opacity-100 transition-opacity">
+        {/* <div className="mt-4 flex items-center text-formation-blue opacity-0 group-hover:opacity-100 transition-opacity">
           <span className="mr-2">Explore agents</span>
           <FaArrowRight size={12} />
-        </div>
+        </div> */}
       </div>
       <Dots className="absolute bottom-0 left-0 right-0" />
     </div>
@@ -100,7 +100,7 @@ const UseCasesSection = ({ title, subtitle, useCases }) => {
           </div>
         </div> */}
 
-        <div className="w-full text-center mt-12">
+        {/* <div className="w-full text-center mt-12">
           <Link href="/marketplace/agents">
             <Button
               className="inline-flex items-center px-8 py-4 bg-[#0A84FF] text-white rounded-full hover:bg-[#0A84FF]/90 transition-all text-[15px] font-medium uppercase tracking-wide"
@@ -108,7 +108,7 @@ const UseCasesSection = ({ title, subtitle, useCases }) => {
               VIEW ALL AGENTS <RightCaret className="ml-2 w-4 h-4" />
             </Button>
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );

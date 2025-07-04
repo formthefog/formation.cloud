@@ -52,15 +52,15 @@ export default function DocsNavigation() {
             href="/"
             className="text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors ml-4"
           >
-            Homepage
+            Home
           </Link>
-          <Link
+          {/* <Link
             href="/marketplace"
             className="text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors mx-4"
           >
             Marketplace
           </Link>
-          <AuthButton />
+          <AuthButton /> */}
         </div>
       </div>
 

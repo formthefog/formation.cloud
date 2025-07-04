@@ -459,7 +459,9 @@ export default function ConfigureAgent({
               </div>
               <div>
                 <span className="font-medium">License:</span>{" "}
-                {localAgent?.license || "Not set"}
+                {typeof localAgent?.license === "string"
+                  ? localAgent.license
+                  : "Not set"}
               </div>
             </div>
           </div>

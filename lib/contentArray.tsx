@@ -5,14 +5,10 @@ export const content = [
       title: ["Agent Marketplace", "Powered by Formation"],
       subtitle:
         "Be among the first to join our agent marketplace. Connect with early adopters, deploy your agents, and help shape the future of AI automation.",
-      buttonText: "Explore Marketplace",
+      buttonText: "Join Waitlist",
     },
     keyFeatures: {
-      tagline: (
-        <>
-          Your Gateway to the Agent Economy
-        </>
-      ),
+      tagline: <>Your Gateway to the Agent Economy</>,
       features: [
         {
           title: "Launch Agents",
@@ -74,7 +70,8 @@ export const content = [
           title: "For Innovators",
           description:
             "Create specialized agents for niche markets and monetize your expertise through our decentralized marketplace.",
-        }],
+        },
+      ],
     },
     whyFormation: {
       subtitle: "Why Formation Marketplace",
@@ -83,11 +80,7 @@ export const content = [
         "Formation's marketplace connects agent developers with users worldwide, powered by our decentralized inference network. Earn and spend Formation credits in a thriving ecosystem of innovation.",
     },
     footer: {
-      headline: (
-        <>
-          Join the Agent Revolution
-        </>
-      ),
+      headline: <>Join the Agent Revolution</>,
       buttonText: "Launch Your Agent",
     },
   },
@@ -102,7 +95,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Empowering edge-first infrastructure for <br /> speed, resilience, and innovation
+          Empowering edge-first infrastructure for <br /> speed, resilience, and
+          innovation
         </>
       ),
       features: [
@@ -383,7 +377,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Affordable, reliable, and scalable <br /> solutions for small businesses
+          Affordable, reliable, and scalable <br /> solutions for small
+          businesses
         </>
       ),
       features: [
@@ -664,7 +659,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Infrastructure to deploy, scale, and <br /> secure your blockchain projects
+          Infrastructure to deploy, scale, and <br /> secure your blockchain
+          projects
         </>
       ),
       features: [
@@ -758,7 +754,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Reliable, scalable, and secure <br /> infrastructure for dApp developers
+          Reliable, scalable, and secure <br /> infrastructure for dApp
+          developers
         </>
       ),
       features: [
@@ -937,7 +934,11 @@ export const content = [
   },
   {
     hero: {
-      title: ["Powering", " Financial Excellence,", "Securing Every Transaction."],
+      title: [
+        "Powering",
+        " Financial Excellence,",
+        "Securing Every Transaction.",
+      ],
       subtitle:
         "With Formation, financial platforms can achieve unmatched reliability, real-time processing, and regulatory compliance at scale.",
       buttonText: "Explore Solutions",
@@ -945,7 +946,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Scalable, compliant, and secure <br /> infrastructure for financial platforms
+          Scalable, compliant, and secure <br /> infrastructure for financial
+          platforms
         </>
       ),
       features: [
@@ -1038,7 +1040,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Empowering financial systems with <br /> speed, security, and scalability
+          Empowering financial systems with <br /> speed, security, and
+          scalability
         </>
       ),
       features: [

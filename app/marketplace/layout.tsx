@@ -2,6 +2,7 @@
 
 import MarketplaceNavigation from "@/components/MarketplaceNavigation";
 import Sidebar from "@/components/marketplace/Sidebar";
+import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function MarketplaceLayout({
@@ -55,6 +56,8 @@ export default function MarketplaceLayout({
       description: "Average yearly savings per enterprise customer",
     },
   ];
+
+  return redirect("/");
 
   return (
     <div className="relative">

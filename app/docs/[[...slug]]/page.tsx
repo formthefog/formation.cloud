@@ -70,43 +70,35 @@ export default async function DocsCatchAllPage({
   const tocLinks = await extractTocLinks(markdown);
 
   return (
-    <div className="flex w-full flex-col px-4 md:px-0 pt-4 md:pt-0 md:flex-row">
+    <div className="flex w-full max-w-screen-2xl mx-auto flex-col min-h-screen px-4 md:px-0 pt-4 md:pt-0 md:flex-row">
       {/* Main Content */}
-      <main className="markdown-body w-full flex-1 px-4 bg-white sm:px-6 md:px-12 py-4 md:py-10 shadow-sm min-h-[calc(100vh-64px)] overflow-x-auto md:overflow-x-hidden">
+      <main className="markdown-body w-full flex-1 px-4 bg-white sm:px-6 md:px-12 md:pr-0 py-4 md:py-10 shadow-sm min-h-[calc(100vh-64px)] md:max-w-3xl md:mx-auto">
         <ReactMarkdown
           // @ts-ignore
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw, rehypeSlug]}
           components={{
             a({ href = "", children, ...props }) {
-              // Only rewrite relative .md links
               let newHref = href;
-              if (
-                href &&
-                !href.startsWith("http") &&
-                !href.startsWith("/") &&
-                href.endsWith(".md")
-              ) {
-                let withoutMd = href.replace(/\.md$/, "");
+              if (href && !href.startsWith("http") && href.endsWith(".md")) {
+                let cleanHref = href.startsWith("/") ? href.slice(1) : href;
+                let withoutMd = cleanHref.replace(/\.md$/, "");
                 let segments = withoutMd.split("/");
-                if (segments[segments.length - 1].toLowerCase() === "readme") {
+                if (
+                  segments.length &&
+                  segments[segments.length - 1].toLowerCase() === "readme"
+                ) {
                   segments.pop();
                 }
-                newHref =
-                  "/docs" + (segments.length ? "/" + segments.join("/") : "");
+                newHref = segments.length ? segments.join("/") : "";
               }
-              return (
-                <Link href={newHref} {...props}>
-                  {children}
-                </Link>
-              );
+              // Remove href from props so it doesn't override newHref
+              return <Link href={"/docs/" + newHref}>{children}</Link>;
             },
             code(props) {
               const { children, className, ...rest } = props;
               const match = /language-(\w+)/.exec(className || "");
               const codeString = String(children).replace(/\n$/, "");
-
-              console.log("match", match);
 
               return match && match[1] !== "mermaid" ? (
                 <div className="relative group overflow-x-auto rounded-md font-mono">
@@ -137,8 +129,7 @@ export default async function DocsCatchAllPage({
         </ReactMarkdown>
       </main>
 
-      {/* Table of Contents (desktop only) */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-l border-gray-100 py-8 pl-2">
+      <aside className="hidden min-h-screen md:flex flex-col w-64 bg-white border-l border-gray-100 py-8 pl-2">
         <div className="sticky top-24">
           <TableOfContents tocLinks={tocLinks} />
         </div>
