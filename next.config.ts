@@ -13,8 +13,13 @@ export function middleware(request: NextRequest) {
   }
 
   if (isDocsSubdomain) {
-    // Rewrite to /docs, preserving the rest of the path, but avoid double-rewriting
     const url = request.nextUrl.clone();
+    // If root, rewrite to /docs (not /docs/)
+    if (url.pathname === "/") {
+      url.pathname = "/docs";
+      return NextResponse.rewrite(url);
+    }
+    // If not already at /docs, rewrite as before
     if (!url.pathname.startsWith("/docs")) {
       url.pathname = "/docs" + url.pathname;
       return NextResponse.rewrite(url);
