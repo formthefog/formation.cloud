@@ -6,11 +6,9 @@ import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import Hamburger from "./icons/Hamburger";
 
-import Image from "next/image";
-import { useModal } from "@/context/ModalContext";
 import { BsTwitterX } from "react-icons/bs";
 import Link from "next/link";
-
+import { useRouter, usePathname } from "next/navigation";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -77,7 +75,6 @@ const Navigation = () => {
   return (
     <header
       className={`w-full sticky top-0 z-50 transition-all duration-300 ${
-
         isScrolled ? "bg-white/100 shadow-sm border-b border-gray-200" : ""
       }`}
     >
@@ -93,7 +90,6 @@ const Navigation = () => {
           <div className="flex-shrink-0">
             <FormationLogo />
           </div>
-
         </div>
 
         <nav className="hidden md:flex flex-1 text-[13px] justify-evenly leading-[1.5385] tracking-[0.05em] font-geistMono font-[600] items-center">
@@ -183,7 +179,6 @@ const Navigation = () => {
               <RightCaret />
             </Button>
           </Link> */}
-
         </div>
       </div>
 
