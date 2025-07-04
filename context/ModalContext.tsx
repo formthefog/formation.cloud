@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { WaitlistDialog } from '@/components/WaitlistDialog';
-import { Button } from '@/components/ui/button';
+import { WaitlistDialog } from "@/components/WaitlistDialog";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type ModalContextType = {
   openWaitlistModal: () => void;
@@ -28,26 +27,24 @@ export function ModalProvider({ children }: { children: ReactNode }) {
       value={{
         openWaitlistModal,
         closeWaitlistModal,
-        isWaitlistModalOpen
+        isWaitlistModalOpen,
       }}
     >
       {children}
-
-      {/* The global waitlist dialog */}
       <WaitlistDialog
         isOpen={isWaitlistModalOpen}
         onOpenChange={setIsWaitlistModalOpen}
         buttonText="Join the Waitlist"
-        trigger={<></>} // Empty trigger since we'll control it programmatically
+        trigger={<></>}
       />
     </ModalContext.Provider>
   );
-};
+}
 
 export function useModal() {
   const context = useContext(ModalContext);
   if (context === undefined) {
-    throw new Error('useModal must be used within a ModalProvider');
+    throw new Error("useModal must be used within a ModalProvider");
   }
   return context;
 }

@@ -1,0 +1,67 @@
+<context>
+# Overview
+We are building a platform that allows organizations to deploy and manage AI agents. The platform uses a credit-based billing system, with Stripe for payments and Supabase for backend data. Accounts (not users) are the primary billing entity.
+
+# Core Features
+- Extend the current Stripe integration to support a credit-based, auto top-up system.
+- Do not disrupt or modify the existing Stripe subscription flow, which is already working well.
+- Allow organizations to purchase credits via Stripe Checkout and be auto-charged for top-ups.
+- Allow organizations to save a payment method for future, off-session (auto) payments.
+- Track credit balances and payment history in Supabase.
+- Allow organizations to manage their payment methods.
+- Ensure all billing logic is account-centric.
+
+# User Experience
+- Accounts can top up credits and be auto-charged when needed, without manual intervention.
+- The UI clearly communicates both subscription status and credit balance to the user.
+- Prompt for payment only when required (e.g., on upgrade or low balance).
+- Clearly distinguish between subscription status and credit balance in the UI.
+</context>
+<PRD>
+# Technical Architecture
+- Stripe Checkout for one-time credit top-ups, with `setup_future_usage: 'off_session'` to save the card.
+- Store `stripe_customer_id`, `stripe_subscription_id`, `stripe_price_id`, and default payment method on the account in Supabase.
+- For auto top-ups, use Stripe PaymentIntent with `off_session: true` and the saved payment method.
+- Credit-based payments and subscriptions must be independent and can coexist for an account.
+- Never store raw card data; only use Stripe tokens/IDs.
+- Ensure all sensitive operations are authenticated and authorized.
+
+# Development Roadmap
+- **Phase 1:** Implement credit top-up via Stripe Checkout, saving payment method for off-session use.
+- **Phase 2:** Implement webhook handling for credit top-ups and off-session payments.
+- **Phase 3:** Implement auto top-up logic and off-session PaymentIntent creation.
+- **Phase 4:** Add UI for credit balance, payment method management, and clear separation of subscription vs. credit status.
+- **Phase 5:** Add notifications and error handling for payment failures.
+
+# Logical Dependency Chain
+- Foundation: Ensure all existing subscription logic and endpoints are preserved.
+- Step 1: Add credit top-up via Stripe Checkout and save payment method.
+- Step 2: Implement webhook handling for credit payments.
+- Step 3: Add credit balance tracking in Supabase.
+- Step 4: Implement auto top-up logic and off-session payments.
+- Step 5: Add UI/UX for credit and subscription management.
+
+# Risks and Mitigations
+- **Risk:** Accidentally breaking existing subscription flow.
+  - **Mitigation:** All new credit-based logic must be independent and not alter subscription endpoints or webhooks.
+- **Risk:** Payment method not saved correctly for off-session use.
+  - **Mitigation:** Use `setup_future_usage: 'off_session'` and test with multiple card types.
+- **Risk:** Race conditions or double-charging during auto top-up.
+  - **Mitigation:** Use database transactions and idempotency keys for off-session charges.
+
+# Appendix
+- Listen for relevant Stripe webhooks:
+  - `checkout.session.completed` (for credit top-ups)
+  - `payment_intent.succeeded` (for off-session top-ups)
+  - `payment_intent.payment_failed`
+  - `customer.subscription.created`, `updated`, `deleted` (existing logic must remain unchanged)
+- On successful credit payment, update the account's credit balance.
+- On payment failure, notify the account and pause service if needed.
+- Out of Scope:
+  - User-level billing (all billing is account-based)
+  - Manual invoice management
+  - Any changes to the existing subscription product, price, or flow
+- Success Criteria:
+  - All payment and credit events are accurately reflected in Supabase.
+  - All existing subscription functionality continues to work as before, with no regressions.
+</PRD> 

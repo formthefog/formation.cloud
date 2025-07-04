@@ -1,19 +1,20 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { Button } from "./ui/button";
 import RightCaret from "./icons/RightCaret";
 import { useModal } from "@/context/ModalContext";
+import Link from "next/link";
 
 const Footer = ({ headline, buttonText }) => {
   const { openWaitlistModal } = useModal();
 
   return (
     <footer
-      className="relative flex flex-col w-full bg-cover bg-top md:bg-center bg-no-repeat"
+      className="relative flex flex-col min-h-[60vh] w-full bg-cover bg-top md:bg-center bg-no-repeat justify-center items-center"
       style={{ backgroundImage: "url('/city-2.jpg')" }}
     >
-      <div className="container pt-16 md:pt-24 pb-24 mx-auto border-l border-r h-full max-w-[1280px] px-6 text-center">
+      <div className="container pt-16 md:pt-24 grow pb-24 mx-auto border-l border-r h-full max-w-[1280px] px-6 text-center">
         <div className="flex flex-col items-center gap-6">
           <span className="flex flex-col items-center justify-center">
             <Image
@@ -28,13 +29,11 @@ const Footer = ({ headline, buttonText }) => {
             </h2>
           </span>
           <div className="mt-8 mb-12">
-            <Button
-              size="lg"
-              className="button-with-gradient"
-              onClick={openWaitlistModal}
-            >
-              {buttonText} <RightCaret />
-            </Button>
+            <div onClick={openWaitlistModal}>
+              <Button size="lg" className="button-with-gradient">
+                {buttonText} <RightCaret />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

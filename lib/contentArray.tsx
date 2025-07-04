@@ -1,94 +1,87 @@
 export const content = [
-  // 1. General/Universal Appeal
+  // 1. Agent Marketplace Focus
   {
     hero: {
-      title: ["Discover, Deploy, Monetize"],
+      title: ["Agent Marketplace", "Powered by Formation"],
       subtitle:
-        "Formation makes it easy for you to discover and deploy agents and customized models, enabling everyone to go from idea to enterprise at record speed.",
-      buttonText: "Join the Waitlist",
+        "Be among the first to join our agent marketplace. Connect with early adopters, deploy your agents, and help shape the future of AI automation.",
+      buttonText: "Join Waitlist",
     },
     keyFeatures: {
-      tagline: (
-        <>
-          For Users and For Developers
-        </>
-      ),
+      tagline: <>Your Gateway to the Agent Economy</>,
       features: [
         {
-          title: "100% Uptime Guarantee",
+          title: "Launch Agents",
           description:
-            "Ensure your AI agents are always available with automated fail-over, so your operations run smoothly.",
+            "Be among the first to experience our carefully curated selection of agents designed for real-world applications.",
           icon: "/uptime.jpg",
         },
         {
-          title: "Fast Inference",
+          title: "Early Access Program",
           description:
-            "Minimize latency with state-of-the-art techniques and hardware for timely responses.",
+            "Join our exclusive early access program and help shape the future of agent monetization.",
           icon: "/latency.jpg",
         },
         {
-          title: "Cost Savings",
+          title: "Developer Tools",
           description:
-            "Save up to 90% on inference costs with popular open-source models, boosting productivity and profitability.",
+            "Access comprehensive SDKs and APIs to build, test, and deploy your agents seamlessly.",
           icon: "/cost.jpg",
         },
         {
-          title: "Scalability",
+          title: "Secure Platform",
           description:
-            "Access a growing number of the latest GPUs to handle any compute demand efficiently.",
+            "Enterprise-grade security and compliance for all marketplace transactions.",
           icon: "/scalability.jpg",
         },
         {
-          title: "Data Sovereignty",
+          title: "Revenue Share",
           description:
-            "Protect data with end-to-end encryption on our private mesh architecture and encrypted storage for long term memory.",
+            "Earn 80% revenue share on your agent deployments with 0% platform fee at launch.",
           icon: "/sovereignty.jpg",
         },
       ],
     },
     useCases: {
-      title: "Transforming industries with Formation",
+      title: "Agents Transforming Industries",
       subtitle:
-        "Explore how Formation is revolutionizing the way businesses and technologies operate.",
+        "Explore how Formation's marketplace is revolutionizing access to AI capabilities across sectors.",
       useCases: [
         {
           icon: "/ar-game.jpg",
-          title: "Consumer Applications",
+          title: "For Users",
           description:
-            "Improve market research, analyze user data, rapidly iterate, automate feature requests and more with Formation.",
+            "Access a diverse ecosystem of agents to enhance productivity, automate tasks, and unlock new possibilities with Formation credits.",
         },
         {
           icon: "/financial.jpg",
-          title: "Financial Services",
+          title: "For Developers",
           description:
-            "Augment your research team, make better decisions faster, deliver better results, manage relationships more effectively, automate onboarding and grow your customer base with Formation.",
+            "Monetize your agents, reach a global audience, and earn Formation credits while focusing on building great solutions.",
         },
         {
           icon: "/smart-city.jpg",
-          title: "Smart Businesses",
+          title: "For Enterprises",
           description:
-            "Small business is smart business, you no longer need a massive team to scale. Enhance profitability, reduce inefficiencies, and grow your sales with Formation",
+            "Deploy custom agents across your organization with enterprise-grade security, compliance, and scalability.",
         },
         {
           icon: "/autonomous-vehicle.jpg",
-          title: "Independent Developers",
+          title: "For Innovators",
           description:
-            "Your github commit grid is filled with bright green, but your open source agent projects are lost in a sea of noise, register them with Formation and access an audience of excited users on Formation.",
-        }],
+            "Create specialized agents for niche markets and monetize your expertise through our decentralized marketplace.",
+        },
+      ],
     },
     whyFormation: {
-      subtitle: "Why Formation",
-      title: "Unlock your full potential with Formation",
+      subtitle: "Why Formation Marketplace",
+      title: "The Future of Agent Distribution",
       description:
-        "Formation provides the tools to succeed in the Age of Autonomy by providing a unified marketplace for agents, models and inference. Take control of your future with Formation.",
+        "Formation's marketplace connects agent developers with users worldwide, powered by our decentralized inference network. Earn and spend Formation credits in a thriving ecosystem of innovation.",
     },
     footer: {
-      headline: (
-        <>
-          Enter the Autonomous Age with Formation
-        </>
-      ),
-      buttonText: "Join the Waitlist",
+      headline: <>Join the Agent Revolution</>,
+      buttonText: "Join Waitlist",
     },
   },
   // 2. Startup Innovators
@@ -102,7 +95,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Empowering edge-first infrastructure for <br /> speed, resilience, and innovation
+          Empowering edge-first infrastructure for <br /> speed, resilience, and
+          innovation
         </>
       ),
       features: [
@@ -127,7 +121,7 @@ export const content = [
         {
           title: "Scalability",
           description:
-            "Grow on demand. Formation’s distributed systems make scaling effortless and affordable.",
+            "Grow on demand. Formation's distributed systems make scaling effortless and affordable.",
           icon: "/scalability.jpg",
         },
         {
@@ -215,13 +209,13 @@ export const content = [
         {
           title: "Cost Savings",
           description:
-            "Optimize IT budgets with Formation’s efficient and scalable pricing model.",
+            "Optimize IT budgets with Formation's efficient and scalable pricing model.",
           icon: "/cost.jpg",
         },
         {
           title: "Scalability",
           description:
-            "Expand into new markets with ease—Formation’s global footprint is built to scale with your ambitions.",
+            "Expand into new markets with ease—Formation's global footprint is built to scale with your ambitions.",
           icon: "/scalability.jpg",
         },
         {
@@ -284,7 +278,7 @@ export const content = [
     hero: {
       title: ["Develop. Deploy.", "Redefine the Edge."],
       subtitle:
-        "Build decentralized apps with ease using Formation’s developer-first platform.",
+        "Build decentralized apps with ease using Formation's developer-first platform.",
       buttonText: "Start Building",
     },
     keyFeatures: {
@@ -297,7 +291,7 @@ export const content = [
         {
           title: "100% Uptime Guarantee",
           description:
-            "Keep your apps online with Formation’s decentralized, always-on infrastructure.",
+            "Keep your apps online with Formation's decentralized, always-on infrastructure.",
           icon: "/uptime.jpg",
         },
         {
@@ -383,7 +377,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Affordable, reliable, and scalable <br /> solutions for small businesses
+          Affordable, reliable, and scalable <br /> solutions for small
+          businesses
         </>
       ),
       features: [
@@ -589,7 +584,7 @@ export const content = [
         {
           title: "Cost Savings",
           description:
-            "Cut costs with Formation’s efficient and scalable infrastructure designed for decentralized applications.",
+            "Cut costs with Formation's efficient and scalable infrastructure designed for decentralized applications.",
           icon: "/cost.jpg",
         },
         {
@@ -664,7 +659,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Infrastructure to deploy, scale, and <br /> secure your blockchain projects
+          Infrastructure to deploy, scale, and <br /> secure your blockchain
+          projects
         </>
       ),
       features: [
@@ -758,7 +754,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Reliable, scalable, and secure <br /> infrastructure for dApp developers
+          Reliable, scalable, and secure <br /> infrastructure for dApp
+          developers
         </>
       ),
       features: [
@@ -937,7 +934,11 @@ export const content = [
   },
   {
     hero: {
-      title: ["Powering", " Financial Excellence,", "Securing Every Transaction."],
+      title: [
+        "Powering",
+        " Financial Excellence,",
+        "Securing Every Transaction.",
+      ],
       subtitle:
         "With Formation, financial platforms can achieve unmatched reliability, real-time processing, and regulatory compliance at scale.",
       buttonText: "Explore Solutions",
@@ -945,7 +946,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Scalable, compliant, and secure <br /> infrastructure for financial platforms
+          Scalable, compliant, and secure <br /> infrastructure for financial
+          platforms
         </>
       ),
       features: [
@@ -1038,7 +1040,8 @@ export const content = [
     keyFeatures: {
       tagline: (
         <>
-          Empowering financial systems with <br /> speed, security, and scalability
+          Empowering financial systems with <br /> speed, security, and
+          scalability
         </>
       ),
       features: [
