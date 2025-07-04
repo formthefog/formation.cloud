@@ -49,7 +49,7 @@ export default function DocsNavigation() {
         {/* Desktop navigation */}
         <div className="hidden md:flex md:items-center">
           <Link
-            href="/"
+            href="https://formation.cloud"
             className="text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors ml-4"
           >
             Home
@@ -69,13 +69,13 @@ export default function DocsNavigation() {
         <div className="md:hidden bg-white border-b border-gray-200 py-2">
           <div className="px-4 space-y-2">
             <Link
-              href="/"
+              href="https://formation.cloud"
               className="block text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors py-2"
               onClick={() => setMobileMenuOpen(false)}
             >
               Homepage
             </Link>
-            <Link
+            {/* <Link
               href="/marketplace"
               className="block text-sm font-bold text-gray-400 tracking-wide hover:text-blue-600 transition-colors py-2"
               onClick={() => setMobileMenuOpen(false)}
@@ -84,7 +84,7 @@ export default function DocsNavigation() {
             </Link>
             <div className="py-2">
               <AuthButton />
-            </div>
+            </div> */}
           </div>
         </div>
       )}
