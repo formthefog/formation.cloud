@@ -6,10 +6,10 @@ export function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // Block access to /docs from non-docs subdomain
-  if (pathname.startsWith("/docs") && !isDocsSubdomain) {
-    return new NextResponse(null, { status: 404 });
-  }
+  //   // Block access to /docs from non-docs subdomain
+  //   if (pathname.startsWith("/docs") && !isDocsSubdomain) {
+  //     return new NextResponse(null, { status: 404 });
+  //   }
 
   // Rewrite requests like /getting-started to /docs/getting-started on the docs subdomain
   if (isDocsSubdomain && !pathname.startsWith("/docs")) {

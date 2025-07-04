@@ -81,7 +81,7 @@ export const content = [
     },
     footer: {
       headline: <>Join the Agent Revolution</>,
-      buttonText: "Launch Your Agent",
+      buttonText: "Join Waitlist",
     },
   },
   // 2. Startup Innovators

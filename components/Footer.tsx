@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { Button } from "./ui/button";
@@ -29,14 +29,11 @@ const Footer = ({ headline, buttonText }) => {
             </h2>
           </span>
           <div className="mt-8 mb-12">
-            <Link href="/marketplace/create-agent">
-            <Button
-              size="lg"
-              className="button-with-gradient"
-            >
-              {buttonText} <RightCaret />
-            </Button>
-            </Link>
+            <div onClick={openWaitlistModal}>
+              <Button size="lg" className="button-with-gradient">
+                {buttonText} <RightCaret />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
