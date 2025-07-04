@@ -62,6 +62,77 @@ const navLinks = [
   },
 ];
 
+// app/layout.tsx
+export const metadata = {
+  metadataBase: new URL("https://docs.formation.cloud"),
+  title: {
+    default: "Formation Documentation",
+    template: "%s — Formation Docs",
+  },
+  description:
+    "Comprehensive documentation for Formation.cloud: learn how to use, integrate, and build with the Formation agent marketplace.",
+  keywords: [
+    "Formation documentation",
+    "docs",
+    "API reference",
+    "agent marketplace",
+    "integration guide",
+    "developer guide",
+    "AI agents",
+    "Formation cloud",
+    "Next.js",
+    "TypeScript",
+    "SDK",
+    "REST API",
+    "tutorials",
+    "examples",
+  ],
+  applicationName: "Formation Docs",
+  generator: "Next.js",
+  viewport: "width=device-width,initial-scale=1",
+  themeColor: "#009CFF",
+  robots: "index, follow",
+  canonical: "https://docs.formation.cloud",
+
+  // Open Graph (Discord, Slack, iMessage…)
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Formation Docs",
+    url: "https://docs.formation.cloud",
+    title: "Formation Documentation",
+    description:
+      "Official documentation for Formation.cloud: guides, API reference, and integration tutorials for the agent marketplace.",
+    images: [
+      {
+        url: "/formation-logos/formation-og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Formation Documentation – Agent Marketplace",
+      },
+    ],
+  },
+
+  // Twitter Card
+  twitter: {
+    card: "summary_large_image",
+    site: "@formthefog",
+    creator: "@formthefog",
+    title: "Formation Documentation",
+    description:
+      "Learn how to use, integrate, and build with Formation.cloud. Access guides, API docs, and tutorials.",
+    images: ["/formation-logos/formation-og-image.jpg"],
+  },
+
+  // Favicons & PWA
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-96x96.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
+};
+
 export default function DocsLayout({
   children,
 }: {
