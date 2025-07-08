@@ -8,6 +8,7 @@ import WhyFormationSection from "@/components/WhyFormationSection";
 import { content } from "@/lib/contentArray";
 import OldHeroSection from "./old/Hero";
 import OldKeyFeaturesSection from "./old/OldKeyFeatures";
+import BackedBy from "./BackedByComponent";
 
 export default function Home() {
   const currentContent = content[0];
@@ -29,11 +30,13 @@ export default function Home() {
         subtitle={currentContent.whyFormation.subtitle}
         description={currentContent.whyFormation.description}
       />
+
       <UseCasesSection
         title={currentContent.useCases.title}
         subtitle={currentContent.useCases.subtitle}
         useCases={currentContent.useCases.useCases}
       />
+
       <Footer
         headline={currentContent.footer.headline}
         buttonText={currentContent.footer.buttonText}

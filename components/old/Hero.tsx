@@ -1,10 +1,9 @@
 "use client";
 
-import BackedBy from "@/components/BackedByComponent";
 import RightCaret from "@/components/icons/RightCaret";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useModal } from "@/context/ModalContext";
+import SupportedModelComponent from "../SupportedModelComponent";
 
 const OldHeroSection = ({
   title,
@@ -47,7 +46,7 @@ const OldHeroSection = ({
         </div>
       </div>
       <div className="md:-mt-24  w-full max-w-[1280px] m-auto">
-        <BackedBy />
+        <SupportedModelComponent />
       </div>
     </section>
   );
