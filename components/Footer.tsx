@@ -18,7 +18,7 @@ const Footer = ({ headline, buttonText }) => {
       <div className="container pt-16 md:pt-24 flex flex-col justify-center grow pb-24 mx-auto border-l border-r h-full max-w-[1280px] px-6 text-center">
         <div className="flex flex-col items-center gap-6">
           <h6 className="text-xl md:text-[33px] font-[500] md:leading-[88px] font-hauora tracking-[-0.05em]">
-            Supported By:
+            Our Investors:
           </h6>
           <BackedBy />
           <div className="mt-8 mb-12">
