@@ -41,6 +41,14 @@ const Footer = ({ headline, buttonText }) => {
             <a href="#" className="hover:text-gray-700 transition-colors">
               Docs
             </a>
+            <a
+              href="https://discord.gg/kbpXsDt5"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-700 transition-colors"
+            >
+              Discord
+            </a>
             <a href="#" className="hover:text-gray-700 transition-colors">
               Terms
             </a>

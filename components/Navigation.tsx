@@ -7,6 +7,7 @@ import RightCaret from "./icons/RightCaret";
 import Hamburger from "./icons/Hamburger";
 
 import { BsTwitterX } from "react-icons/bs";
+import { FaDiscord } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -131,6 +132,12 @@ const Navigation = () => {
         <div className="flex items-center space-x-4">
           <Link href="https://x.com/formthefog" target="_blank">
             <BsTwitterX
+              size={25}
+              className="text-gray-500 hover:text-black cursor-pointer hidden lg:block"
+            />
+          </Link>
+          <Link href="https://discord.gg/kbpXsDt5" target="_blank">
+            <FaDiscord
               size={25}
               className="text-gray-500 md:mr-4 hover:text-black cursor-pointer hidden lg:block"
             />
