@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useState } from 'react';
+import { gtmEvent } from '@/lib/gtm';
 import { Button } from '@/components/ui/button';
 import RightCaret from '@/components/icons/RightCaret';
 import {
@@ -55,7 +56,10 @@ export function WaitlistDialog({
   // Determine if we're using controlled or uncontrolled dialog
   const isControlled = isOpen !== undefined && onOpenChange !== undefined;
   const open = isControlled ? isOpen : internalOpen;
-  const setOpen = isControlled ? onOpenChange : setInternalOpen;
+  const handleOpenChange = (next: boolean) => {
+    if (next) gtmEvent("waitlist_modal_opened");
+    isControlled ? onOpenChange!(next) : setInternalOpen(next);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -93,6 +97,12 @@ export function WaitlistDialog({
         throw new Error('Please enter a valid email address');
       }
 
+      gtmEvent("waitlist_form_submitted", {
+        interests_count: formData.interests.length,
+        company_provided: !!formData.company?.trim(),
+        email_domain: formData.email.split("@")[1] ?? "",
+      });
+
       // Submit to API
       const response = await fetch('/api/waitlist', {
         method: 'POST',
@@ -110,15 +120,20 @@ export function WaitlistDialog({
       const result = await response.json();
 
       if (!response.ok) {
+        if (result.error?.toLowerCase().includes('duplicate') || result.error?.toLowerCase().includes('already')) {
+          gtmEvent("waitlist_signup_duplicate");
+        }
         throw new Error(result.error || 'Failed to submit. Please try again.');
       }
+
+      gtmEvent("waitlist_signup_success", { interests: formData.interests });
 
       // Set success state
       setIsSuccess(true);
 
       // Close dialog after 2 seconds
       setTimeout(() => {
-        setOpen(false);
+        handleOpenChange(false);
         // Reset form after dialog is closed
         setTimeout(() => {
           setIsSuccess(false);
@@ -140,7 +155,7 @@ export function WaitlistDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       {trigger && (
         <DialogTrigger asChild={React.isValidElement(trigger) && typeof trigger.type !== 'string'}>
           {trigger}
