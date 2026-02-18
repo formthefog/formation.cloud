@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { useAuth } from "./auth-provider";
 import { getPlanFromPriceId } from "@/lib/stripe";
+import { gtmEvent } from "@/lib/gtm";
 
 export function AuthButton({
   className,
@@ -41,6 +42,7 @@ export function AuthButton({
 
   // Subscribe to auth events
   useDynamicEvents("logout", () => {
+    gtmEvent("sign_out");
     toast.info("Successfully logged out");
   });
 
@@ -50,6 +52,7 @@ export function AuthButton({
 
   // Handle auth failures
   useDynamicEvents("authFailure", () => {
+    gtmEvent("sign_in_error");
     toast.error("Authentication failed");
   });
 
@@ -79,6 +82,7 @@ export function AuthButton({
     if (primaryWallet) {
       router.push("/marketplace/settings");
     } else {
+      gtmEvent("sign_in_flow_opened");
       setShowAuthFlow(true);
     }
   };
